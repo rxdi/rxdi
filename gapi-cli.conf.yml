@@ -46,7 +46,8 @@ commands:
     build: node ./build-definition.js
     # all-publish: for d in ./*/ ; do (cd "$d" && git add . && git commit -m autocommitmessage && git push && npm publish --update-readme --access public); done
   diff:
-    push: for d in $(git diff --name-only); do (cd "$d" && git push); done && echo stop
+    push: git submodule foreach "git push"
+    hydrate: npx bolt ws exec -- git checkout master && git pull
     show: for d in $(git diff --name-only); do (cd "$d" && echo $d); done && echo stop
 
   tags:
