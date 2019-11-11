@@ -82,3 +82,51 @@
 [submodule "packages/deploy-commit"]
 	path = packages/deploy-commit
 	url = git@github.com:rxdi/deploy-commit.git
+[submodule "examples/starter-client-side-lit-html"]
+	path = examples/starter-client-side-lit-html
+	url = git@github.com:rxdi/starter-client-side-lit-html.git
+[submodule "examples/starter-server-side"]
+	path = examples/starter-server-side
+	url = git@github.com:rxdi/starter-server-side.git
+[submodule "examples/starter-client-side-preact"]
+	path = examples/starter-client-side-preact
+	url = git@github.com:rxdi/starter-client-side-preact.git
+[submodule "examples/starter-client-side-advanced"]
+	path = examples/starter-client-side-advanced
+	url = git@github.com:rxdi/starter-client-side-advanced.git
+[submodule "examples/starter-client-router-preact"]
+	path = examples/starter-client-router-preact
+	url = git@github.com:rxdi/starter-client-router-preact.git
+[submodule "examples/starter-neo4j-javascript"]
+	path = examples/starter-neo4j-javascript
+	url = git@github.com:rxdi/starter-neo4j-javascript.git
+[submodule "examples/starter-neo4j-typescript"]
+	path = examples/starter-neo4j-typescript
+	url = git@github.com:rxdi/starter-neo4j-typescript.git
+[submodule "examples/starter-neo4j-typescript-complex"]
+	path = examples/starter-neo4j-typescript-complex
+	url = git@github.com:rxdi/starter-neo4j-typescript-complex.git
+[submodule "examples/gapi-starter"]
+	path = examples/gapi-starter
+	url = git@github.com:Stradivario/gapi-starter.git
+[submodule "examples/gapi-starter-simple"]
+	path = examples/gapi-starter-simple
+	url = git@github.com:Stradivario/gapi-starter-simple.git
+[submodule "examples/gapi-starter-simple-serverless"]
+	path = examples/gapi-starter-simple-serverless
+	url = git@github.com:Stradivario/gapi-starter-simple-serverless.git
+[submodule "examples/gapi-starter-serverless"]
+	path = examples/gapi-starter-serverless
+	url = git@github.com:Stradivario/gapi-starter-serverless.git
+[submodule "examples/gapi-starter-serverless-sequelize"]
+	path = examples/gapi-starter-serverless-sequelize
+	url = git@github.com:Stradivario/gapi-starter-serverless-sequelize.git
+[submodule "examples/gapi-starter-postgres-sequelize-rabbitmq"]
+	path = examples/gapi-starter-postgres-sequelize-rabbitmq
+	url = git@github.com:Stradivario/gapi-starter-postgres-sequelize-rabbitmq.git
+[submodule "examples/gapi-starter-microservices"]
+	path = examples/gapi-starter-microservices
+	url = git@github.com:Stradivario/gapi-starter-microservices.git
+[submodule "examples/gapi-starter-neo4j"]
+	path = examples/gapi-starter-neo4j
+	url = git@github.com:Stradivario/gapi-starter-neo4j.git

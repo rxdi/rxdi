@@ -4,8 +4,7 @@
   "description": "Monorepo for @rxdi infrastructure",
   "bolt": {
     "workspaces": [
-      "packages/*",
-      "examples/*"
+      "packages/*"
     ]
   },
   "scripts": {
@@ -15,6 +14,9 @@
     "patch": "npx bolt ws exec -- npm version patch",
     "minor": "npx bolt ws exec -- npm version minor",
     "major": "npx bolt ws exec -- npm version major",
+    "pull-all":"gapi pull all",
+    "diff-push":"gapi push diff",
+    "diff-show":"gapi show diff",
     "publish-packages": "npx bolt ws exec -- npm publish --update-readme --access public"
   },
   "husky": {

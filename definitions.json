@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "repo": "browser-server",
+    "label": "@rxdi/browser-server",
+    "owner": "rxdi",
+    "folderName": "browser-server",
+    "url": "https://github.com/rxdi/browser-server",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 2,
+    "repo": "core",
+    "label": "@rxdi/core",
+    "owner": "rxdi",
+    "folderName": "core",
+    "url": "https://github.com/rxdi/core",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 3,
+    "repo": "deploy",
+    "label": "@rxdi/deploy",
+    "owner": "rxdi",
+    "folderName": "deploy",
+    "url": "https://github.com/rxdi/deploy",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 4,
+    "repo": "deploy-webui",
+    "label": "@rxdi/deploy-webui",
+    "owner": "rxdi",
+    "folderName": "deploy-webui",
+    "url": "https://github.com/rxdi/deploy-webui",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 5,
+    "repo": "dts-merge",
+    "label": "@rxdi/dts-merge",
+    "owner": "rxdi",
+    "folderName": "dts-merge",
+    "url": "https://github.com/rxdi/dts-merge",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 6,
+    "repo": "graphql",
+    "label": "@rxdi/graphql",
+    "owner": "rxdi",
+    "folderName": "graphql",
+    "url": "https://github.com/rxdi/graphql",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 7,
+    "repo": "graphql-pubsub",
+    "label": "@rxdi/graphql-pubsub",
+    "owner": "rxdi",
+    "folderName": "graphql-pubsub",
+    "url": "https://github.com/rxdi/graphql-pubsub",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 8,
+    "repo": "hapi",
+    "label": "@rxdi/hapi",
+    "owner": "rxdi",
+    "folderName": "hapi",
+    "url": "https://github.com/rxdi/hapi",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 9,
+    "repo": "install",
+    "label": "@rxdi/install",
+    "owner": "rxdi",
+    "folderName": "install",
+    "url": "https://github.com/rxdi/install",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 10,
+    "repo": "ipfs-package-example",
+    "label": "@rxdi/ipfs-package-example",
+    "owner": "rxdi",
+    "folderName": "ipfs-package-example",
+    "url": "https://github.com/rxdi/ipfs-package-example",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 11,
+    "repo": "neo4j",
+    "label": "@rxdi/neo4j",
+    "owner": "rxdi",
+    "folderName": "neo4j",
+    "url": "https://github.com/rxdi/neo4j",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 12,
+    "repo": "router",
+    "label": "@rxdi/router",
+    "owner": "rxdi",
+    "folderName": "router",
+    "url": "https://github.com/rxdi/router",
+    "namespace": "rxdi"
+  }
+]
