@@ -1,0 +1,1 @@
+{"version":3,"file":"hamburger-statistics.type.js","sourceRoot":"","sources":["../../../src/hamburger/server/types/hamburger-statistics.type.ts"],"names":[],"mappings":";;AAAA,qCAAwD;AAE3C,QAAA,uBAAuB,GAAG,IAAI,2BAAiB,CAAC;IAC3D,IAAI,EAAE,yBAAyB;IAC/B,MAAM,EAAE,GAAG,EAAE,CAAC,CAAC;QACb,MAAM,EAAE;YACN,IAAI,EAAE,oBAAU;SACjB;KACF,CAAC;CACH,CAAC,CAAC"}

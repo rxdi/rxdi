@@ -1,0 +1,4 @@
+/node_modules
+/external_modules
+/.cache
+/coverage

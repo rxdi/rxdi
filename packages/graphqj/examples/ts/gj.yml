@@ -1,0 +1,50 @@
+
+$mode: advanced
+$directives: ./directives.ts
+$externals:
+  - map: 🚀
+    file: ./interceptors.ts
+  - map: 🛡️
+    file: ./guards.ts
+  - map: 🕵️
+    file: ./modifiers.ts
+  - map: ⌛
+    file: ./helpers/moment.js
+
+$types:
+  User:
+    name: String {🕵️@OnlyAdmin}
+    email: String {🗡️@LoggerInterceptor}
+    phone: Number {🛡️@IsAuthorized}
+    arrayOfNumbers: Number[]
+    arrayOfStrings: String[]
+    createdAt: String => {⌛fromNow}
+
+$args:
+  UserPayload:
+    userId: String!
+    userId2: String
+    userId3: String
+    userId4: String
+
+$resolvers:
+  findUser:
+    type: User
+    args:
+      payload: UserPayload
+    resolve:
+      name: Kristiyan Tachev
+      email: test@gmail.com
+      phone: 414141
+      arrayOfNumbers: 
+        - 515151
+        - 412414
+      arrayOfStrings:
+        - '515151'
+        - '412414'
+
+  findUser2:
+    type: User
+    args:
+      payload: UserPayload
+    resolve: 💉./findUser2.js

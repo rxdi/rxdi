@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script>
+  localStorage.setItem('config-loaded', JSON.stringify({ status: false }));
+  const currentItem = localStorage.getItem('config');
+  window.serverSource = new EventSource("http://localhost:8957/status");
+  window.serverSource.onmessage = function (m) {
+    if (m.data) {
+      const data = JSON.parse(m.data);
+      if(currentItem && data.config) {
+        const port = JSON.parse(currentItem).config.hapi.port;
+        if (port !== data.config.hapi.port) {
+          localStorage.setItem('config', JSON.stringify(data));
+          window.location.reload();
+        }
+      }
+      if (data.config && !currentItem) {
+        localStorage.setItem('config', JSON.stringify(data));
+        localStorage.setItem('config-loaded', JSON.stringify({ status: true }));
+        window.location.reload();
+      }
+    }
+  }
+</script>
+
+<head>
+  <meta charset="utf-8">
+  <title>DeployWebui</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+  <app-root></app-root>
+</body>
+
+</html>

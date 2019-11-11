@@ -1,0 +1,6 @@
+
+<div *ngFor="let namespace of (namespace | async)?.builds">
+    <mat-card (click)="goToDetails(namespace._id)" style="margin-bottom: 10px" class="pointer">
+        {{ namespace.message }}
+    </mat-card>
+  </div>

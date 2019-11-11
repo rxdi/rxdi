@@ -1,0 +1,59 @@
+{
+  "name": "@rxdi/graphqj",
+  "main": "./lib/main.js",
+  "version": "0.7.49",
+  "scripts": {
+    "start": "gapi start --local --minify=false --inspect",
+    "start-client": "parcel ./src/app/client/application/index.html",
+    "introspect": "gapi schema introspect --collect-documents --collect-types",
+    "build": "gapi build",
+    "build-client": "parcel build ./src/app/client/application/index.html",
+    "patch": "npm version patch && npm publish --update-readme --access public"
+  },
+  "dependencies": {
+    "@gapi/core": "^1.8.5",
+    "@gapi/voyager": "^1.8.5",
+    "chokidar": "^3.0.2",
+    "clear-module": "^4.0.0",
+    "esm": "^3.2.25",
+    "fast-glob": "^3.0.4",
+    "js-yaml": "^3.13.1"
+  },
+  "esm": {
+    "cjs": {
+      "cache": false
+    }
+  },
+  "browserslist": [
+    "last 1 chrome versions"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rxdi/graphqj"
+  },
+  "bin": {
+    "gj": "./dist/main.js",
+    "gg": "./dist/main.js",
+    "graphqj": "./dist/main.js"
+  },
+  "devDependencies": {
+    "@popeindustries/lit-html-server": "^1.3.0",
+    "@babel/polyfill": "7.4.4",
+    "core-js": "^2.6.5",
+    "@rxdi/graphql-client": "^0.7.16",
+    "@rxdi/lit-html": "^0.7.16",
+    "@rxdi/router": "^0.7.16",
+    "himalaya": "^1.1.0",
+    "@webcomponents/webcomponentsjs": "1.3.3",
+    "graphql-tag": "^2.10.1",
+    "@rxdi/parcel-plugin-shebang": "^0.7.5",
+    "@types/graphql": "^14.5.0",
+    "@types/hapi": "^18.0.2",
+    "@types/js-yaml": "^3.12.1",
+    "cssnano": "^4.1.10",
+    "typescript": "^3.5.3"
+  },
+  "types": "./lib/index.d.ts",
+  "module": "./lib/index.js",
+  "typings": "./lib/index.d.ts"
+}

@@ -1,0 +1,8 @@
+/node_modules
+/build
+/proba
+.cache
+.jsipfs
+.rxdi
+
+/test

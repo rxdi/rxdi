@@ -1,0 +1,9 @@
+query listNamespaces($limit:Int!, $skip: Int!) {
+  listNamespaces(limit:$limit, skip: $skip) {
+    count
+    rows {
+      _id
+      name
+    }
+  }
+}

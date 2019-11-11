@@ -1,0 +1,7 @@
+config:
+  schema:
+    introspectionEndpoint: http://localhost:9300/graphql
+    introspectionOutputFolder: ./src/app/core/api-introspection
+commands:
+  documents:
+    collect: gapi schema introspect --collect-documents --collect-types

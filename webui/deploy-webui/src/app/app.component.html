@@ -1,0 +1,121 @@
+<div style="height: 100%">
+
+  <!-- <mat-toolbar color="primary">
+        <mat-toolbar-row>
+          <mat-icon class="pointer example-icon" (click)="drawer.toggle()">favorite</mat-icon>
+          <span class="example-spacer"></span>
+          <button style="margin-right: 10px" (click)="goTo('/namespace')" mat-raised-button color="warn">Namespaces</button>
+          <button style="margin-right: 10px" (click)="goTo('/folders')" mat-raised-button color="warn">Folders</button>
+          <button style="margin-right: 10px" (click)="goTo('/builds')" mat-raised-button color="warn">Builds</button>
+        </mat-toolbar-row>
+      </mat-toolbar> -->
+
+  <mat-toolbar color="accent">
+    <!-- <button mat-icon-button>
+      <mat-icon>menu</mat-icon>
+    </button> -->
+    <!-- <span>Toolbar</span> -->
+    
+    <td-notification-count class="pointer dark" (click)="goTo('/folders')" color="primary" positionX="before">
+      <mat-icon>folder</mat-icon>
+    </td-notification-count>
+
+    <td-notification-count class="pointer dark"  (click)="goTo('/namespace')" color="primary" positionX="before">
+      <mat-icon>cloud</mat-icon>
+    </td-notification-count>
+    <td-notification-count class="pointer dark" (click)="goTo('/builds')" color="primary" positionX="before">
+      <mat-icon>hdr_strong</mat-icon>
+    </td-notification-count>
+    <td-notification-count *ngIf="backService.isArrowVisible | async" class="pointer dark" (click)="back()" color="primary" positionX="before">
+      <mat-icon>arrow_back</mat-icon>
+    </td-notification-count>
+
+    <span class="spacer"></span>
+    <td-search-box placeholder="Search" [alwaysVisible]="false" flex></td-search-box>
+    <!-- <td-notification-count color="primary" positionX="before" [notifications]="true">
+      <mat-icon>person</mat-icon>
+    </td-notification-count> -->
+    <!-- <td-notification-count color="primary" [notifications]="false">
+      <mat-icon>messages</mat-icon>
+    </td-notification-count> -->
+    <button class="overflow-visible" mat-icon-button [matMenuTriggerFor]="notificationsMenu">
+      <td-notification-count [notifications]="1">
+        <mat-icon style="line-height: 40px" >notifications</mat-icon>
+      </td-notification-count>
+    </button>
+    <mat-menu #notificationsMenu="matMenu" [overlapTrigger]="false">
+      <td-menu>
+        <div td-menu-header class="mat-subheading-2 push-none">Notifications</div>
+        <mat-nav-list dense>
+          <ng-template let-last="last" ngFor [ngForOf]="[0,1,2,3,4,5,6,7,8,9]">
+            <a mat-list-item>
+              <mat-icon matListAvatar>check</mat-icon>
+              <h4 matLine><span class="text-wrap">Build passeddadada da a daa  a a ad  a</span></h4>
+              <p matLine>22 minutes ago</p>
+            </a>
+            <mat-divider *ngIf="!last"></mat-divider>
+          </ng-template>
+        </mat-nav-list>
+        <button mat-button color="accent" td-menu-footer>
+          See All Notifications
+        </button>
+      </td-menu>
+    </mat-menu>
+    <button mat-icon-button [matMenuTriggerFor]="toolbarMenu1">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #toolbarMenu1="matMenu">
+      <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>Settings</span>
+      </button>
+      <!-- <button mat-menu-item>
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Sign out</span>
+      </button> -->
+    </mat-menu>
+  </mat-toolbar>
+  <!-- <mat-list>
+      <ng-template let-item let-last="last" ngFor [ngForOf]="items">
+        <mat-list-item>
+          <div matListAvatar>
+            <ng-template tdLoading [tdLoadingUntil]="!item.value" tdLoadingStrategy="overlay">
+              <mat-icon matListAvatar>
+                settings_backup_restore
+              </mat-icon>
+            </ng-template>
+          </div>
+          <h3 matLine>{{item.label}}</h3>
+        </mat-list-item>
+        <mat-divider *ngIf="!last"></mat-divider>
+      </ng-template>
+    </mat-list> -->
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+
+  <!-- <p *ngFor="let m of (stream | async)">
+        {{ m.message }}
+    </p> -->
+  <!--     
+  <mat-drawer-container class="example-container" autosize>
+    
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+      
+      <div style="display: inline-grid;">
+
+        <button style="margin-bottom:20px;" mat-raised-button>
+          Build
+        </button>
+        <button style="margin-bottom:20px;" mat-raised-button>
+          History
+        </button>
+        <button style="margin-bottom:20px;" mat-raised-button>
+          Settings
+        </button>
+      </div>
+    </mat-drawer>
+
+  </mat-drawer-container> -->
+
+</div>

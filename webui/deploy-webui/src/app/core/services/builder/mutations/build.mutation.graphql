@@ -1,0 +1,5 @@
+mutation triggerBuild($folder:String!, $file:String!, $message: String!, $namespace:String!, $buildFolder: String!) {
+  triggerBuild(folder:$folder, file:$file, message:$message, namespace:$namespace, buildFolder: $buildFolder) {
+    status
+  }
+}

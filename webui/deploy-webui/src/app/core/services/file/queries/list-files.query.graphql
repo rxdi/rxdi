@@ -1,0 +1,10 @@
+query listFiles($folder: String!){
+  listFiles(folder: $folder) {
+    paths {
+      path
+      directory
+      file
+      name
+    }
+  }
+}
