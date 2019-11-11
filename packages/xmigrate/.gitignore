@@ -1,6 +1,0 @@
-node_modules
-migrations
-migrations-log
-coverage
-.cache
-.xmigrate

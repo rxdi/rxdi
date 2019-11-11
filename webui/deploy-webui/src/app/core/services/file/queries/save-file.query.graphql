@@ -1,6 +1,0 @@
-query saveFile($folder: String!, $content: String!){
-  saveFile(folder: $folder, content: $content) {
-    package
-    file
-  }
-}

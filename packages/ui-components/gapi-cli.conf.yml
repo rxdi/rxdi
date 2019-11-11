@@ -1,7 +1,0 @@
-config:
-  app:
-    local:
-      INTROSPECTION_FOLDER: ./src/introspection/
-  schema:
-    introspectionEndpoint: http://localhost:9000/graphql
-    introspectionOutputFolder: ./src/introspection

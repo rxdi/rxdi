@@ -1,0 +1,84 @@
+[submodule "packages/forms"]
+	path = packages/forms
+	url = git@github.com:rxdi/forms.git
+[submodule "packages/ui-kit"]
+	path = packages/ui-kit
+	url = git@github.com:rxdi/ui-kit.git
+[submodule "packages/firestore"]
+	path = packages/firestore
+	url = git@github.com:rxdi/firestore.git
+[submodule "packages/xmigrate"]
+	path = packages/xmigrate
+	url = git@github.com:rxdi/xmigrate.git
+[submodule "packages/schematics"]
+	path = packages/schematics
+	url = git@github.com:rxdi/schematics.git
+[submodule "packages/router"]
+	path = packages/router
+	url = git@github.com:rxdi/router.git
+[submodule "packages/neo4j"]
+	path = packages/neo4j
+	url = git@github.com:rxdi/neo4j.git
+[submodule "packages/lit-html"]
+	path = packages/lit-html
+	url = git@github.com:rxdi/lit-html.git
+[submodule "packages/install"]
+	path = packages/install
+	url = git@github.com:rxdi/install.git
+[submodule "packages/hapi"]
+	path = packages/hapi
+	url = git@github.com:rxdi/hapi.git
+[submodule "packages/graphql-rabbitmq-subscriptions"]
+	path = packages/graphql-rabbitmq-subscriptions
+	url = git@github.com:rxdi/graphql-rabbitmq-subscriptions.git
+[submodule "packages/graphql-pubsub"]
+	path = packages/graphql-pubsub
+	url = git@github.com:rxdi/graphql-pubsub.git
+[submodule "packages/graphql-client"]
+	path = packages/graphql-client
+	url = git@github.com:rxdi/graphql-client.git
+[submodule "packages/dts-merge"]
+	path = packages/dts-merge
+	url = git@github.com:rxdi/dts-merge.git
+[submodule "packages/deploy"]
+	path = packages/deploy
+	url = git@github.com:rxdi/deploy.git
+[submodule "webui/deploy-webui"]
+	path = webui/deploy-webui
+	url = git@github.com:rxdi/deploy-webui.git
+[submodule "packages/core"]
+	path = packages/core
+	url = git@github.com:rxdi/core.git
+[submodule "packages/browser-server"]
+	path = packages/browser-server
+	url = git@github.com:rxdi/browser-server.git
+[submodule "packages/firelink"]
+	path = packages/firelink
+	url = git@github.com:rxdi/firelink.git
+[submodule "packages/graphql"]
+	path = packages/graphql
+	url = git@github.com:rxdi/graphql.git
+[submodule "packages/monorepo"]
+	path = packages/monorepo
+	url = git@github.com:rxdi/monorepo.git
+[submodule "packages/graph-gateway"]
+	path = packages/graph-gateway
+	url = git@github.com:rxdi/graph-gateway.git
+[submodule "packages/ui-registry-client"]
+	path = packages/ui-registry-client
+	url = git@github.com:rxdi/ui-registry-client.git
+[submodule "packages/ui-registry"]
+	path = packages/ui-registry
+	url = git@github.com:rxdi/ui-registry.git
+[submodule "packages/graphqj"]
+	path = packages/graphqj
+	url = git@github.com:rxdi/graphqj.git
+[submodule "packages/parcel-plugin-shebang"]
+	path = packages/parcel-plugin-shebang
+	url = git@github.com:rxdi/parcel-plugin-shebang.git
+[submodule "packages/cache"]
+	path = packages/cache
+	url = git@github.com:rxdi/cache.git
+[submodule "packages/deploy-commit"]
+	path = packages/deploy-commit
+	url = git@github.com:rxdi/deploy-commit.git
