@@ -48,6 +48,9 @@ commands:
   diff:
     push: for d in $(git diff --name-only); do (cd "$d" && git push); done && echo stop
     show: for d in $(git diff --name-only); do (cd "$d" && echo $d); done && echo stop
+
+  tags:
+    delete: for d in ./packages/*/; do (cd "$d" && git tag -l | xargs git tag -d && git fetch --tags); done && echo stop
   pull:
     all: npx bolt ws exec -- git pull
     #  >/dev/null 2>&

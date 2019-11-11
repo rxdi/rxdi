@@ -17,6 +17,8 @@
     "pull-all":"gapi pull all",
     "diff-push":"gapi push diff",
     "diff-show":"gapi show diff",
+    "deinit":"git submodule deinit -f . && git submodule update --init",
+    "delete-tags":"gapi tags delete",
     "publish-packages": "npx bolt ws exec -- npm publish --update-readme --access public"
   },
   "husky": {
