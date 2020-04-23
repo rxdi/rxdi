@@ -21,12 +21,6 @@
     "delete-tags":"gapi tags delete",
     "publish-packages": "npx bolt ws exec -- npm publish --update-readme --access public"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo SUCCESS PUSH",
-      "pre-push": "echo SUCCESS PUSH"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rxdi/mono.git"
