@@ -1,15 +1,6 @@
 [
   {
     "id": 1,
-    "repo": "browser-server",
-    "label": "@rxdi/browser-server",
-    "owner": "rxdi",
-    "folderName": "browser-server",
-    "url": "https://github.com/rxdi/browser-server",
-    "namespace": "rxdi"
-  },
-  {
-    "id": 2,
     "repo": "core",
     "label": "@rxdi/core",
     "owner": "rxdi",
@@ -18,25 +9,7 @@
     "namespace": "rxdi"
   },
   {
-    "id": 3,
-    "repo": "deploy",
-    "label": "@rxdi/deploy",
-    "owner": "rxdi",
-    "folderName": "deploy",
-    "url": "https://github.com/rxdi/deploy",
-    "namespace": "rxdi"
-  },
-  {
-    "id": 4,
-    "repo": "deploy-webui",
-    "label": "@rxdi/deploy-webui",
-    "owner": "rxdi",
-    "folderName": "deploy-webui",
-    "url": "https://github.com/rxdi/deploy-webui",
-    "namespace": "rxdi"
-  },
-  {
-    "id": 5,
+    "id": 2,
     "repo": "dts-merge",
     "label": "@rxdi/dts-merge",
     "owner": "rxdi",
@@ -45,12 +18,39 @@
     "namespace": "rxdi"
   },
   {
-    "id": 6,
+    "id": 3,
+    "repo": "firestore",
+    "label": "@rxdi/firestore",
+    "owner": "rxdi",
+    "folderName": "firestore",
+    "url": "https://github.com/rxdi/firestore",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 4,
+    "repo": "forms",
+    "label": "@rxdi/forms",
+    "owner": "rxdi",
+    "folderName": "forms",
+    "url": "https://github.com/rxdi/forms",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 5,
     "repo": "graphql",
     "label": "@rxdi/graphql",
     "owner": "rxdi",
     "folderName": "graphql",
     "url": "https://github.com/rxdi/graphql",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 6,
+    "repo": "graphql-client",
+    "label": "@rxdi/graphql-client",
+    "owner": "rxdi",
+    "folderName": "graphql-client",
+    "url": "https://github.com/rxdi/graphql-client",
     "namespace": "rxdi"
   },
   {
@@ -64,6 +64,15 @@
   },
   {
     "id": 8,
+    "repo": "graphql-rabbitmq-subscriptions",
+    "label": "@rxdi/graphql-rabbitmq-subscriptions",
+    "owner": "rxdi",
+    "folderName": "graphql-rabbitmq-subscriptions",
+    "url": "https://github.com/rxdi/graphql-rabbitmq-subscriptions.git",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 9,
     "repo": "hapi",
     "label": "@rxdi/hapi",
     "owner": "rxdi",
@@ -72,7 +81,7 @@
     "namespace": "rxdi"
   },
   {
-    "id": 9,
+    "id": 10,
     "repo": "install",
     "label": "@rxdi/install",
     "owner": "rxdi",
@@ -81,16 +90,16 @@
     "namespace": "rxdi"
   },
   {
-    "id": 10,
-    "repo": "ipfs-package-example",
-    "label": "@rxdi/ipfs-package-example",
+    "id": 11,
+    "repo": "lit-html",
+    "label": "@rxdi/lit-html",
     "owner": "rxdi",
-    "folderName": "ipfs-package-example",
-    "url": "https://github.com/rxdi/ipfs-package-example",
+    "folderName": "lit-html",
+    "url": "https://github.com/rxdi/lit-html",
     "namespace": "rxdi"
   },
   {
-    "id": 11,
+    "id": 12,
     "repo": "neo4j",
     "label": "@rxdi/neo4j",
     "owner": "rxdi",
@@ -99,7 +108,16 @@
     "namespace": "rxdi"
   },
   {
-    "id": 12,
+    "id": 13,
+    "repo": "parcel-plugin-shebang",
+    "label": "@rxdi/parcel-plugin-shebang",
+    "owner": "rxdi",
+    "folderName": "parcel-plugin-shebang",
+    "url": "git+https://github.com/rxdi/parcel-plugin-shebang.git",
+    "namespace": "rxdi"
+  },
+  {
+    "id": 14,
     "repo": "router",
     "label": "@rxdi/router",
     "owner": "rxdi",

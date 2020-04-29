@@ -13,7 +13,7 @@ const getDirectories = source =>
 const repos = [];
 let count = 0;
 
-getDirectories(__dirname).forEach(dir => {
+getDirectories('packages').forEach(dir => {
   if (dir.includes(".git")) {
     return;
   }

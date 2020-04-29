@@ -1,0 +1,33 @@
+"use strict";
+/**
+ * @license
+ * Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+ * This code may only be used under the BSD style license found at
+ * http://polymer.github.io/LICENSE.txt
+ * The complete set of authors may be found at
+ * http://polymer.github.io/AUTHORS.txt
+ * The complete set of contributors may be found at
+ * http://polymer.github.io/CONTRIBUTORS.txt
+ * Code distributed by Google as part of the polymer project is also
+ * subject to an additional IP rights grant found at
+ * http://polymer.github.io/PATENTS.txt
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+const lit_html_1 = require("../lit-html");
+/**
+ * For AttributeParts, sets the attribute if the value is defined and removes
+ * the attribute if the value is undefined.
+ *
+ * For other part types, this directive is a no-op.
+ */
+exports.ifDefined = lit_html_1.directive((value) => (part) => {
+    if (value === undefined && part instanceof lit_html_1.AttributePart) {
+        if (value !== part.value) {
+            const name = part.committer.name;
+            part.committer.element.removeAttribute(name);
+        }
+    }
+    else {
+        part.setValue(value);
+    }
+});

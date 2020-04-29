@@ -1,0 +1,31 @@
+{
+  "name": "@rxdi/graphql-client",
+  "version": "0.7.47",
+  "main": "index.js",
+  "author": "Kristiyan Tachev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rxdi/graphql-client"
+  },
+  "scripts": {
+    "test": "echo Test Graphql client"
+  },
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.6.2",
+    "apollo-client": "^2.6.3",
+    "apollo-link": "^1.2.12",
+    "apollo-link-context": "^1.0.18",
+    "apollo-link-http": "^1.5.15",
+    "apollo-link-ws": "^1.0.18",
+    "subscriptions-transport-ws": "^0.9.16"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.3",
+    "graphql": "^14.5.8",
+    "@rxdi/core": "^0.7.37"
+  },
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "typings": "./dist/index.d.ts"
+}

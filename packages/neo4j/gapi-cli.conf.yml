@@ -1,0 +1,37 @@
+config:
+  app:
+    local:
+      TEST_CONFIG: 'dadada'
+
+
+  schema:
+    introspectionEndpoint: http://localhost:9000/graphql
+    introspectionOutputFolder: ./src/app/core/api-introspection
+
+
+commands:
+  testing:
+    browser: jest --env jsdom --testPathPattern="/src/.*\\.browser.spec.(ts|tsx|js)$"
+    node: jest --env node --testPathPattern="/src/.*\\.spec.(ts|tsx|js)$"
+
+  module:
+    build-node:
+      - ./node_modules/.bin/parcel build --target node src/index.ts
+      - ./node_modules/.bin/rxdi-merge --name @rxdi/core --project . --out dist/index.d.ts
+      - cp -r dist/* ./dmodule
+      - gapi module clean
+
+    build-browser:
+      - ./node_modules/.bin/parcel build --target browser src/index.ts
+      - ./node_modules/.bin/rxdi-merge --name @rxdi/core --project . --out dist/index.d.ts
+      - cp -r dist/* ./dmodule-browser
+      - gapi module clean
+    clean:
+      - rm -rf dist
+      - rm -rf .cache
+      - rm -rf ./dmodule/index.map
+    deploy:
+      - jsipfs add ./dmodule/index.js
+      - jsipfs add ./dmodule/index.d.ts
+    deploy-config:
+      - jsipfs add ./dmodule/index.json

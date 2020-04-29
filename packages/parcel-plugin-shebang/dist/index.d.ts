@@ -1,0 +1,28 @@
+declare const fs: any;
+declare const escapeStringRegexp: any;
+declare const path: any;
+declare const CWD: string;
+declare const yn: any;
+declare const processAccordingFoundShebangs: (bundles: any) => void;
+declare const processAccordingConfiguration: (bundles: any, conf: any) => void;
+declare const validate: (obj: any) => any;
+declare const loadConfigFromPackageJson: () => any;
+declare const loadConfigFromShebangRc: () => any[];
+declare const toAbsolutePath: (files: any) => any;
+declare const getConfig: (dynamicConfig: any) => any[];
+declare const SHEBANG_REGEX: RegExp;
+declare const BLANK_LINE_REGEX: RegExp;
+declare const existsFile: (path: any) => any;
+declare const readFile: (path: any) => any;
+declare const writeFile: (path: any, content: any) => void;
+declare const hasShebang: (content: any) => boolean;
+declare const getShebang: (content: any) => string;
+declare const buildShebangLine: (interpreter: any) => string;
+declare const rewriteShebang: (path: any) => void;
+declare const writeShebang: (path: any, interpreter: any) => void;
+declare const removeBlankLines: (content: any) => any;
+declare const newBundle: (name: any, path: any) => {
+    name: any;
+    path: any;
+};
+declare const getBundles: (bundle: any) => any[];
