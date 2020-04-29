@@ -49,9 +49,6 @@
 [submodule "packages/browser-server"]
 	path = packages/browser-server
 	url = git@github.com:rxdi/browser-server.git
-[submodule "packages/firelink"]
-	path = packages/firelink
-	url = git@github.com:rxdi/firelink.git
 [submodule "packages/graphql"]
 	path = packages/graphql
 	url = git@github.com:rxdi/graphql.git
