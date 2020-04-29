@@ -1,9 +1,6 @@
 [submodule "packages/forms"]
 	path = packages/forms
 	url = git@github.com:rxdi/forms.git
-[submodule "packages/ui-kit"]
-	path = packages/ui-kit
-	url = git@github.com:rxdi/ui-kit.git
 [submodule "packages/firestore"]
 	path = packages/firestore
 	url = git@github.com:rxdi/firestore.git
