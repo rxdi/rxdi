@@ -1,0 +1,466 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@rxdi/graphql</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@rxdi/graphql</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> @rxdi/graphql</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<h1 id="-rxdi-graphql-module">@rxdi Graphql Module</h1>
+				<p><a href="https://travis-ci.org/rxdi/graphql"><img src="https://travis-ci.org/rxdi/graphql.svg?branch=master" alt="Build Status"></a></p>
+				<h5 id="more-information-about-hapi-server-can-be-found-here-hapi">More information about Hapi server can be found here <a href="https://hapijs.com/">Hapi</a></h5>
+				<h5 id="for-questions-issues-you-can-write-ticket-here">For questions/issues you can write ticket <a href="http://gitlab.youvolio.com/rxdi/graphql/issues">here</a></h5>
+				<h5 id="this-module-is-intended-to-be-used-with-rxdi">This module is intended to be used with <a href="https://github.com/rxdi/core">rxdi</a></h5>
+				<h2 id="installation-and-basic-examples-">Installation and basic examples:</h2>
+				<h5 id="to-install-this-gapi-module-run-">To install this Gapi module, run:</h5>
+				<pre><code class="language-bash">$ npm install @rxdi/graphql --save</code></pre>
+				<h2 id="consuming-rxdi-graphql">Consuming @rxdi/graphql</h2>
+				<h5 id="import-inside-appmodule-or-coremodule">Import inside AppModule or CoreModule</h5>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { Module } <span class="hljs-keyword">from</span> <span class="hljs-string">"@rxdi/core"</span>;
+<span class="hljs-keyword">import</span> { HapiModule } <span class="hljs-keyword">from</span> <span class="hljs-string">"@rxdi/hapi"</span>;
+<span class="hljs-keyword">import</span> { GraphQLModule } <span class="hljs-keyword">from</span> <span class="hljs-string">"@rxdi/graphql"</span>;
+
+<span class="hljs-meta">@Module</span>({
+    imports: [
+        HapiModule.forRoot({
+            hapi: {
+                port: <span class="hljs-number">9000</span>
+            }
+        }),
+        GraphQLModule.forRoot({
+            path: <span class="hljs-string">'/graphql'</span>,
+            openBrowser: <span class="hljs-literal">false</span>,
+            writeEffects: <span class="hljs-literal">false</span>,
+            graphiQlPath: <span class="hljs-string">'/graphiql'</span>,
+            graphiqlOptions: {
+                endpointURL: <span class="hljs-string">'/graphql'</span>,
+                subscriptionsEndpoint: <span class="hljs-string">`<span class="hljs-subst">${
+                    process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'
+                    }</span>://<span class="hljs-subst">${process.env.GRAPHIQL_WS_PATH || 'localhost'}</span><span class="hljs-subst">${
+                    process.env.DEPLOY_PLATFORM === 'heroku'
+                        ? ''
+                        : `:${process.env.API_PORT ||
+                        process.env.PORT}</span>`</span>
+                    }/subscriptions<span class="hljs-string">`,
+                websocketConnectionParams: {
+                    token: process.env.GRAPHIQL_TOKEN
+                }
+            },
+            graphqlOptions: {
+                schema: null
+            }
+        }),
+    ]
+})
+export class CoreModule {}</span></code></pre>
+				<h5 id="install-neo4j-driver">Install NEO4J Driver</h5>
+				<pre><code class="language-bash">$ npm install neo4j-graphql-js neo4j-driver</code></pre>
+				<h5 id="neo4j-driver-load">Neo4J Driver load</h5>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { Module } <span class="hljs-keyword">from</span> <span class="hljs-string">"@rxdi/core"</span>;
+<span class="hljs-keyword">import</span> { HapiModule } <span class="hljs-keyword">from</span> <span class="hljs-string">"@rxdi/hapi"</span>;
+<span class="hljs-keyword">import</span> { GraphQLModule } <span class="hljs-keyword">from</span> <span class="hljs-string">"@rxdi/graphql"</span>;
+<span class="hljs-keyword">import</span> { v1 <span class="hljs-keyword">as</span> neo4j } <span class="hljs-keyword">from</span> <span class="hljs-string">'neo4j-driver'</span>;
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> neo4jgql <span class="hljs-keyword">from</span> <span class="hljs-string">'neo4j-graphql-js'</span>;
+
+<span class="hljs-meta">@Module</span>({
+    providers: [{
+        provide: <span class="hljs-string">'neo4j-graphql-js'</span>,
+        useValue: neo4jgql
+    }],
+    imports: [
+        HapiModule.forRoot({
+            hapi: {
+                port: <span class="hljs-number">9000</span>
+            }
+        }),
+        GraphQLModule.forRoot({
+            path: <span class="hljs-string">'/graphql'</span>,
+            openBrowser: <span class="hljs-literal">false</span>,
+            writeEffects: <span class="hljs-literal">false</span>,
+            graphiQlPath: <span class="hljs-string">'/graphiql'</span>,
+            graphiqlOptions: {
+                endpointURL: <span class="hljs-string">'/graphql'</span>,
+                subscriptionsEndpoint: <span class="hljs-string">`<span class="hljs-subst">${
+                    process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'
+                    }</span>://<span class="hljs-subst">${process.env.GRAPHIQL_WS_PATH || 'localhost'}</span><span class="hljs-subst">${
+                    process.env.DEPLOY_PLATFORM === 'heroku'
+                        ? ''
+                        : `:${process.env.API_PORT ||
+                        process.env.PORT}</span>`</span>
+                    }/subscriptions<span class="hljs-string">`,
+                websocketConnectionParams: {
+                    token: process.env.GRAPHIQL_TOKEN
+                }
+            },
+            graphqlOptions: {
+                context: {
+                    driver: (neo4j.driver(
+                        'bolt://localhost:7687',
+                        neo4j.auth.basic('neo4j', 'your-graph-password')
+                    ))
+                },
+                schema: null
+            }
+        }),
+    ]
+})
+export class CoreModule {}</span></code></pre>
+				<h4 id="using-on_request-and-schema_override">Using ON_REQUEST and SCHEMA_OVERRIDE</h4>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { Module, ON_REQUEST_HANDLER, SCHEMA_OVERRIDE, Boom } <span class="hljs-keyword">from</span> <span class="hljs-string">"@gapi/core"</span>;
+<span class="hljs-keyword">import</span> { AppQueriesController } <span class="hljs-keyword">from</span> <span class="hljs-string">"./app.controller"</span>;
+<span class="hljs-keyword">import</span> { Request, ResponseToolkit } <span class="hljs-keyword">from</span> <span class="hljs-string">'hapi'</span>;
+
+<span class="hljs-meta">@Module</span>({
+    controllers: [AppQueriesController],
+    providers: [
+        {
+            provide: SCHEMA_OVERRIDE,
+            useFactory: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> (schema) =&gt; {
+                <span class="hljs-comment">// Do things with bootstrapped schema</span>
+                <span class="hljs-keyword">return</span> schema;
+            }
+        },
+        {
+            provide: ON_REQUEST_HANDLER,
+            useFactory: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">async</span> (next, context, request: Request, h: ResponseToolkit, err: <span class="hljs-built_in">Error</span>) =&gt; {
+                <span class="hljs-comment">// Authenticate user here if it is not authenticated return Boom.unauthorized()</span>
+                <span class="hljs-comment">// if (request.headers.authorization) {</span>
+                <span class="hljs-comment">//     const tokenData = ValidateToken(request.headers.authorization);</span>
+                <span class="hljs-comment">//     const user = {};</span>
+                <span class="hljs-comment">//     if (!user) {</span>
+                <span class="hljs-comment">//         return Boom.unauthorized();</span>
+                <span class="hljs-comment">//     } else {</span>
+                <span class="hljs-comment">//         context.user = {id: 1, name: 'pesho'};</span>
+                <span class="hljs-comment">//     }</span>
+                <span class="hljs-comment">// }</span>
+                <span class="hljs-keyword">return</span> next();
+            }
+        }
+    ]
+})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> AppModule { }</code></pre>
+				<h4 id="here-we-inject-neo4j-graphql-js-library-to-dependency-injection-so-graphql-server-will-handle-it-and-work-with-the-library">Here we inject neo4j-graphql-js library to dependency injection so graphql server will handle it and work with the library</h4>
+				<pre><code class="language-typescript">    providers: [{
+        provide: <span class="hljs-string">'neo4j-graphql-js'</span>,
+        useValue: neo4jgql
+    }],</code></pre>
+				<h4 id="here-we-attach-neo4j-driver-to-context-of-our-resolvers">Here we attach neo4j driver to context of our resolvers</h4>
+				<pre><code class="language-typescript">    context: {
+        driver: (neo4j.driver(
+            <span class="hljs-string">'bolt://localhost:7687'</span>,
+            neo4j.auth.basic(<span class="hljs-string">'neo4j'</span>, <span class="hljs-string">'your-pass'</span>)
+        ))
+    },</code></pre>
+				<p>You are ready to write queries :)</p>
+				<p>TODO: Better documentation...</p>
+				<p>Enjoy ! :)</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_config_tokens_.html">"config.tokens"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_effect_name_effect_name_decorator_.html">"decorators/effect-<wbr>name/effect-<wbr>name.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_effect_name_effect_name_decorator_spec_.html">"decorators/effect-<wbr>name/effect-<wbr>name.decorator.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_effect_name_index_.html">"decorators/effect-<wbr>name/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_guard_guard_decorator_.html">"decorators/guard/guard.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_guard_guard_decorator_spec_.html">"decorators/guard/guard.decorator.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_guard_guard_interface_.html">"decorators/guard/guard.interface"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_guard_index_.html">"decorators/guard/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_index_.html">"decorators/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_intercept_index_.html">"decorators/intercept/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_intercept_intercept_decorator_.html">"decorators/intercept/intercept.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_intercept_intercept_decorator_spec_.html">"decorators/intercept/intercept.decorator.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_intercept_intercept_interface_.html">"decorators/intercept/intercept.interface"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_mutation_index_.html">"decorators/mutation/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_mutation_mutation_decorator_.html">"decorators/mutation/mutation.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_mutation_mutation_decorator_spec_.html">"decorators/mutation/mutation.decorator.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_object_type_index_.html">"decorators/object-<wbr>type/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_object_type_object_type_decorator_.html">"decorators/object-<wbr>type/object-<wbr>type.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_object_type_object_type_decorator_spec_.html">"decorators/object-<wbr>type/object-<wbr>type.decorator.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_of_type_index_.html">"decorators/of-<wbr>type/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_of_type_of_type_decorator_.html">"decorators/of-<wbr>type/of-<wbr>type.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_of_type_of_type_decorator_spec_later_.html">"decorators/of-<wbr>type/of-<wbr>type.decorator.spec-<wbr>later"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_public_index_.html">"decorators/public/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_public_public_decorator_.html">"decorators/public/public.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_public_public_decorator_spec_.html">"decorators/public/public.decorator.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_query_index_.html">"decorators/query/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_query_query_decorator_.html">"decorators/query/query.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_query_query_decorator_spec_.html">"decorators/query/query.decorator.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_resolver_index_.html">"decorators/resolver/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_resolver_resolver_decorator_.html">"decorators/resolver/resolver.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_scope_index_.html">"decorators/scope/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_scope_scope_decorator_.html">"decorators/scope/scope.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_scope_scope_decorator_spec_.html">"decorators/scope/scope.decorator.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_type_injector_index_.html">"decorators/type-<wbr>injector/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_type_injector_type_injector_.html">"decorators/type-<wbr>injector/type-<wbr>injector"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_type_index_.html">"decorators/type/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_type_type_decorator_.html">"decorators/type/type.decorator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_decorators_type_type_decorator_spec_.html">"decorators/type/type.decorator.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_helpers_directives_custom_directive_.html">"helpers/directives/custom-<wbr>directive"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_helpers_directives_custom_directive_spec_.html">"helpers/directives/custom-<wbr>directive.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_helpers_index_.html">"helpers/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_index_.html">"index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_plugin_init_.html">"plugin-<wbr>init"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_apollo_service_.html">"services/apollo.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_bootstrap_service_.html">"services/bootstrap.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_effect_service_.html">"services/effect.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_error_service_.html">"services/error.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_graphiql_service_.html">"services/graphiql.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_hooks_service_.html">"services/hooks.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_index_.html">"services/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_server_push_service_.html">"services/server-<wbr>push.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_services_start_service_.html">"services/start.service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_test_global_spec_.html">"test/global.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_test_helpers_core_module_.html">"test/helpers/core-<wbr>module"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_test_helpers_core_module_spec_.html">"test/helpers/core-<wbr>module.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_test_index_.html">"test/index"</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

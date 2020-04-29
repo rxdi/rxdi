@@ -1,0 +1,25 @@
+{
+  "name": "@rxdi/dts-merge",
+  "version": "0.7.50",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo Test DTS"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rxdi/dts-merge"
+  },
+  "bin": {
+    "rxdi-merge": "bin/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "glob": "^7.1.2",
+    "mkdirp": "^0.5.1"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.3"
+  }
+}
