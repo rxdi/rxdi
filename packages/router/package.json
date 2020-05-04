@@ -9,7 +9,8 @@
     "url": "https://github.com/rxdi/router"
   },
   "dependencies": {
-    "@vaadin/router": "^1.2.0"
+    "@vaadin/router": "^1.2.0",
+    "router-slot": "^1.5.4"
   },
   "devDependencies": {
     "@rxdi/core": "^0.7.37",

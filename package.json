@@ -39,6 +39,7 @@
     "firebase-admin": "^8.2.0",
     "@gapi/auth": "^1.8.6",
     "yn": "^3.1.0",
+    "router-slot": "^1.5.4",
     "escape-string-regexp": "^2.0.0",
     "@google-cloud/firestore": "2.2.1",
     "ts-lint": "^4.5.1",

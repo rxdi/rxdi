@@ -9731,6 +9731,11 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
+router-slot@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/router-slot/-/router-slot-1.5.4.tgz#2262a1eaf49962e3f922f84ae4692abe0b25a59c"
+  integrity sha512-tHqDp0ZZ/KF+j3+OlPbxHoYRkMrHQrxU8D0kUoUhZEevj+j/sMV2pXmZ2jL4oND2o6PyTsCYz1VRqZr7mBfaTg==
+
 rsvp@^4.8.4:
   version "4.8.5"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"
