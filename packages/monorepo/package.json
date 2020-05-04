@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/monorepo",
-  "version": "0.7.51",
+  "version": "0.7.52",
   "description": "",
   "main": "./dist/main.js",
   "scripts": {
