@@ -33,6 +33,9 @@ exports.customElement = (tag, config = {}) => (classOrDescriptor) => {
         return cls;
     };
     config.styles = config.styles || [];
+    if (!('unsubscribeOnDestroy' in config)) {
+        config.unsubscribeOnDestroy = true;
+    }
     cls.prototype.getTemplateResult = function () {
         return this;
     };
@@ -98,8 +101,10 @@ exports.customElement = (tag, config = {}) => (classOrDescriptor) => {
             });
         }
         // Disconnect from all observables when component is about to unmount
-        cls.subscriptions.forEach(sub => sub.unsubscribe());
-        cls.subscriptions.clear();
+        if (config.unsubscribeOnDestroy) {
+            cls.subscriptions.forEach(sub => sub.unsubscribe());
+            cls.subscriptions.clear();
+        }
         OnDestroy.call(this);
         disconnectedCallback.call(this);
     };
@@ -109,12 +114,16 @@ exports.customElement = (tag, config = {}) => (classOrDescriptor) => {
     cls.prototype.update = function () {
         update.call(this);
         OnUpdate.call(this);
-        mapToSubscriptions.call(this);
+        if (config.unsubscribeOnDestroy) {
+            mapToSubscriptions.call(this);
+        }
     };
     cls.prototype.firstUpdated = function () {
         firstUpdated.call(this);
         OnUpdateFirst.call(this);
-        mapToSubscriptions.call(this);
+        if (config.unsubscribeOnDestroy) {
+            mapToSubscriptions.call(this);
+        }
     };
     cls.prototype.connectedCallback = function () {
         if (config.providers && config.providers.length) {
@@ -125,7 +134,9 @@ exports.customElement = (tag, config = {}) => (classOrDescriptor) => {
             }
             catch (e) { }
         }
-        mapToSubscriptions.call(this);
+        if (config.unsubscribeOnDestroy) {
+            mapToSubscriptions.call(this);
+        }
         if (!config.template) {
             config.template = () => lit_html_1.html ``;
         }

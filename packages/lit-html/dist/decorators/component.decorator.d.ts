@@ -10,6 +10,7 @@ interface CustomElementConfig<T> {
     extends?: string;
     container?: Element | DocumentFragment;
     providers?: Function[];
+    unsubscribeOnDestroy?: boolean;
 }
 interface ClassDescriptor {
     kind: 'class';

@@ -11,6 +11,7 @@ interface CustomElementConfig<T> {
   extends?: string;
   container?: Element | DocumentFragment;
   providers?: Function[];
+  unsubscribeOnDestroy?: boolean;
 }
 
 // From the TC39 Decorators proposal
@@ -75,7 +76,7 @@ const standardCustomElement = (
 
 export const customElement = <T>(
   tag: string,
-  config: CustomElementConfig<T> = {} as any
+  config: CustomElementConfig<T> = {} as CustomElementConfig<T>
 ) => (classOrDescriptor: Constructor<RXDIElement> | ClassDescriptor) => {
   if (!tag || (tag && tag.indexOf('-') <= 0)) {
     throw new Error(
@@ -90,6 +91,9 @@ export const customElement = <T>(
     return cls;
   };
   config.styles = config.styles || [];
+  if (!('unsubscribeOnDestroy' in config)) {
+    config.unsubscribeOnDestroy = true;
+  }
   cls.prototype.getTemplateResult = function() {
     return this;
   };
@@ -156,8 +160,10 @@ export const customElement = <T>(
       });
     }
     // Disconnect from all observables when component is about to unmount
-    cls.subscriptions.forEach(sub => sub.unsubscribe());
-    cls.subscriptions.clear();
+    if (config.unsubscribeOnDestroy) {
+      cls.subscriptions.forEach(sub => sub.unsubscribe());
+      cls.subscriptions.clear();
+    }
     OnDestroy.call(this);
     disconnectedCallback.call(this);
   };
@@ -167,12 +173,16 @@ export const customElement = <T>(
   cls.prototype.update = function() {
     update.call(this);
     OnUpdate.call(this);
-    mapToSubscriptions.call(this);
+    if (config.unsubscribeOnDestroy) {
+      mapToSubscriptions.call(this);
+    }
   };
   cls.prototype.firstUpdated = function() {
     firstUpdated.call(this);
     OnUpdateFirst.call(this);
-    mapToSubscriptions.call(this);
+    if (config.unsubscribeOnDestroy) {
+      mapToSubscriptions.call(this);
+    }
   };
   cls.prototype.connectedCallback = function() {
     if (config.providers && config.providers.length) {
@@ -182,7 +192,9 @@ export const customElement = <T>(
         config.providers.forEach(provider => Container.get(provider));
       } catch (e) {}
     }
-    mapToSubscriptions.call(this);
+    if (config.unsubscribeOnDestroy) {
+      mapToSubscriptions.call(this);
+    }
     if (!config.template) {
       config.template = () => html``;
     }
