@@ -5,13 +5,19 @@ class Outlet extends router_1.Router {
     constructor(element, options) {
         super(element, options);
         this.options = options;
-        this.activePath = '/';
-        window.addEventListener('vaadin-router-location-changed', event => {
+        this.activePath = "/";
+        this.listener = this.onSnapshotChange((event) => {
             if (this.options.log) {
-                console.log(`You are at '${event['detail'].location.pathname}'`);
+                console.log(`You are at '${event.detail.location.pathname}'`);
             }
-            this.activePath = event['detail'].location.pathname;
+            this.activePath = event.detail.location.pathname;
         });
+    }
+    onSnapshotChange(callback) {
+        window.addEventListener("vaadin-router-location-changed", callback);
+        return {
+            unsubscribe: () => window.removeEventListener("vaadin-router-location-changed", callback),
+        };
     }
     freezeRouter() {
         this.freeze = true;
@@ -116,6 +122,9 @@ class Outlet extends router_1.Router {
      * Removes the subscription to navigation events created in the subscribe() method.
      */
     unsubscribe() {
+        if (this.listener) {
+            this.listener.unsubscribe();
+        }
         super.unsubscribe();
     }
     addRoutes(routes) {

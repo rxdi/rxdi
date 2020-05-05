@@ -1,11 +1,22 @@
-import { Router as VaadinRouter } from '@vaadin/router';
-import { NavigationTrigger } from './injection.tokens';
-import { RouterOptions, Route } from './injection.tokens';
+import { Router as VaadinRouter } from "@vaadin/router";
+import { NavigationTrigger } from "./injection.tokens";
+import { RouterOptions, Route } from "./injection.tokens";
+interface Detail extends Event {
+    detail: {
+        location: {
+            pathname: string;
+        };
+    };
+}
 export declare class Outlet<C = {}> extends VaadinRouter {
     private options;
     activePath: string;
     private freeze;
+    private listener;
     constructor(element: Element, options: RouterOptions);
+    onSnapshotChange(callback: (event: Detail) => void): {
+        unsubscribe: () => void;
+    };
     freezeRouter(): void;
     unfreezeRouter(): void;
     /**
@@ -78,3 +89,4 @@ export declare class Outlet<C = {}> extends VaadinRouter {
     unsubscribe(): void;
     addRoutes(routes: Route<C> | Route<C>[]): Route<C>[];
 }
+export {};

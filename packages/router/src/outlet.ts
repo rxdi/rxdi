@@ -1,18 +1,32 @@
-import { Router as VaadinRouter } from '@vaadin/router';
-import { NavigationTrigger } from './injection.tokens';
-import { RouterOptions, Route } from './injection.tokens';
+import { Router as VaadinRouter } from "@vaadin/router";
+import { NavigationTrigger } from "./injection.tokens";
+import { RouterOptions, Route } from "./injection.tokens";
+import { Subscription } from "@rxdi/lit-html";
+
+interface Detail extends Event {
+  detail: { location: { pathname: string } };
+}
 
 export class Outlet<C = {}> extends VaadinRouter {
-  activePath: string = '/';
+  activePath: string = "/";
   private freeze: boolean;
+  private listener: { unsubscribe: () => void };
   constructor(element: Element, private options: RouterOptions) {
     super(element, options);
-    window.addEventListener('vaadin-router-location-changed', event => {
+    this.listener = this.onSnapshotChange((event) => {
       if (this.options.log) {
-        console.log(`You are at '${event['detail'].location.pathname}'`);
+        console.log(`You are at '${event.detail.location.pathname}'`);
       }
-      this.activePath = event['detail'].location.pathname;
+      this.activePath = event.detail.location.pathname;
     });
+  }
+
+  onSnapshotChange(callback: (event: Detail) => void) {
+    window.addEventListener("vaadin-router-location-changed", callback);
+    return {
+      unsubscribe: () =>
+        window.removeEventListener("vaadin-router-location-changed", callback),
+    };
   }
 
   freezeRouter() {
@@ -133,11 +147,13 @@ export class Outlet<C = {}> extends VaadinRouter {
    * Removes the subscription to navigation events created in the subscribe() method.
    */
   unsubscribe() {
+    if (this.listener) {
+      this.listener.unsubscribe();
+    }
     super.unsubscribe();
   }
 
   addRoutes(routes: Route<C> | Route<C>[]): Route<C>[] {
     return super.addRoutes(routes);
   }
-
 }
