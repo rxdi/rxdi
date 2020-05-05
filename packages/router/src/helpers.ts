@@ -1,11 +1,11 @@
-import { BehaviorSubject, isObservable } from 'rxjs';
+import { BehaviorSubject, isObservable } from "rxjs";
 import {
   Route,
   CanActivateResolver,
   RouterOptions,
-  RouteContext
-} from './injection.tokens';
-import { Container } from '@rxdi/core';
+  RouteContext,
+} from "./injection.tokens";
+import { Container } from "@rxdi/core";
 
 const RouteCache = new Map();
 
@@ -14,12 +14,12 @@ export const ChildRoutesObservable: BehaviorSubject<
 > = new BehaviorSubject(null);
 
 function assignChildren(route: Route) {
-  if (route.children && typeof route.children === 'function') {
+  if (route.children && typeof route.children === "function") {
     const lazyModule = route.children;
     route.children = async function(context, commands) {
       await lazyModule(context, commands);
       let params = [
-        ...ChildRoutesObservable.getValue().map(r => Object.assign({}, r))
+        ...ChildRoutesObservable.getValue().map((r) => Object.assign({}, r)),
       ];
       if (!RouteCache.has(route.path)) {
         RouteCache.set(route.path, params);
@@ -39,13 +39,13 @@ async function activateGuard(result, commands, route: RouteContext) {
   } else {
     const routerOptions = Container.get(RouterOptions) as any;
     let redirect;
-    if (route.path === '/') {
-      redirect = commands.redirect('/not-found');
+    if (route.path === "/") {
+      redirect = commands.redirect("/not-found");
     } else {
-      redirect = commands.redirect(route.parent.path || '/');
+      redirect = commands.redirect(route.parent.path || "/");
     }
     if (routerOptions.log) {
-      console.error(`Guard ${route.canActivate['originalName']} activated!`);
+      console.error(`Guard ${route.canActivate["originalName"]} activated!`);
     }
     return redirect;
   }
@@ -74,14 +74,14 @@ function assignAction(route: Route) {
 }
 
 function assignStaticIs(route: Route) {
-  if (typeof route.component === 'function') {
+  if (typeof route.component === "function") {
     route.component = route.component.is();
   }
   return route;
 }
 
 export function loadRoutes(routes: Route[]) {
-  const notFoundRoute = routes.find(v => v.path === '(.*)');
+  const notFoundRoute = routes.find((v) => v.path === "(.*)");
   routes = routes.sort(function(a, b) {
     if (a.path < b.path) {
       return -1;
@@ -97,9 +97,20 @@ export function loadRoutes(routes: Route[]) {
     routes.push(notFoundRoute);
   }
 
-  const r = [...routes].map(route =>
+  const r = [...routes].map((route) =>
     assignStaticIs(assignAction(assignChildren(route)))
   );
   ChildRoutesObservable.next(null);
   return r;
+}
+
+export function getQueryParams<T>(params: string[]) {
+  const uriParams = new URLSearchParams(location.search);
+  return params.reduce(
+    (prev, curr) => {
+      prev[curr] = uriParams.get(curr);
+      return prev;
+    },
+    {} as T
+  );
 }

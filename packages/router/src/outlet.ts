@@ -2,6 +2,7 @@ import { Router as VaadinRouter } from "@vaadin/router";
 import { NavigationTrigger } from "./injection.tokens";
 import { RouterOptions, Route } from "./injection.tokens";
 import { Subscription } from "@rxdi/lit-html";
+import { getQueryParams } from "./helpers";
 
 interface Detail extends Event {
   detail: { location: { pathname: string } };
@@ -35,6 +36,10 @@ export class Outlet<C = {}> extends VaadinRouter {
 
   unfreezeRouter() {
     this.freeze = false;
+  }
+
+  getQueryParams<T>(params: string[]) {
+    return getQueryParams<T>(params);
   }
 
   /**
