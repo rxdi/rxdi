@@ -17,3 +17,7 @@ export interface GraphqlModuleConfig {
 export const noopHeaders = () => new Headers();
 export const noop = () => null;
 
+export interface Definintion {
+  kind: string;
+  operation?: string;
+};

@@ -1,10 +1,11 @@
 {
   "name": "@rxdi/dts-merge",
-  "version": "0.7.55",
+  "version": "0.7.56",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo Test DTS"
+    "test": "echo Test DTS",
+    "build": "tsc || true"
   },
   "repository": {
     "type": "git",

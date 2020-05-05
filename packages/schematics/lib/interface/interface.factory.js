@@ -24,7 +24,7 @@ function transform(options) {
 }
 function generate(options) {
     return (context) => schematics_1.apply(schematics_1.url('./files'), [
-        schematics_1.template(Object.assign({}, core_1.strings, options)),
+        schematics_1.template(Object.assign(Object.assign({}, core_1.strings), options)),
         schematics_1.move(options.path),
     ])(context);
 }

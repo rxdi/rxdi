@@ -5,7 +5,8 @@ import {
   ApolloClient,
   GraphqlDocuments,
   GraphqlModuleConfig,
-  noopHeaders
+  noopHeaders,
+  Definintion
 } from './graphql.injection';
 import { ApolloClient as ApolloClientOriginal } from 'apollo-client';
 import { concat, ApolloLink, split, Observable, from } from 'apollo-link';
@@ -49,7 +50,7 @@ export class GraphqlModule {
                 ]),
                 split(
                   ({ query }) => {
-                    const { kind, operation } = getMainDefinition(query);
+                    const { kind, operation }: Definintion = getMainDefinition(query);
                     return (
                       kind === 'OperationDefinition' &&
                       operation === 'subscription'

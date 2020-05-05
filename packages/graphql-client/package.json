@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/graphql-client",
-  "version": "0.7.55",
+  "version": "0.7.56",
   "main": "index.js",
   "author": "Kristiyan Tachev",
   "license": "MIT",
@@ -9,6 +9,7 @@
     "url": "https://github.com/rxdi/graphql-client"
   },
   "scripts": {
+    "build": "tsc || true",
     "test": "echo Test Graphql client"
   },
   "dependencies": {
@@ -23,7 +24,7 @@
   "devDependencies": {
     "typescript": "^3.5.3",
     "graphql": "^14.5.8",
-    "@rxdi/core": "0.7.55"
+    "@rxdi/core": "^0.7.56"
   },
   "types": "./dist/index.d.ts",
   "module": "./dist/index.js",

@@ -34,7 +34,7 @@ function transform(source) {
 }
 function generate(options) {
     return (context) => schematics_1.apply(schematics_1.url('./files'), [
-        schematics_1.template(Object.assign({}, core_1.strings, options)),
+        schematics_1.template(Object.assign(Object.assign({}, core_1.strings), options)),
         schematics_1.move(options.path),
     ])(context);
 }
@@ -59,7 +59,7 @@ function addDeclarationToModule(options) {
         const content = tree.read(options.module).toString();
         const declarator = new module_declarator_1.ModuleDeclarator();
         const rootPath = `${options.directory}/dist/${options.directory}`;
-        const declarationOptions = Object.assign({}, options, { staticOptions: {
+        const declarationOptions = Object.assign(Object.assign({}, options), { staticOptions: {
                 name: 'forRoot',
                 value: {
                     rootPath,

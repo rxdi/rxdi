@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { FileService } from '@rxdi/core/services/file';
-import { Container } from '@rxdi/core/container/Container';
-import { ExternalImporter, ExternalImporterIpfsConfig } from '@rxdi/core/services/external-importer';
+import { FileService } from '@rxdi/core';
+import { Container } from '@rxdi/core';
+import { ExternalImporter, ExternalImporterIpfsConfig } from '@rxdi/core';
 import { Observable, combineLatest } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ConfigService } from '@rxdi/core/services/config/config.service';
+import { ConfigService } from '@rxdi/core';
 
 const externalImporter = Container.get(ExternalImporter);
 const fileService = Container.get(FileService);

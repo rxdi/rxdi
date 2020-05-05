@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/graphql",
-  "version": "0.7.55",
+  "version": "0.7.56",
   "repository": {
     "type": "git",
     "url": "https://github.com/rxdi/graphql"
@@ -8,6 +8,7 @@
   "scripts": {
     "lint": "tslint -c tslint.json 'development/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
+    "build": "tsc || true",
     "test": "jest "
   },
   "author": {
@@ -39,8 +40,8 @@
   },
   "devDependencies": {
     "graphql": "^14.5.8",
-    "@rxdi/core": "0.7.55",
-    "@rxdi/hapi": "0.7.55",
+    "@rxdi/core": "^0.7.56",
+    "@rxdi/hapi": "^0.7.56",
     "@types/graphql": "^14.5.0",
     "@types/hapi": "^18.0.2",
     "@types/jest": "^24.0.22",

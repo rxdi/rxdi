@@ -90,7 +90,7 @@ function addLibraryToCliOptions(projectRoot, projectName) {
 function generate(options) {
     const path = core_1.join(options.path, options.name);
     return schematics_1.apply(schematics_1.url(core_1.join('./files', options.language)), [
-        schematics_1.template(Object.assign({}, core_1.strings, options)),
+        schematics_1.template(Object.assign(Object.assign({}, core_1.strings), options)),
         schematics_1.move(path),
     ]);
 }

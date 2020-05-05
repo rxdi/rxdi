@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/core",
-  "version": "0.7.55",
+  "version": "0.7.56",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "start": "gapi start --local --path=./src/testing-app/main.ts",
-    "build": "gapi module build-node",
+    "build": "tsc || true",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
     "test-browser": "gapi testing browser",
@@ -36,7 +36,7 @@
     "systemjs": "0.21.4"
   },
   "devDependencies": {
-    "@rxdi/dts-merge": "0.7.55",
+    "@rxdi/dts-merge": "^0.7.56",
     "@types/jest": "^24.0.22",
     "@types/node": "^12.0.10",
     "@types/systemjs": "^0.20.6",

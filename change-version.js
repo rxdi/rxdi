@@ -5,7 +5,8 @@ async function readPackageJson(dir) {
   return JSON.parse(await promisify(readFile)(dir, { encoding: 'utf-8' }));
 }
 async function main() {
-  const { version } = await readPackageJson('package.json');
+  const packageJson = await readPackageJson('package.json');
+  const version = `^${packageJson.version}`
   const dirs = await promisify(readdir)('packages');
   const packagesJsons = await Promise.all(
     dirs.map(async directory => {
