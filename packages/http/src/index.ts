@@ -18,3 +18,6 @@ export class HttpModule {
     };
   }
 }
+
+export * from './http.provider';
+export * from './http.tokens';
