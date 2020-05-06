@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/graphql-rabbitmq-subscriptions",
-  "version": "0.7.60",
+  "version": "0.7.61",
   "description": "A graphql-subscriptions PubSub Engine using RabbitMQ",
   "main": "dist/index.js",
   "repository": {
