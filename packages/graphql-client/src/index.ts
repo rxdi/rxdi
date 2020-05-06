@@ -18,7 +18,7 @@ import { setContext } from 'apollo-link-context';
 @Module({})
 export class GraphqlModule {
   public static forRoot(
-    { uri, pubsub, onRequest }: GraphqlModuleConfig = {} as any,
+    { uri, pubsub, onRequest, cache }: GraphqlModuleConfig = {} as any,
     documents = {}
   ): ModuleWithServices {
     const headers = {};
@@ -66,7 +66,7 @@ export class GraphqlModule {
                   createHttpLink({ uri })
                 )
               ),
-              cache: new InMemoryCache()
+              cache: cache || new InMemoryCache()
             })
         }
       ]
@@ -81,4 +81,6 @@ export {
   SubscriptionOptions,
   MutationOptions
 } from 'apollo-client';
+export { IntrospectionFragmentMatcher, InMemoryCache } from 'apollo-cache-inmemory';
+
 export { DataProxy } from 'apollo-cache';

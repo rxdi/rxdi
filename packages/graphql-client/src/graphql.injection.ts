@@ -1,6 +1,6 @@
 import { InjectionToken } from '@rxdi/core';
 import { ApolloClient as AC } from 'apollo-client';
-import { NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { NormalizedCacheObject, InMemoryCache } from 'apollo-cache-inmemory';
 
 export const ApolloClient = new InjectionToken<AC<NormalizedCacheObject>>(
   'apollo-link'
@@ -13,6 +13,7 @@ export interface GraphqlModuleConfig {
   uri: string;
   pubsub: string;
   onRequest?(): Promise<Headers>;
+  cache?: InMemoryCache;
 }
 export const noopHeaders = () => new Headers();
 export const noop = () => null;
