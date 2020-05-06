@@ -26,6 +26,19 @@ export interface ExcludedTypes {
   };
 }
 
+export interface RelationshipType {
+  searchIndex: string;
+  replaceWith: string;
+}
+export interface Relationship {
+  direction: 'IN' | 'OUT';
+  name: string;
+  cyper: string;
+}
+export interface RelationshipMap {
+  [key: string]: RelationshipType;
+}
+
 export interface NEO4J_MODULE_CONFIG {
   types?: GraphQLObjectType[];
   username?: string;
@@ -37,7 +50,6 @@ export interface NEO4J_MODULE_CONFIG {
   context?: any;
   onRequest?(
     next,
-    context,
     request: Request,
     h: ResponseToolkit,
     err: Error

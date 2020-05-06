@@ -13,3 +13,5 @@ export const exclude = (
     )
   }
 });
+
+export * from './generate-type-defs';

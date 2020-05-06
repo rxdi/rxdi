@@ -66,9 +66,7 @@ export class Neo4JModule {
                 provide: SCHEMA_OVERRIDE,
                 deps: [UtilService],
                 useFactory: (util: UtilService) => (schema: GraphQLSchema) =>
-                  util.augmentSchema(
-                    util.mergeSchemas(schema, util.createRootSchema())
-                  )
+                  util.augmentSchema(schema)
               }
             ])
       ]
