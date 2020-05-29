@@ -9,7 +9,7 @@ export class HotkeyModule {
   config: HotkeysConfig = {} as HotkeysConfig,
  ): ModuleWithProviders {
   return {
-   ngModule: HotkeyModule,
+   module: HotkeyModule,
    providers: [HotKeysService, { provide: HotkeysConfig, useValue: config }],
   };
  }
