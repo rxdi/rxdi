@@ -18,11 +18,11 @@ export class HotKeysService {
   );
  }
 
- bind(key: string): Observable<void>;
- bind(keys: string[]): Observable<void>;
+ bind(key: string): Observable<Event>;
+ bind(keys: string[]): Observable<Event>;
  bind(key) {
-  return new Observable((o) => {
-   this.mousetrap.bind(key, (e) => o.next(e));
+  return new Observable<Event>((o) => {
+   this.mousetrap.bind(key, (e: Event) => o.next(e));
    return () => this.mousetrap.unbind(key);
   });
  }
