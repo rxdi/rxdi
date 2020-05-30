@@ -17,7 +17,7 @@
     "pull-all": "gapi pull all",
     "diff-push": "gapi push diff",
     "diff-show": "gapi show diff",
-    "build": "npx bolt ws exec -- tsc || true",
+    "build": "npx bolt ws exec -- tsc",
     "deinit": "git submodule deinit -f . && git submodule update --init",
     "delete-tags": "gapi tags delete",
     "publish-packages": "npx bolt ws exec -- npm publish --update-readme --access public"
@@ -108,7 +108,7 @@
     "ts-jest": "^24.0.2",
     "tslint": "^5.20.1",
     "tslint-language-service": "^0.9.9",
-    "typescript": "^3.5.3",
+    "typescript": "^3.9.3",
     "@types/amqplib": "^0.5.1",
     "@types/bluebird": "^3.0.37",
     "@cdm-logger/server": "^3.0.2",

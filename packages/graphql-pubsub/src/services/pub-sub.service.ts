@@ -11,7 +11,7 @@ import { RemotePubsub } from './remote-pubsub.service';
 
 @Service()
 export class PubSubService {
-  sub: AmqpPubSub | PubSub;
+  sub: AmqpPubSub | PubSub | RemotePubsub;
   constructor(
     @Inject(GRAPHQL_PUB_SUB_CONFIG) private config: GRAPHQL_PUB_SUB_DI_CONFIG,
     private logger: PubSubLogger

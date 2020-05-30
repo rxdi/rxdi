@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ModuleMetadataDeclarator = void 0;
 const metadata_manager_1 = require("./metadata.manager");
 class ModuleMetadataDeclarator {
     declare(content, options) {

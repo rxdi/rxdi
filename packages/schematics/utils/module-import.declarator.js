@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ModuleImportDeclarator = void 0;
 const core_1 = require("@angular-devkit/core");
 const path_solver_1 = require("./path.solver");
 class ModuleImportDeclarator {

@@ -29,7 +29,7 @@ export class RemotePubsub extends PubSub {
     });
   }
 
-  publish(signal: string, data: any): Promise<void> {
+  publish(signal: string, data: any): Promise<any> {
     return this.notifier(signal, data);
   }
 }

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ModuleDeclarator = void 0;
 const strings_1 = require("@angular-devkit/core/src/utils/strings");
 const module_import_declarator_1 = require("./module-import.declarator");
 const module_metadata_declarator_1 = require("./module-metadata.declarator");

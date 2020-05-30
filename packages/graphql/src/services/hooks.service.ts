@@ -124,7 +124,7 @@ export type EffectTypes = keyof typeof EffectTypes;
     } else if (res.constructor === Promise) {
       await this.validateGuard(await res);
     } else if (res.constructor === Observable) {
-      await this.validateGuard(await res['toPromise']());
+      await this.validateGuard(await (res['toPromise'] as any)());
     }
   }
 

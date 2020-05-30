@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MetadataManager = void 0;
 const typescript_1 = require("typescript");
 class MetadataManager {
     constructor(content) {
