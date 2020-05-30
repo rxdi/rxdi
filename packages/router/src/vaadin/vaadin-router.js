@@ -1146,7 +1146,6 @@ class Resolver {
   }
 }
 
-Resolver.pathToRegexp = pathToRegexp_1;
 
 /**
  * Universal Router (https://www.kriasoft.com/universal-router/)
@@ -1349,7 +1348,7 @@ function createLocation({pathname = '', search = '', hash = '', chain = [], para
     params,
     redirectFrom,
     getUrl: (userParams = {}) => getPathnameForRouter(
-      Router.pathToRegexp.compile(
+      pathToRegexp_1.compile(
         getMatchedPath(routes)
       )(Object.assign({}, params, userParams)),
       resolver
@@ -2283,7 +2282,7 @@ class Router extends Resolver {
    */
   urlForPath(path, params) {
     return getPathnameForRouter(
-      Router.pathToRegexp.compile(path)(params),
+      pathToRegexp_1.compile(path)(params),
       this
     );
   }
@@ -2363,46 +2362,10 @@ function isFlowProductionMode() {
   return false;
 }
 
-function uncommentAndRun(callback, args) {
-  if (typeof callback !== 'function') {
-    return;
-  }
-
-  const match = DEV_MODE_CODE_REGEXP.exec(callback.toString());
-  if (match) {
-    try {
-      // requires CSP: script-src 'unsafe-eval'
-      callback = new Function(match[1]);
-    } catch (e) {
-      // eat the exception
-      console.log('vaadin-development-mode-detector: uncommentAndRun() failed', e);
-    }
-  }
-
-  return callback(args);
-}
-
 // A guard against polymer-modulizer removing the window.Vaadin
 // initialization above.
 window['Vaadin'] = window['Vaadin'] || {};
 
-/**
- * Inspects the source code of the given `callback` function for
- * specially-marked _commented_ code. If such commented code is found in the
- * callback source, uncomments and runs that code instead of the callback
- * itself. Otherwise runs the callback as is.
- *
- * The optional arguments are passed into the callback / uncommented code,
- * the result is returned.
- *
- * See the `isMinified()` function source code in this file for an example.
- *
- */
-const runIfDevelopmentMode = function(callback, args) {
-  if (window.Vaadin.developmentMode) {
-    return uncommentAndRun(callback, args);
-  }
-};
 
 if (window.Vaadin.developmentMode === undefined) {
   window.Vaadin.developmentMode = isDevelopmentMode();
@@ -2418,7 +2381,6 @@ window.Vaadin.registrations.push({
 
 
 
-Router.NavigationTrigger = {POPSTATE, CLICK};
 
 export { Resolver, Router };
 //# sourceMappingURL=vaadin-router.js.map
