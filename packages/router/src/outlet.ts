@@ -1,7 +1,6 @@
-import { Router as VaadinRouter } from "@vaadin/router";
+import { Router as VaadinRouter } from "./vaadin/vaadin-router";
 import { NavigationTrigger } from "./injection.tokens";
 import { RouterOptions, Route } from "./injection.tokens";
-import { Subscription } from "@rxdi/lit-html";
 import { getQueryParams } from "./helpers";
 
 interface Detail extends Event {
@@ -47,9 +46,8 @@ export class Outlet<C = {}> extends VaadinRouter {
    * @param routes: Route<C>[]
    * @returns Route<C>[]
    */
-  setRoutes(routes: Route<C>[]): Route<C>[] {
-    super.setRoutes(routes);
-    return routes;
+  setRoutes(routes: Route<C>[]): Promise<Node> {
+    return super.setRoutes(routes);
   }
 
   /**
@@ -96,16 +94,6 @@ export class Outlet<C = {}> extends VaadinRouter {
   }
 
   /**
-   * Configures what triggers Vaadin.Router navigation events:
-   * @event POPSTATE: popstate events on the current window
-   * @event CLICK: click events on <a> links leading to the current page
-   * This method is invoked with the pre-configured values when creating a new Router instance. By default, both POPSTATE and CLICK are enabled. This setup is expected to cover most of the use cases.See the router-config.js for the default navigation triggers config. Based on it, you can create the own one and only import the triggers you need, instead of pulling in all the code, e.g. if you want to handle click differently.
-   */
-  setTriggers(triggers: NavigationTrigger[]) {
-    VaadinRouter.setTriggers(triggers);
-  }
-
-  /**
    * Returns the current router outlet. The initial value is undefined.
    */
   getOutlet(): Node {
@@ -134,7 +122,13 @@ export class Outlet<C = {}> extends VaadinRouter {
    * @param shouldUpdateHistory
    */
   render(
-    pathnameOrContext: string | { pathname: string },
+    pathnameOrContext:
+      | string
+      | {
+          pathname: string;
+          search: string;
+          hash: string;
+        },
     shouldUpdateHistory
   ): Promise<Node> {
     return super.render(pathnameOrContext, shouldUpdateHistory);

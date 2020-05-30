@@ -67,7 +67,6 @@
     "apollo-client": "^2.6.3",
     "apollo-link": "^1.2.12",
     "ws": "6.2.1",
-    "@vaadin/router": "git+https://github.com/Stradivario/vaadin-router",
     "apollo-link-context": "^1.0.18",
     "apollo-link-http": "^1.5.15",
     "apollo-link-ws": "^1.0.18",

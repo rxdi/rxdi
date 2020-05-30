@@ -12,7 +12,6 @@
     "build": "tsc || true"
   },
   "dependencies": {
-    "@vaadin/router": "git+https://github.com/Stradivario/vaadin-router",
     "router-slot": "^1.5.4"
   },
   "devDependencies": {
