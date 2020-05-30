@@ -9,6 +9,7 @@
         "experimentalDecorators": true,
         "moduleResolution": "node",
         "paths": { "*": ["types/*"] },
+        "allowJs": true,
         "outDir": "dist",
         "lib": [
             "es2017",
