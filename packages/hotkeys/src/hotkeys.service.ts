@@ -23,7 +23,7 @@ export class HotKeysService {
  bind(key) {
   return new Observable<Event>((o) => {
    this.mousetrap.bind(key, (e: Event) => o.next(e));
-   return () => this.mousetrap.unbind(key);
+   return () => o.complete();
   });
  }
 
