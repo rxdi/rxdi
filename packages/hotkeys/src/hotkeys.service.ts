@@ -1,51 +1,62 @@
 import 'mousetrap';
 
 import { Injectable, Injector } from '@rxdi/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { HotkeysConfig } from './hotkeys.interface';
 
 @Injectable({ init: true })
 export class HotKeysService {
- private mousetrap: Mousetrap = new Mousetrap();
+  private mousetrap: Mousetrap = new Mousetrap();
 
- @Injector(HotkeysConfig)
- private config: HotkeysConfig;
+  private map: Map<string, Subject<Event>> = new Map();
 
- OnInit() {
-  this.config?.globalBindings?.forEach(([key, callback]) =>
-   this.mousetrap.bind(key, callback),
-  );
- }
+  @Injector(HotkeysConfig)
+  private config: HotkeysConfig;
 
- bind(key: string): Observable<Event>;
- bind(keys: string[]): Observable<Event>;
- bind(key) {
-  return new Observable<Event>((o) => {
-   this.mousetrap.bind(key, (e: Event) => o.next(e));
-   return () => o.complete();
-  });
- }
+  OnInit() {
+    if (this.config.globalBindings) {
+      this.config.globalBindings.forEach(([key, callback]) =>
+        this.mousetrap.bind(key, callback)
+      );
+    }
+  }
 
- unbind(key: string, action?: keyof WindowEventMap): void;
- unbind(key: string[], action?: keyof WindowEventMap): void;
- unbind(key, action) {
-  this.mousetrap.unbind(key, action);
- }
+  bind(key: string): Observable<Event>;
+  bind(keys: string[]): Observable<Event>;
+  bind(key) {
+    if (this.map.has(key)) {
+      return this.map.get(key).asObservable();
+    }
+    const item = this.map.set(key, new Subject()).get(key);
+    this.mousetrap.bind(key, (e: Event) => item.next(e));
+    return item.asObservable;
+  }
 
- trigger(key: string, action?: keyof WindowEventMap): void;
- trigger(key: string[], action?: keyof WindowEventMap): void;
- trigger(key, action) {
-  this.mousetrap.trigger(key, action);
- }
+  unbind(key: string, action?: keyof WindowEventMap): void;
+  unbind(key: string[], action?: keyof WindowEventMap): void;
+  unbind(key, action) {
+    const item = this.map.get(key);
+    if (item) {
+      item.complete();
+      this.map.delete(key);
+    }
+    this.mousetrap.unbind(key, action);
+  }
 
- reset() {
-  this.mousetrap.reset();
- }
+  trigger(key: string, action?: keyof WindowEventMap): void;
+  trigger(key: string[], action?: keyof WindowEventMap): void;
+  trigger(key, action) {
+    this.mousetrap.trigger(key, action);
+  }
 
- stopCallback(e: KeyboardEvent, element: HTMLElement): Observable<boolean> {
-  return new Observable((o) => {
-   this.mousetrap.stopCallback(e, element, o.next.bind(o));
-  });
- }
+  reset() {
+    this.mousetrap.reset();
+  }
+
+  stopCallback(e: KeyboardEvent, element: HTMLElement): Observable<boolean> {
+    return new Observable((o) => {
+      this.mousetrap.stopCallback(e, element, o.next.bind(o));
+    });
+  }
 }
