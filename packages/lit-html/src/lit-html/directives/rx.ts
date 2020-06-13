@@ -1,4 +1,4 @@
-import { directive, Part } from '../lit-html/lit-html';
+import { directive, Part } from '../lit-html';
 export interface Unsubscribable {
   unsubscribe(): void;
 }
