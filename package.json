@@ -1,6 +1,6 @@
 {
   "name": "main",
-  "version": "0.7.81",
+  "version": "0.7.82",
   "description": "Monorepo for @rxdi infrastructure",
   "bolt": {
     "workspaces": [
