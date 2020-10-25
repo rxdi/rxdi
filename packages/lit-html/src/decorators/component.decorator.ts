@@ -62,188 +62,168 @@ const standardCustomElement = (
         clazz,
         options as ElementDefinitionOptions
       );
-    }
+    },
   };
 };
-
-// function CustomElement() {
-//   return Reflect.construct(HTMLElement, [], CustomElement);
-// }
-//   Object.setPrototypeOf(CustomElement.prototype, HTMLElement.prototype);
-//   Object.setPrototypeOf(CustomElement, HTMLElement);
-//   Object.setPrototypeOf(cls, CustomElement);
-
 
 export const customElement = <T>(
   tag: string,
   config: CustomElementConfig<T> = {} as CustomElementConfig<T>
-) => (classOrDescriptor: Constructor<RXDIElement> | ClassDescriptor) => {
+) => <K extends new (...args: any[]) => {}>(Base: K) => {
   if (!tag || (tag && tag.indexOf('-') <= 0)) {
     throw new Error(
-      `You need at least 1 dash in the custom element name! ${classOrDescriptor}`
+      `You need at least 1 dash in the custom element name! ${Base}`
     );
   }
-  const cls = classOrDescriptor as any;
-
-  cls.is = () => tag;
-  cls.setElement = (document: RXDIElement) => {
-    config.container = document;
-    return cls;
-  };
   config.styles = config.styles || [];
   if (!('unsubscribeOnDestroy' in config)) {
     config.unsubscribeOnDestroy = true;
   }
-  cls.prototype.getTemplateResult = function() {
-    return this;
-  };
-  const OnInit = cls.prototype.OnInit || function() {};
-  const OnDestroy = cls.prototype.OnDestroy || function() {};
-  const OnUpdate = cls.prototype.OnUpdate || function() {};
-  const OnUpdateFirst = cls.prototype.OnUpdateFirst || function() {};
-  const connectedCallback = cls.prototype.connectedCallback || function() {};
+  const OnInit = Base.prototype.OnInit || function () {};
+  const OnDestroy = Base.prototype.OnDestroy || function () {};
+  const OnUpdate = Base.prototype.OnUpdate || function () {};
+  const OnUpdateFirst = Base.prototype.OnUpdateFirst || function () {};
+  const connectedCallback = Base.prototype.connectedCallback || function () {};
   const disconnectedCallback =
-    cls.prototype.disconnectedCallback || function() {};
-  const update = cls.prototype.update || function() {};
-  const firstUpdated = cls.prototype.firstUpdated || function() {};
+    Base.prototype.disconnectedCallback || function () {};
+  const update = Base.prototype.update || function () {};
+  const firstUpdated = Base.prototype.firstUpdated || function () {};
+
   if (!config.template) {
-    config.template = cls.prototype.render;
+    config.template = Base.prototype.render;
   }
   if (config.style) {
     config.styles.push(config.style);
   }
-  cls.styles = config.styles;
-  cls.subscriptions = new Map();
-  cls.prototype.render = config.template;
-  const render = cls.prototype.render || function() {};
 
-  cls.prototype.OnInit = function() {
-    if (config.container) {
-      renderer(config.template.call(this), config.container);
-      if (config.style) {
-        const style = document.createElement('style');
-        style.type = 'text/css';
-        if (style['styleSheet']) {
-          // This is required for IE8 and below.
-          style['styleSheet'].cssText = config.style.toString();
-        } else {
-          style.appendChild(document.createTextNode(config.style.toString()));
-        }
-        config.container.prepend(style);
-      }
+  const ModifiedClass = class NoName extends Base {
+    static styles = config.styles;
+    static subscriptions = new Map();
+    constructor(...args: any[]) {
+      super(...args);
     }
-    return OnInit.call(this);
-  };
-  function mapToSubscriptions() {
-    // Override subscribe method so we can set subscription to new Map() later when component is unmounted we can unsubscribe
-    Object.keys(this).forEach(observable => {
-      if (this[observable] && typeof this[observable].lift === 'function' && typeof this[observable].subscribe === 'function') {
-        const original = this[observable].subscribe.bind(this[observable]);
-        this[observable].subscribe = (cb, err) => {
-          const subscribe = original(cb, err);
-          cls.subscriptions.set(subscribe, subscribe);
-          return subscribe;
-        };
+
+    static is() {
+      return tag;
+    }
+    static setElement = (document: RXDIElement) => {
+      config.container = document;
+      return Base;
+    };
+
+    getTemplateResult() {
+      return this;
+    }
+
+    OnInit() {
+      if (config.container) {
+        renderer(config.template.call(this), config.container);
+        if (config.style) {
+          const style = document.createElement('style');
+          style.type = 'text/css';
+          if (style['styleSheet']) {
+            // This is required for IE8 and below.
+            style['styleSheet'].cssText = config.style.toString();
+          } else {
+            style.appendChild(document.createTextNode(config.style.toString()));
+          }
+          config.container.prepend(style);
+        }
       }
-    });
-  }
-  cls.prototype.disconnectedCallback = function() {
-    if (config.providers && config.providers.length) {
-      config.providers.forEach(provider => {
-        try {
-          const rxdi = '@rxdi/core';
-          const { Container } = require(rxdi);
-          Container.reset(provider);
-          Container.remove(provider);
-          
-        } catch (e) {}
+      return OnInit.call(this);
+    }
+
+    mapToSubscriptions() {
+      // Override subscribe method so we can set subscription to new Map() later when component is unmounted we can unsubscribe
+      Object.keys(this).forEach((observable) => {
+        if (
+          this[observable] &&
+          typeof this[observable].lift === 'function' &&
+          typeof this[observable].subscribe === 'function'
+        ) {
+          const original = this[observable].subscribe.bind(this[observable]);
+          this[observable].subscribe = (cb, err) => {
+            const subscribe = original(cb, err);
+            NoName.subscriptions.set(subscribe, subscribe);
+            return subscribe;
+          };
+        }
       });
     }
-    // Disconnect from all observables when component is about to unmount
-    if (config.unsubscribeOnDestroy) {
-      cls.subscriptions.forEach(sub => sub.unsubscribe());
-      cls.subscriptions.clear();
+    disconnectedCallback() {
+      // Disconnect from all observables when component is about to unmount
+      if (config.unsubscribeOnDestroy) {
+        NoName.subscriptions.forEach((sub) => sub.unsubscribe());
+        NoName.subscriptions.clear();
+      }
+      OnDestroy.call(this);
+      disconnectedCallback.call(this);
     }
-    OnDestroy.call(this);
-    disconnectedCallback.call(this);
-  };
-  cls.prototype.render = function() {
-    return render.call(this);
-  };
-  cls.prototype.update = function() {
-    update.call(this);
-    OnUpdate.call(this);
-    if (config.unsubscribeOnDestroy) {
-      mapToSubscriptions.call(this);
-    }
-  };
-  cls.prototype.firstUpdated = function() {
-    firstUpdated.call(this);
-    OnUpdateFirst.call(this);
-    if (config.unsubscribeOnDestroy) {
-      mapToSubscriptions.call(this);
-    }
-  };
-  cls.prototype.connectedCallback = function() {
-    if (config.providers && config.providers.length) {
-      try {
-        const rxdi = '@rxdi/core';
-        const { Container } = require(rxdi);
-        config.providers.forEach(provider => Container.get(provider));
-      } catch (e) {}
-    }
-    if (config.unsubscribeOnDestroy) {
-      mapToSubscriptions.call(this);
-    }
-    if (!config.template) {
-      config.template = () => html``;
-    }
-    // Check if element is pure HTMLElement or LitElement
-    if (!this.performUpdate) {
-      config.template = config.template.bind(this);
-      const clone = document.importNode(
-        config.template(this).getTemplateElement().content,
-        true
-      );
-      if (config.style) {
-        const style = document.createElement('style');
-        style.type = 'text/css';
-        if (style['styleSheet']) {
-          // This is required for IE8 and below.
-          style['styleSheet'].cssText = config.style.toString();
-        } else {
-          style.appendChild(document.createTextNode(config.style.toString()));
+
+    connectedCallback() {
+      if (config.unsubscribeOnDestroy) {
+        this.mapToSubscriptions.call(this);
+      }
+      if (!config.template) {
+        config.template = () => html``;
+      }
+      // Check if element is pure HTMLElement or LitElement
+      if (!this['performUpdate']) {
+        config.template = config.template.bind(this);
+        const clone = document.importNode(
+          config.template(this as never).getTemplateElement().content,
+          true
+        );
+        if (config.style) {
+          const style = document.createElement('style');
+          style.type = 'text/css';
+          if (style['styleSheet']) {
+            // This is required for IE8 and below.
+            style['styleSheet'].cssText = config.style.toString();
+          } else {
+            style.appendChild(document.createTextNode(config.style.toString()));
+          }
+          clone.append(style);
         }
-        clone.append(style);
+        if (config.useShadow) {
+          this['attachShadow']({ mode: 'open' }).append(clone);
+        } else {
+          this['appendChild'](clone);
+        }
       }
-      if (config.useShadow) {
-        this.attachShadow({ mode: 'open' }).append(clone);
-      } else {
-        this.appendChild(clone);
+      connectedCallback.call(this);
+      OnInit.call(this);
+    }
+    render() {
+      return config.template.call(this);
+    }
+
+    update() {
+      update.call(this);
+      OnUpdate.call(this);
+      if (config.unsubscribeOnDestroy) {
+        this.mapToSubscriptions.call(this);
       }
     }
-    connectedCallback.call(this);
-    OnInit.call(this);
+
+    firstUpdated() {
+      firstUpdated.call(this);
+      OnUpdateFirst.call(this);
+      if (config.unsubscribeOnDestroy) {
+        this.mapToSubscriptions.call(this);
+      }
+    }
   };
-  // window.customElements.define(config.selector, cls);
-  if (typeof cls === 'function') {
-    legacyCustomElement(tag, cls, { extends: config.extends });
+
+  if (typeof ModifiedClass === 'function') {
+    legacyCustomElement(tag, ModifiedClass as never, {
+      extends: config.extends,
+    });
   } else {
-    standardCustomElement(tag, cls, { extends: config.extends });
+    standardCustomElement(tag, ModifiedClass, { extends: config.extends });
   }
-  try {
-    const rxdi = '@rxdi/core';
-    require(rxdi).Component(config)(cls)
-  } catch (e) {}
+  return ModifiedClass;
 };
 
 export const Component = <T>(config: CustomElementConfig<T>) =>
   customElement(config.selector, config);
-
-// @CustomElement2({
-//   selector: 'home-component',
-//   style: '',
-//   template: (self) => html``,
-//   useShadow: true
-// })
-// export class Pesho {}
