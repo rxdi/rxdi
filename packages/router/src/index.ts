@@ -1,13 +1,9 @@
 import { Module, ModuleWithServices } from '@rxdi/core';
-import { RouterService } from './router.service';
-import { BehaviorSubject } from 'rxjs';
 import { RouterComponent } from './router.component';
 import {
   RouterOptions,
   Route,
   Routes,
-  RouterRoutlet,
-  RouterInitialized
 } from './injection.tokens';
 import { ChildRoutesObservable, loadRoutes } from './helpers';
 import { NotFoundComponent } from './not-found.component';
@@ -28,19 +24,6 @@ export class RouterModule {
         {
           provide: Routes,
           useValue: loadRoutes(routes)
-        },
-        {
-          provide: RouterInitialized,
-          useFactory: () => new BehaviorSubject(null)
-        },
-        {
-          provide: RouterRoutlet,
-          useFactory: () => new BehaviorSubject(null)
-        },
-        {
-          provide: 'initRouter',
-          deps: [RouterService],
-          useFactory: (r: RouterService) => r
         },
       ],
       components: [RouterComponent]

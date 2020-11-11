@@ -11,6 +11,7 @@ export class Outlet<C = {}> extends VaadinRouter {
   activePath: string = "/";
   private freeze: boolean;
   private listener: { unsubscribe: () => void };
+
   constructor(element: Element, private options: RouterOptions) {
     super(element, options);
     this.listener = this.onSnapshotChange((event) => {

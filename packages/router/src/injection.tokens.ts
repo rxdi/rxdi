@@ -8,8 +8,7 @@ export interface NavigationTrigger {}
 export function Router() {
   return (target: Object, propertyKey: string) => {
     Object.defineProperty(target, propertyKey, {
-      get: () =>
-        (Container.get(RouterRoutlet) as BehaviorSubject<Outlet>).getValue()
+      get: () => Container.get(RouterRoutlet)
     });
   };
 }
@@ -82,7 +81,6 @@ export interface CanActivateCommands {
 }
 
 export const RouterRoutlet = 'router-outlet';
-export const RouterInitialized = 'router-initialized';
 export const Routes = 'router-routes';
 export const RouterOptions = 'router-options';
 
@@ -93,8 +91,7 @@ export interface RouterOptions {
 }
 export type Routes = Route<any>[];
 
-export type RouterRoutlet = BehaviorSubject<Outlet>;
-export type RouterInitialized = BehaviorSubject<RouterComponent>;
+export type RouterRoutlet = Outlet;
 
 export interface OnBeforeEnter {
   onBeforeEnter(): Promise<any> | void;
