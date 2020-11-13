@@ -4,8 +4,8 @@ import { PubSub } from 'graphql-subscriptions';
 import { Server } from 'http';
 import { ServerOptions } from 'subscriptions-transport-ws';
 export interface GRAPHQL_PUBSUB_SERVER_OPTIONS {
-  server: Server;
-  path: string; // '/subscriptions'
+  server?: Server;
+  path?: string; // '/subscriptions'
   perMessageDeflate: {
     zlibDeflateOptions: {
       chunkSize: number; // 1024
