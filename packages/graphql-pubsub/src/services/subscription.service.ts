@@ -68,7 +68,8 @@ export class SubscriptionService implements PluginInterface {
     }
     new SubscriptionServer(currentC, {
       server: this.server.listener,
-      path: '/subscriptions'
+      path: '/subscriptions',
+      ...this.pubConfig.subscriptionServerOptions,
     });
   }
 }
