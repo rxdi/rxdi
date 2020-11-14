@@ -1,6 +1,7 @@
 # Graphql module for client side rxdi application build with Apollo-graphql
 
 #### Install
+
 ```bash
 npm i @rxdi/graphql-client
 ```
@@ -23,6 +24,16 @@ import { DOCUMENTS } from './@introspection/documents';
       },
       uri: 'http://localhost:9000/graphql',
       pubsub: 'ws://localhost:9000/subscriptions',
+      apolloClientOptions: {
+        /* ApolloClientOptions defined above */
+      },
+      apolloRequestHandler: (operation, forward) => forward(operation)
+      /* 
+      * Will cancel all request from the same type
+      * in order to make only 1 request for specific update or query
+      * `false` by default
+      */
+      cancelPendingRequests: true, 
     }, DOCUMENTS),
   ],
   bootstrap: [AppComponent],
@@ -30,16 +41,42 @@ import { DOCUMENTS } from './@introspection/documents';
 export class AppModule {}
 ```
 
+# ApolloClientOptions interface
+
+```ts
+interface ApolloClientOptions {
+  link?: ApolloLink;
+  cache: ApolloCache;
+  ssrForceFetchDelay?: number;
+  ssrMode?: boolean;
+  connectToDevTools?: boolean;
+  queryDeduplication?: boolean;
+  defaultOptions?: DefaultOptions;
+  assumeImmutableResults?: boolean;
+  resolvers?: Resolvers | Resolvers[];
+  typeDefs?: string | string[] | DocumentNode | DocumentNode[];
+  fragmentMatcher?: FragmentMatcher;
+  name?: string;
+  version?: string;
+}
+```
 
 #### Base component
-```typescript
 
-import { Injector } from '@rxdi/core';
-import { DocumentTypes } from '../@introspection/documentTypes';
-import { from, Observable } from 'rxjs';
-import { IQuery, IMutation, ISubscription } from '../@introspection';
-import { LitElement } from '@rxdi/lit-html';
-import { importQuery, ApolloClient, QueryOptions, SubscriptionOptions, MutationOptions, DataProxy } from '@rxdi/graphql-client';
+```typescript
+import { Injector } from "@rxdi/core";
+import { DocumentTypes } from "../@introspection/documentTypes";
+import { from, Observable } from "rxjs";
+import { IQuery, IMutation, ISubscription } from "../@introspection";
+import { LitElement } from "@rxdi/lit-html";
+import {
+  importQuery,
+  ApolloClient,
+  QueryOptions,
+  SubscriptionOptions,
+  MutationOptions,
+  DataProxy,
+} from "@rxdi/graphql-client";
 
 export class BaseComponent extends LitElement {
   @Injector(ApolloClient)
@@ -47,23 +84,23 @@ export class BaseComponent extends LitElement {
 
   query<T = IQuery>(options: ImportQueryMixin) {
     options.query = importQuery(options.query);
-    return from(this.graphql.query.bind(this.graphql)(
-      options
-    ) as any) as Observable<{ data: T }>;
+    return from(
+      this.graphql.query.bind(this.graphql)(options) as any
+    ) as Observable<{ data: T }>;
   }
 
   mutate<T = IMutation>(options: ImportMutationMixin) {
     options.mutation = importQuery(options.mutation);
-    return from(this.graphql.mutate.bind(this.graphql)(
-      options
-    ) as any) as Observable<{ data: T }>;
+    return from(
+      this.graphql.mutate.bind(this.graphql)(options) as any
+    ) as Observable<{ data: T }>;
   }
 
   subscribe<T = ISubscription>(options: ImportSubscriptionMixin) {
     options.query = importQuery(options.query);
-    return from(this.graphql.subscribe.bind(this.graphql)(
-      options
-    ) as any) as Observable<{ data: T }>;
+    return from(
+      this.graphql.subscribe.bind(this.graphql)(options) as any
+    ) as Observable<{ data: T }>;
   }
 }
 
@@ -77,22 +114,20 @@ interface ImportSubscriptionMixin extends SubscriptionOptions {
 
 interface ImportMutationMixin extends MutationOptions {
   mutation: DocumentTypes;
-  update?(proxy: DataProxy, res: {data: IMutation}): void;
+  update?(proxy: DataProxy, res: { data: IMutation }): void;
 }
-
 ```
-
 
 #### Usage
 
 ```typescript
-import { Component, html, css, async } from '@rxdi/lit-html';
-import { BaseComponent } from '../../shared/base.component';
-import { RouteParams } from '@rxdi/router';
-import { map } from 'rxjs/operators';
+import { Component, html, css, async } from "@rxdi/lit-html";
+import { BaseComponent } from "../../shared/base.component";
+import { RouteParams } from "@rxdi/router";
+import { map } from "rxjs/operators";
 
 @Component({
-  selector: 'project-details-component',
+  selector: "project-details-component",
   style: css`
     .container {
       width: 1000px;
@@ -108,7 +143,7 @@ import { map } from 'rxjs/operators';
         </card-component>
       </div>
     `;
-  }
+  },
 })
 export class DetailsComponent extends BaseComponent {
   @RouteParams()
@@ -116,14 +151,14 @@ export class DetailsComponent extends BaseComponent {
 
   getProject() {
     return this.query({
-      query: 'get-project.query.graphql',
+      query: "get-project.query.graphql",
       variables: {
-        name: this.params.projectName
-      }
+        name: this.params.projectName,
+      },
     }).pipe(
-      map(res => res.data.getProject),
+      map((res) => res.data.getProject),
       map(
-        res => html`
+        (res) => html`
           <project-item-component
             createdAt=${res.createdAt}
             id=${res.id}
@@ -131,7 +166,7 @@ export class DetailsComponent extends BaseComponent {
             ownedBy=${res.ownedBy}
           ></project-item-component>
         `
-      ),
+      )
     );
   }
 }
