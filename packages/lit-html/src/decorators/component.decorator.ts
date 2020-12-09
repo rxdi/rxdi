@@ -16,8 +16,9 @@ interface CustomElementConfig<T> {
    * It will unsubscribe from previous observables subscriptions
    * Defaults to 5000 ms
    * */
-
   garbageCollectTimeout?: number;
+
+  garbageCollectOnUpdate?: boolean;
 }
 
 // From the TC39 Decorators proposal
@@ -106,11 +107,9 @@ export const customElement = <T>(
     static styles = config.styles;
     static subscriptions = new Map();
 
-    static collectGarbage(after: number = 5000) {
-      setTimeout(() => {
-        ModifiedClass.subscriptions.forEach((sub) => sub.unsubscribe());
-        ModifiedClass.subscriptions.clear();
-      }, after);
+    static collectGarbage() {
+      ModifiedClass.subscriptions.forEach((sub) => sub.unsubscribe());
+      ModifiedClass.subscriptions.clear();
     }
 
     static mapToSubscriptions() {
@@ -139,10 +138,6 @@ export const customElement = <T>(
       return Base;
     };
 
-    constructor(...args: any[]) {
-      super(...args);
-    }
-
     getTemplateResult() {
       return this;
     }
@@ -166,13 +161,11 @@ export const customElement = <T>(
     }
 
     disconnectedCallback() {
-      // Disconnect from all observables when component is about to unmount
-
+      if (config.unsubscribeOnDestroy) {
+        ModifiedClass.collectGarbage();
+      }
       OnDestroy.call(this);
       disconnectedCallback.call(this);
-      if (config.unsubscribeOnDestroy) {
-        ModifiedClass.collectGarbage(config.garbageCollectTimeout);
-      }
     }
 
     connectedCallback() {
@@ -214,10 +207,12 @@ export const customElement = <T>(
     }
 
     update() {
+      if (config.garbageCollectOnUpdate) {
+        ModifiedClass.collectGarbage();
+      }
       update.call(this);
       OnUpdate.call(this);
       if (config.unsubscribeOnDestroy) {
-        ModifiedClass.collectGarbage();
         ModifiedClass.mapToSubscriptions.call(this);
       }
     }
