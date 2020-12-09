@@ -169,6 +169,9 @@ export const customElement = <T>(
     }
 
     connectedCallback() {
+      if (config.unsubscribeOnDestroy) {
+        ModifiedClass.mapToSubscriptions.call(this);
+      }
       if (!config.template) {
         config.template = () => html``;
       }
@@ -198,9 +201,6 @@ export const customElement = <T>(
       }
       connectedCallback.call(this);
       OnInit.call(this);
-      if (config.unsubscribeOnDestroy) {
-        ModifiedClass.mapToSubscriptions.call(this);
-      }
     }
     render() {
       return config.template.call(this);
