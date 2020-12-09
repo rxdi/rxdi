@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/hotkeys",
-  "version": "0.7.89",
+  "version": "0.7.90",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/rxdi/mono/blob/master/README.md",
   "dependencies": {
-    "@rxdi/core": "^0.7.89",
+    "@rxdi/core": "^0.7.90",
     "rxjs": "^6.5.3",
     "mousetrap": "^1.6.5"
   },
