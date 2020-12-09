@@ -1,5 +1,4 @@
-import { CSSResult } from '../lit-element/lib/css-tag';
-import { CSSResultArray } from '../lit-element/lit-element';
+import { CSSResult, CSSResultArray } from '../lit-element/lit-element';
 import { TemplateResult } from '../lit-html/lit-html';
 
 export declare class Subscription {

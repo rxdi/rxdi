@@ -12,20 +12,70 @@
  * http://polymer.github.io/PATENTS.txt
  */
 
-import {isPrimitive} from '../lib/parts';
-import {directive, NodePart, Part} from '../lit-html';
+import {
+  directive,
+  Directive,
+  nothing,
+  TemplateResult,
+  noChange,
+  PartInfo,
+  NODE_PART,
+} from '../lit-html';
 
-interface PreviousValue {
-  readonly value: unknown;
-  readonly fragment: DocumentFragment;
+const HTML_RESULT = 1;
+
+export class UnsafeHTML extends Directive {
+  static directiveName = 'unsafeHTML';
+  static resultType = HTML_RESULT;
+
+  value: unknown = nothing;
+  templateResult?: TemplateResult;
+
+  constructor(partInfo: PartInfo) {
+    super(partInfo);
+    if (partInfo.type !== NODE_PART) {
+      throw new Error(
+        `${
+          (this.constructor as typeof UnsafeHTML).directiveName
+        }() can only be used in text bindings`
+      );
+    }
+  }
+
+  render(value: string) {
+    // TODO: add tests for nothing and noChange
+    if (value === nothing) {
+      this.templateResult = undefined;
+      return (this.value = value);
+    }
+    if (value === noChange) {
+      return value;
+    }
+    if (typeof value != 'string') {
+      throw new Error(
+        `${
+          (this.constructor as typeof UnsafeHTML).directiveName
+        }() called with a non-string value`
+      );
+    }
+    if (value === this.value) {
+      return this.templateResult;
+    }
+    this.value = value;
+    const strings = ([value] as unknown) as TemplateStringsArray;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (strings as any).raw = strings;
+    // WARNING: impersonating a TemplateResult like this is extremely
+    // dangerous. Third-party directives should not do this.
+    return (this.templateResult = {
+      // Cast to a known set of integers that satisfy ResultType so that we
+      // don't have to export ResultType and possibly encourage this pattern.
+      _$litType$: (this.constructor as typeof UnsafeHTML).resultType as 1 | 2,
+      strings,
+      values: [],
+    });
+  }
 }
-
-// For each part, remember the value that was last rendered to the part by the
-// unsafeHTML directive, and the DocumentFragment that was last set as a value.
-// The DocumentFragment is used as a unique key to check if the last value
-// rendered to the part was with unsafeHTML. If not, we'll always re-render the
-// value passed to unsafeHTML.
-const previousValues = new WeakMap<NodePart, PreviousValue>();
 
 /**
  * Renders the result as HTML, rather than text.
@@ -34,21 +84,4 @@ const previousValues = new WeakMap<NodePart, PreviousValue>();
  * sanitized or escaped, as it may lead to cross-site-scripting
  * vulnerabilities.
  */
-export const unsafeHTML = directive((value: unknown) => (part: Part): void => {
-  if (!(part instanceof NodePart)) {
-    throw new Error('unsafeHTML can only be used in text bindings');
-  }
-
-  const previousValue = previousValues.get(part);
-
-  if (previousValue !== undefined && isPrimitive(value) &&
-      value === previousValue.value && part.value === previousValue.fragment) {
-    return;
-  }
-
-  const template = document.createElement('template');
-  template.innerHTML = value as string;  // innerHTML casts to string internally
-  const fragment = document.importNode(template.content, true);
-  part.setValue(fragment);
-  previousValues.set(part, {value, fragment});
-});
+export const unsafeHTML = directive(UnsafeHTML);

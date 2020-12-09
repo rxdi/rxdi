@@ -1,4 +1,4 @@
-import { CSSResult } from '../lit-element/lib/css-tag';
+import { CSSResult } from '../lit-element';
 import { TemplateResult, html, render as renderer } from '../lit-html/lit-html';
 import { RXDIElement } from './tokens';
 
@@ -9,7 +9,7 @@ interface CustomElementConfig<T> {
   styles?: CSSResult[];
   useShadow?: boolean;
   extends?: string;
-  container?: Element | DocumentFragment;
+  container?: DocumentFragment | HTMLElement;
   providers?: Function[];
   unsubscribeOnDestroy?: boolean;
 }
@@ -171,7 +171,7 @@ export const customElement = <T>(
       if (!this['performUpdate']) {
         config.template = config.template.bind(this);
         const clone = document.importNode(
-          config.template(this as never).getTemplateElement().content,
+          config.template(this as never)['getTemplateElement']().content,
           true
         );
         if (config.style) {
