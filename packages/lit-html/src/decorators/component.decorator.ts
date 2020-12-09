@@ -12,6 +12,12 @@ interface CustomElementConfig<T> {
   container?: Element | DocumentFragment;
   providers?: Function[];
   unsubscribeOnDestroy?: boolean;
+  /**
+   * It will unsubscribe from previous observables subscriptions
+   * Defaults to 5000 ms
+   * */
+
+  garbageCollectTimeout?: number;
 }
 
 // From the TC39 Decorators proposal
@@ -99,8 +105,30 @@ export const customElement = <T>(
   const ModifiedClass = class NoName extends Base {
     static styles = config.styles;
     static subscriptions = new Map();
-    constructor(...args: any[]) {
-      super(...args);
+
+    static collectGarbage(after: number = 5000) {
+      setTimeout(() => {
+        ModifiedClass.subscriptions.forEach((sub) => sub.unsubscribe());
+        ModifiedClass.subscriptions.clear();
+      }, after);
+    }
+
+    static mapToSubscriptions() {
+      // Override subscribe method so we can set subscription to new Map() later when component is unmounted we can unsubscribe
+      Object.keys(this).forEach((observable) => {
+        if (
+          this[observable] &&
+          typeof this[observable].lift === 'function' &&
+          typeof this[observable].subscribe === 'function'
+        ) {
+          const original = this[observable].subscribe.bind(this[observable]);
+          this[observable].subscribe = (cb, err) => {
+            const subscribe = original(cb, err);
+            ModifiedClass.subscriptions.set(subscribe, subscribe);
+            return subscribe;
+          };
+        }
+      });
     }
 
     static is() {
@@ -110,6 +138,10 @@ export const customElement = <T>(
       config.container = document;
       return Base;
     };
+
+    constructor(...args: any[]) {
+      super(...args);
+    }
 
     getTemplateResult() {
       return this;
@@ -133,37 +165,17 @@ export const customElement = <T>(
       return OnInit.call(this);
     }
 
-    mapToSubscriptions() {
-      // Override subscribe method so we can set subscription to new Map() later when component is unmounted we can unsubscribe
-      Object.keys(this).forEach((observable) => {
-        if (
-          this[observable] &&
-          typeof this[observable].lift === 'function' &&
-          typeof this[observable].subscribe === 'function'
-        ) {
-          const original = this[observable].subscribe.bind(this[observable]);
-          this[observable].subscribe = (cb, err) => {
-            const subscribe = original(cb, err);
-            NoName.subscriptions.set(subscribe, subscribe);
-            return subscribe;
-          };
-        }
-      });
-    }
     disconnectedCallback() {
       // Disconnect from all observables when component is about to unmount
-      if (config.unsubscribeOnDestroy) {
-        NoName.subscriptions.forEach((sub) => sub.unsubscribe());
-        NoName.subscriptions.clear();
-      }
+
       OnDestroy.call(this);
       disconnectedCallback.call(this);
+      if (config.unsubscribeOnDestroy) {
+        ModifiedClass.collectGarbage(config.garbageCollectTimeout);
+      }
     }
 
     connectedCallback() {
-      if (config.unsubscribeOnDestroy) {
-        this.mapToSubscriptions.call(this);
-      }
       if (!config.template) {
         config.template = () => html``;
       }
@@ -193,6 +205,9 @@ export const customElement = <T>(
       }
       connectedCallback.call(this);
       OnInit.call(this);
+      if (config.unsubscribeOnDestroy) {
+        ModifiedClass.mapToSubscriptions.call(this);
+      }
     }
     render() {
       return config.template.call(this);
@@ -202,7 +217,8 @@ export const customElement = <T>(
       update.call(this);
       OnUpdate.call(this);
       if (config.unsubscribeOnDestroy) {
-        this.mapToSubscriptions.call(this);
+        ModifiedClass.collectGarbage();
+        ModifiedClass.mapToSubscriptions.call(this);
       }
     }
 
@@ -210,7 +226,7 @@ export const customElement = <T>(
       firstUpdated.call(this);
       OnUpdateFirst.call(this);
       if (config.unsubscribeOnDestroy) {
-        this.mapToSubscriptions.call(this);
+        ModifiedClass.mapToSubscriptions.call(this);
       }
     }
   };
