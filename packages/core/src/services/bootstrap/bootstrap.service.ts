@@ -179,7 +179,9 @@ export class BootstrapService {
 
   private async registerPlugin(pluggable: ServiceArgumentsInternal) {
     const plugin = Container.get<PluginInterface>(pluggable);
-    await plugin.register();
+    if (typeof plugin?.register === 'function') {
+      await plugin.register();
+    }
     return plugin;
   }
 
