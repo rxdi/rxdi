@@ -1645,10 +1645,10 @@
   dependencies:
     graphql "*"
 
-"@types/hapi@^18.0.2":
-  version "18.0.3"
-  resolved "https://registry.yarnpkg.com/@types/hapi/-/hapi-18.0.3.tgz#e74c019f6a1b1c7f647fe014d3890adec9c0214a"
-  integrity sha512-UM03myDZ2UWbpqLSZqboK4L98F9r4GCcd9JOr2auhgC3iOd/69mvDggivOHhOYJKWHeCW/dECPHIB7DwQz00dw==
+"@types/hapi@^18.0.4":
+  version "18.0.4"
+  resolved "https://registry.yarnpkg.com/@types/hapi/-/hapi-18.0.4.tgz#3a9d26f7f5a71cc2783f862f8b23aa637b0718f6"
+  integrity sha512-r2FkDKdAxuczL/9ltfcO5uW/AmdvIHAEUuhfYVdsl1xgJJQu3uXbdAX7GvjfHHct35xw+DpqsC41+q/PHtiVBA==
   dependencies:
     "@types/boom" "*"
     "@types/catbox" "*"

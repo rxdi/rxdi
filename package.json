@@ -116,7 +116,7 @@
     "@types/node": "^12.0.10",
     "@types/systemjs": "^0.20.6",
     "@types/graphql": "^14.5.0",
-    "@types/hapi": "^18.0.2",
+    "@types/hapi": "^18.0.4",
     "@types/nedb": "^1.8.6",
     "parcel-plugin-shebang": "^1.2.3",
     "prettier": "2.0.5"
