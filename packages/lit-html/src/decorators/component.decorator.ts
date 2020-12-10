@@ -2,7 +2,7 @@ import { CSSResult } from '../lit-element/lib/css-tag';
 import { TemplateResult, html, render as renderer } from '../lit-html/lit-html';
 import { RXDIElement } from './tokens';
 
-interface CustomElementConfig<T> {
+export interface CustomElementConfig<T> {
   selector: string;
   template?: (self: T) => TemplateResult;
   style?: CSSResult;
