@@ -2,7 +2,7 @@
   "name": "@rxdi/install",
   "version": "0.7.92",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "tsc || true",
     "test": "echo Test Install"
