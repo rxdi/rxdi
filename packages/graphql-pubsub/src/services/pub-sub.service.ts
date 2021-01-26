@@ -1,13 +1,14 @@
-import { PubSub } from 'graphql-subscriptions';
-import { AmqpPubSub } from '@rxdi/graphql-rabbitmq-subscriptions';
-import { Service, Inject } from '@rxdi/core';
+import { PubSub } from "graphql-subscriptions";
+import { AmqpPubSub } from "@rxdi/graphql-rabbitmq-subscriptions";
+import { Service, Inject } from "@rxdi/core";
 import {
   GRAPHQL_PUB_SUB_CONFIG,
-  GRAPHQL_PUB_SUB_DI_CONFIG
-} from '../config.tokens';
-import { PubSubLogger } from './logger.service';
+  GRAPHQL_PUB_SUB_DI_CONFIG,
+} from "../config.tokens";
+import { PubSubLogger } from "./logger.service";
 export let pubsub: PubSub | AmqpPubSub;
-import { RemotePubsub } from './remote-pubsub.service';
+import { RemotePubsub } from "./remote-pubsub.service";
+import { Observable } from "rxjs";
 
 @Service()
 export class PubSubService {
@@ -21,15 +22,16 @@ export class PubSubService {
     } else if (this.config.remotePubsub) {
       this.sub = new RemotePubsub({
         host: this.config.host,
-        port: this.config.host
+        port: this.config.host,
       });
     } else if (this.config.activateRabbitMQ) {
       this.sub = new AmqpPubSub({
-        config: {
-          host: this.config.host || process.env.AMQP_HOST,
-          port: this.config.port || process.env.AMQP_PORT
-        },
-        logger: this.config.logger || this.logger
+        config: `amqp://${
+          this.config.user || process.env.AMQP_USER || "guest"
+        }:${this.config.pass || "guest"}@${
+          this.config.host || process.env.AMQP_HOST || "localhost"
+        }:${this.config.port || process.env.AMQP_PORT || "5672"}`,
+        logger: this.config.logger || this.logger,
       });
     } else {
       this.sub = new PubSub();
@@ -42,5 +44,20 @@ export class PubSubService {
 
   publish(signal: string, data: any): Promise<void> {
     return this.sub.publish(signal, data);
+  }
+
+  subscribe(signal: string) {
+    return new Observable((observer) => {
+      let subscription: number;
+      this.sub
+        .subscribe(signal, (data) => {
+          observer.next(data);
+        })
+        .then((sub) => (subscription = sub));
+      return () => {
+        this.sub.unsubscribe(subscription);
+        observer.complete();
+      };
+    });
   }
 }

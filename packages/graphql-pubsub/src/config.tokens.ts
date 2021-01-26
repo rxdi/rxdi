@@ -26,6 +26,8 @@ export class GRAPHQL_PUB_SUB_DI_CONFIG {
   pubsub?: AmqpPubSub | PubSub | any;
   remotePubsub?: boolean;
   host?: string;
+  user?: string;
+  pass?: string;
   query?: string;
   port?: string | number;
   authentication?: string;
