@@ -8,7 +8,6 @@ import {
 import { PubSubLogger } from "./logger.service";
 export let pubsub: PubSub | AmqpPubSub;
 import { RemotePubsub } from "./remote-pubsub.service";
-import { Observable } from "rxjs";
 
 @Service()
 export class PubSubService {
@@ -44,20 +43,5 @@ export class PubSubService {
 
   publish(signal: string, data: any): Promise<void> {
     return this.sub.publish(signal, data);
-  }
-
-  subscribe(signal: string) {
-    return new Observable((observer) => {
-      let subscription: number;
-      this.sub
-        .subscribe(signal, (data) => {
-          observer.next(data);
-        })
-        .then((sub) => (subscription = sub));
-      return () => {
-        this.sub.unsubscribe(subscription);
-        observer.complete();
-      };
-    });
   }
 }
