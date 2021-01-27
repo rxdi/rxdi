@@ -29,7 +29,7 @@ export class PubSubService {
           this.config.user || process.env.AMQP_USER || "guest"
         }:${this.config.pass || "guest"}@${
           this.config.host || process.env.AMQP_HOST || "localhost"
-        }:${this.config.port || process.env.AMQP_PORT || "5672"}`,
+        }:${this.config.port || process.env.AMQP_PORT || "5672"}` as never,
         logger: this.config.logger || this.logger,
       });
     } else {

@@ -5,7 +5,7 @@ import {
   RabbitMqPublisher,
   RabbitMqSubscriber,
   IRabbitMqConnectionConfig,
-} from 'rabbitmq-pub-sub';
+} from '@rxdi/rabbitmq-pubsub';
 import { each } from 'async';
 import * as Logger from 'bunyan';
 import { createChildLogger } from './child-logger';

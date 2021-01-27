@@ -24,6 +24,7 @@ function isConnectionConfig(
 
 export class RabbitMqConnectionFactory implements IRabbitMqConnectionFactory {
   private connection: string;
+  connect;
   constructor(
     private logger: Logger,
     config: IRabbitMqConnectionConfig | string
@@ -36,7 +37,16 @@ export class RabbitMqConnectionFactory implements IRabbitMqConnectionFactory {
 
   create(): Promise<amqp.Connection> {
     this.logger.debug("connecting to %s", this.connection);
-    return Promise.resolve(amqp.connect(this.connection)).catch((err) => {
+    if (this.connect) {
+      return Promise.resolve(this.connect);
+    }
+    return Promise.resolve(amqp.connect(this.connection))
+    .then((connect) => {
+      this.connect = connect;
+      return connect;
+    })
+    .catch((err) => {
+
       this.logger.error("failed to create connection '%s'", this.connection);
       return Promise.reject(err);
     });

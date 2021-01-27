@@ -84,7 +84,6 @@
     "request": "^2.88.0",
     "async": "^2.5.0",
     "graphql-subscriptions": "^1.1.0",
-    "rabbitmq-pub-sub": "^0.2.5",
     "neo4j-graphql-js": "^2.14.0",
     "mousetrap": "^1.6.5"
   },
