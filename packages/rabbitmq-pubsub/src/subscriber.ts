@@ -94,7 +94,7 @@ export class RabbitMqSubscriber {
             queueConfig.name,
             opts.consumerTag
           );
-          return Promisefy.resolve(channel.cancel(opts.consumerTag)).return();
+          return Promisefy.resolve(channel.close()).return();
         }) as IRabbitMqSubscriberDisposer;
       });
   }

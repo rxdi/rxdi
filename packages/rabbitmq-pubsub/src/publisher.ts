@@ -33,6 +33,7 @@ export class RabbitMqPublisher {
                 queueConfig.dlx,
                 message
               );
+              return channel.close();
             });
           })
           .catch(() => {

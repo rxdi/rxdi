@@ -42,6 +42,7 @@ export class RabbitMqProducer {
             queueConfig.name,
             message
           );
+          return channel.close();
         });
       });
   }
