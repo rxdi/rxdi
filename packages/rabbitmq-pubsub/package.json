@@ -1,6 +1,6 @@
 {
-  "name": "@rxdi/graphql-rabbitmq-subscriptions",
-  "version": "0.7.96",
+  "name": "@rxdi/rabbitmq-pubsub",
+  "version": "0.7.95",
   "description": "A graphql-subscriptions PubSub Engine using RabbitMQ",
   "main": "dist/index.js",
   "repository": {
@@ -24,18 +24,12 @@
     "lint": "tslint ./src/**/*.ts"
   },
   "dependencies": {
-    "@types/bunyan": "^1.8.0",
-    "async": "^2.5.0",
-    "graphql-subscriptions": "^1.1.0",
-    "@rxdi/rabbitmq-pubsub": "^0.7.95"
+    "amqplib": "^0.6.0",
+    "bluebird": "^3.7.2"
   },
   "devDependencies": {
     "@types/amqplib": "^0.5.17",
-    "@types/bluebird": "^3.0.37",
     "@types/node": "^12.0.10",
-    "bluebird": "^3.7.2",
-    "@cdm-logger/server": "^3.0.2",
-    "graphql": "^14.5.8",
     "tslint": "^5.20.1",
     "typescript": "^3.9.3"
   },
