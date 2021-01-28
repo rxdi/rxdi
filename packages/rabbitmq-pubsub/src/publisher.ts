@@ -1,6 +1,5 @@
 import * as amqp from "amqplib";
 import { IRabbitMqConnectionFactory } from "./connectionFactory";
-import * as Promise from "bluebird";
 import { IQueueNameConfig, asPubSubQueueNameConfig } from "./common";
 import { createChildLogger, Logger } from "./childLogger";
 
@@ -12,39 +11,31 @@ export class RabbitMqPublisher {
     this.logger = createChildLogger(logger, "RabbitMqPublisher");
   }
 
-  publish<T>(queue: string | IQueueNameConfig, message: T): Promise<void> {
+  async publish<T>(
+    queue: string | IQueueNameConfig,
+    message: T
+  ): Promise<void> {
     const queueConfig = asPubSubQueueNameConfig(queue);
-    return this.connectionFactory
-      .create()
-      .then((connection) => connection.createChannel())
-      .then((channel) => {
-        this.logger.trace("got channel for exchange '%s'", queueConfig.dlx);
-        return this.setupChannel<T>(channel, queueConfig)
-          .then(() => {
-            return Promise.resolve(
-              channel.publish(
-                queueConfig.dlx,
-                "",
-                this.getMessageBuffer(message)
-              )
-            ).then(() => {
-              this.logger.trace(
-                "message sent to exchange '%s' (%j)",
-                queueConfig.dlx,
-                message
-              );
-              return channel.close();
-            });
-          })
-          .catch(() => {
-            this.logger.error(
-              "unable to send message to exchange '%j' {%j}",
-              queueConfig.dlx,
-              message
-            );
-            return Promise.reject(new Error("Unable to send message"));
-          });
-      });
+
+    try {
+      const connection = await this.connectionFactory.create();
+      const channel = await connection.createChannel();
+      await this.setupChannel<T>(channel, queueConfig);
+      channel.publish(queueConfig.dlx, "", this.getMessageBuffer(message));
+      this.logger.trace(
+        "message sent to exchange '%s' (%j)",
+        queueConfig.dlx,
+        message
+      );
+      return channel.close();
+    } catch (e) {
+      this.logger.error(
+        "unable to send message to exchange '%j' {%j}",
+        queueConfig.dlx,
+        message
+      );
+      throw new Error("Unable to send message");
+    }
   }
 
   private setupChannel<T>(
@@ -56,7 +47,7 @@ export class RabbitMqPublisher {
   }
 
   protected getMessageBuffer<T>(message: T) {
-    return new Buffer(JSON.stringify(message), "utf8");
+    return Buffer.from(JSON.stringify(message), "utf8");
   }
 
   protected getChannelSetup(
@@ -71,7 +62,7 @@ export class RabbitMqPublisher {
   protected getSettings(): amqp.Options.AssertQueue {
     return {
       durable: false,
-      autoDelete: true
+      autoDelete: true,
     };
   }
 }

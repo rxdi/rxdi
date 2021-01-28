@@ -1,14 +1,14 @@
-import { PubSubEngine } from 'graphql-subscriptions/dist/pubsub-engine';
-import { PubSubAsyncIterator } from './pubsub-async-iterator';
+import { PubSubEngine } from "graphql-subscriptions";
+import { PubSubAsyncIterator } from "./pubsub-async-iterator";
 import {
   RabbitMqSingletonConnectionFactory,
   RabbitMqPublisher,
   RabbitMqSubscriber,
   IRabbitMqConnectionConfig,
-} from '@rxdi/rabbitmq-pubsub';
-import { each } from 'async';
-import * as Logger from 'bunyan';
-import { createChildLogger } from './child-logger';
+  IRabbitMqConsumerDisposer,
+  IRabbitMqSubscriberDisposer,
+} from "@rxdi/rabbitmq-pubsub";
+import { createChildLogger, Logger } from "./child-logger";
 
 export interface PubSubRabbitMQBusOptions {
   config?: IRabbitMqConnectionConfig;
@@ -18,33 +18,29 @@ export interface PubSubRabbitMQBusOptions {
 }
 
 export class AmqpPubSub implements PubSubEngine {
-
-  private consumer: any;
-  private producer: any;
-  private subscriptionMap: { [subId: number]: [string, Function] };
-  private subsRefsMap: { [trigger: string]: Array<number> };
-  private currentSubscriptionId: number;
+  private consumer: RabbitMqSubscriber;
+  private producer: RabbitMqPublisher;
+  private subscriptionMap: {
+    [subId: number]: [string, (m: string) => Promise<void>];
+  } = {};
+  private subsRefsMap: { [trigger: string]: Array<number> } = {};
+  private currentSubscriptionId: number = 0;
   private triggerTransform: TriggerTransform;
-  private unsubscribeChannelMap: any;
+  private unsubscribeChannelMap: Record<string, IRabbitMqConsumerDisposer> = {};
   private logger: Logger;
 
   constructor(options: PubSubRabbitMQBusOptions = {}) {
-
-    this.triggerTransform = options.triggerTransform || (trigger => trigger as string);
-    const config = options.config || { host: '127.0.0.1', port: 5672 };
+    this.triggerTransform =
+      options.triggerTransform || ((trigger) => trigger as string);
+    const config = options.config || { host: "127.0.0.1", port: 5672 };
     const { logger } = options;
 
-    this.logger = createChildLogger(logger, 'AmqpPubSub');
+    this.logger = createChildLogger(logger, "AmqpPubSub");
 
     const factory = new RabbitMqSingletonConnectionFactory(logger, config);
 
     this.consumer = new RabbitMqSubscriber(logger, factory);
     this.producer = new RabbitMqPublisher(logger, factory);
-
-    this.subscriptionMap = {};
-    this.subsRefsMap = {};
-    this.currentSubscriptionId = 0;
-    this.unsubscribeChannelMap = {};
   }
 
   public async publish(trigger: string, payload: any): Promise<void> {
@@ -52,7 +48,11 @@ export class AmqpPubSub implements PubSubEngine {
     this.producer.publish(trigger, payload);
   }
 
-  public subscribe(trigger: string, onMessage: Function, options?: Object): Promise<number> {
+  public async subscribe(
+    trigger: string,
+    onMessage: (m: string) => Promise<void>,
+    options?: Object
+  ): Promise<number> {
     const triggerName: string = this.triggerTransform(trigger, options);
     const id = this.currentSubscriptionId++;
     this.subscriptionMap[id] = [triggerName, onMessage];
@@ -60,24 +60,36 @@ export class AmqpPubSub implements PubSubEngine {
     if (refs && refs.length > 0) {
       const newRefs = [...refs, id];
       this.subsRefsMap[triggerName] = newRefs;
-      this.logger.trace("subscriber exist, adding triggerName '%s' to saved list.", triggerName);
-      return Promise.resolve(id);
-    } else {
-      return new Promise<number>((resolve, reject) => {
-        this.logger.trace("trying to subscribe to queue '%s'", triggerName);
-        this.consumer.subscribe(triggerName, (msg) => this.onMessage(triggerName, msg))
-          .then(disposer => {
-            this.subsRefsMap[triggerName] = [...(this.subsRefsMap[triggerName] || []), id];
-            this.unsubscribeChannelMap[id] = disposer;
-            return resolve(id);
-          }).catch(err => {
-            this.logger.error(err, "failed to recieve message from queue '%s'", triggerName);
-            reject(id);
-          });
-      });
+      this.logger.trace(
+        "subscriber exist, adding triggerName '%s' to saved list.",
+        triggerName
+      );
+      return id;
+    }
+    this.logger.trace("trying to subscribe to queue '%s'", triggerName);
+    try {
+      const disposer = await this.consumer.subscribe<string>(
+        triggerName,
+        (msg) => this.onMessage(triggerName, msg)
+      );
+      this.subsRefsMap[triggerName] = [
+        ...(this.subsRefsMap[triggerName] || []),
+        id,
+      ];
+      this.unsubscribeChannelMap[id] = disposer;
+
+      return id;
+    } catch (err) {
+      this.logger.error(
+        err,
+        "failed to recieve message from queue '%s'",
+        triggerName
+      );
+      return id;
     }
   }
 
+  
   public unsubscribe(subId: number) {
     const [triggerName = null] = this.subscriptionMap[subId] || [];
     const refs = this.subsRefsMap[triggerName];
@@ -87,7 +99,7 @@ export class AmqpPubSub implements PubSubEngine {
       throw new Error(`There is no subscription of id "{subId}"`);
     }
 
-    let newRefs;
+    let newRefs: number[];
     if (refs.length === 1) {
       newRefs = [];
       this.unsubscribeChannelMap[subId]().then(() => {
@@ -111,7 +123,10 @@ export class AmqpPubSub implements PubSubEngine {
     return new PubSubAsyncIterator<T>(this, triggers);
   }
 
-  private onMessage(channel: string, message: string) {
+  private onMessage(
+    channel: string,
+    message: string
+  ): Promise<IRabbitMqSubscriberDisposer> {
     const subscribers = this.subsRefsMap[channel];
 
     // Don't work for nothing..
@@ -119,17 +134,20 @@ export class AmqpPubSub implements PubSubEngine {
       return;
     }
 
-    this.logger.trace("sending message to subscriber callback function '(%j)'", message);
-
-    each(subscribers, (subId, cb) => {
-      // TODO Support pattern based subscriptions
+    this.logger.trace(
+      "sending message to subscriber callback function '(%j)'",
+      message
+    );
+    for (const subId of subscribers) {
       const [triggerName, listener] = this.subscriptionMap[subId];
       listener(message);
-      cb();
-    });
+    }
   }
 }
 
 export type Path = Array<string | number>;
 export type Trigger = string | Path;
-export type TriggerTransform = (trigger: Trigger, channelOptions?: Object) => string;
+export type TriggerTransform = (
+  trigger: Trigger,
+  channelOptions?: Object
+) => string;

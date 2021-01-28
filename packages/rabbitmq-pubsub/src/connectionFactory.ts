@@ -1,5 +1,4 @@
 import * as amqp from "amqplib";
-import * as Promise from "bluebird";
 import { createChildLogger, Logger } from "./childLogger";
 
 export interface IRabbitMqConnectionFactory {

@@ -1,11 +1,10 @@
 import * as amqp from "amqplib";
 import { IRabbitMqConnectionFactory } from "./connectionFactory";
-import * as Promisefy from "bluebird";
 import { IQueueNameConfig, asPubSubQueueNameConfig } from "./common";
 import { createChildLogger, Logger } from "./childLogger";
 
 export interface IRabbitMqSubscriberDisposer {
-  (): Promisefy<void>;
+  (): Promise<void>;
 }
 
 export class RabbitMqSubscriber {
@@ -16,26 +15,23 @@ export class RabbitMqSubscriber {
     this.logger = createChildLogger(logger, "RabbitMqConsumer");
   }
 
-  subscribe<T>(
+  async subscribe<T>(
     queue: string | IQueueNameConfig,
-    action: (message: T) => Promisefy<any> | void
-  ): Promisefy<IRabbitMqSubscriberDisposer> {
+    action: (message: T) => Promise<IRabbitMqSubscriberDisposer>
+  ): Promise<IRabbitMqSubscriberDisposer> {
     const queueConfig = asPubSubQueueNameConfig(queue);
-    return this.connectionFactory
-      .create()
-      .then((connection) => connection.createChannel())
-      .then((channel) => {
-        this.logger.trace("got channel for queue '%s'", queueConfig.name);
-        return this.setupChannel<T>(channel, queueConfig).then((queueName) => {
-          this.logger.debug(
-            "queue name generated for subscription queue '(%s)' is '(%s)'",
-            queueConfig.name,
-            queueName
-          );
-          const queConfig = { ...queueConfig, dlq: queueName };
-          return this.subscribeToChannel<T>(channel, queConfig, action);
-        });
-      });
+    const connection = await this.connectionFactory.create();
+    const channel = await connection.createChannel();
+    this.logger.trace("got channel for queue '%s'", queueConfig.name);
+    const queueName = await this.setupChannel<T>(channel, queueConfig);
+
+    this.logger.debug(
+      "queue name generated for subscription queue '(%s)' is '(%s)'",
+      queueConfig.name,
+      queueName
+    );
+    const queConfig = { ...queueConfig, dlq: queueName };
+    return this.subscribeToChannel<T>(channel, queConfig, action);
   }
 
   private setupChannel<T>(
@@ -46,57 +42,54 @@ export class RabbitMqSubscriber {
     return this.getChannelSetup(channel, queueConfig);
   }
 
-  private subscribeToChannel<T>(
+  private async subscribeToChannel<T>(
     channel: amqp.Channel,
     queueConfig: IQueueNameConfig,
-    action: (message: T) => Promisefy<any> | void
+    action: (message: T) => Promise<IRabbitMqSubscriberDisposer>
   ) {
     this.logger.trace("subscribing to queue '%s'", queueConfig.name);
-    return channel
-      .consume(queueConfig.dlq, (message) => {
-        let msg: T;
-        Promisefy.try(() => {
-          msg = this.getMessageObject<T>(message);
-          this.logger.trace(
-            "message arrived from queue '%s' (%j)",
-            queueConfig.name,
-            msg
-          );
-          return action(msg);
-        })
-          .then(() => {
-            this.logger.trace(
-              "message processed from queue '%s' (%j)",
-              queueConfig.name,
-              msg
-            );
-            channel.ack(message);
-          })
-          .catch((err) => {
-            this.logger.error(
-              err,
-              "message processing failed from queue '%j' (%j)",
-              queueConfig,
-              msg
-            );
-            channel.nack(message, false, false);
-          });
-      })
-      .then((opts) => {
+    const opts = await channel.consume(queueConfig.dlq, async (message) => {
+      let msg: T = this.getMessageObject<T>(message);
+      this.logger.trace(
+        "message arrived from queue '%s' (%j)",
+        queueConfig.name,
+        msg
+      );
+      try {
+        const disposer = await action(msg);
         this.logger.trace(
-          "subscribed to queue '%s' (%s)",
+          "message processed from queue '%s' (%j)",
           queueConfig.name,
-          opts.consumerTag
+          msg
         );
-        return (() => {
-          this.logger.trace(
-            "disposing subscriber to queue '%s' (%s)",
-            queueConfig.name,
-            opts.consumerTag
-          );
-          return Promisefy.resolve(channel.close()).return();
-        }) as IRabbitMqSubscriberDisposer;
-      });
+        channel.ack(message);
+        return disposer;
+      } catch (err) {
+        this.logger.error(
+          err,
+          "message processing failed from queue '%j' (%j)",
+          queueConfig,
+          msg
+        );
+        channel.nack(message, false, false);
+        throw err;
+      }
+    });
+
+    this.logger.trace(
+      "subscribed to queue '%s' (%s)",
+      queueConfig.name,
+      opts.consumerTag
+    );
+
+    return (async () => {
+      this.logger.trace(
+        "disposing subscriber to queue '%s' (%s)",
+        queueConfig.name,
+        opts.consumerTag
+      );
+      await channel.close();
+    }) as IRabbitMqSubscriberDisposer;
   }
 
   protected getMessageObject<T>(message: amqp.Message) {
@@ -114,17 +107,15 @@ export class RabbitMqSubscriber {
     );
     let result = await channel.assertQueue(
       queueConfig.dlq,
-      this.getQueueSettings(queueConfig.dlx)
+      this.getQueueSettings()
     );
     await channel.bindQueue(result.queue, queueConfig.dlx, "");
     return result.queue;
   }
 
-  protected getQueueSettings(
-    deadletterExchangeName: string
-  ): amqp.Options.AssertQueue {
+  protected getQueueSettings(): amqp.Options.AssertQueue {
     return {
-      exclusive: true,
+      exclusive: false,
       autoDelete: true,
     };
   }

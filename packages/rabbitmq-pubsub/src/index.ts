@@ -7,5 +7,5 @@ export {
 export { RabbitMqConsumer, IRabbitMqConsumerDisposer } from "./consumer";
 export { RabbitMqProducer } from "./producer";
 export { RabbitMqPublisher } from "./publisher";
-export { RabbitMqSubscriber } from "./subscriber";
+export { RabbitMqSubscriber, IRabbitMqSubscriberDisposer } from "./subscriber";
 export { IQueueNameConfig } from "./common";
