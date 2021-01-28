@@ -1,11 +1,10 @@
 import * as amqp from "amqplib";
 import { IRabbitMqConnectionFactory } from "./connectionFactory";
-import * as Promise from "bluebird";
 import { IQueueNameConfig, asQueueNameConfig } from "./common";
 import { createChildLogger, Logger } from "./childLogger";
 
 export interface IRabbitMqConsumerDisposer {
-  (): Promise<void>;
+  (): Promise<unknown>;
 }
 
 export class RabbitMqConsumer {
@@ -16,20 +15,16 @@ export class RabbitMqConsumer {
     this.logger = createChildLogger(logger, "RabbitMqConsumer");
   }
 
-  subscribe<T>(
+  async subscribe<T>(
     queue: string | IQueueNameConfig,
     action: (message: T) => Promise<any> | void
   ): Promise<IRabbitMqConsumerDisposer> {
     const queueConfig = asQueueNameConfig(queue);
-    return this.connectionFactory
-      .create()
-      .then((connection) => connection.createChannel())
-      .then((channel) => {
-        this.logger.trace("got channel for queue '%s'", queueConfig.name);
-        return this.setupChannel<T>(channel, queueConfig).then(() =>
-          this.subscribeToChannel<T>(channel, queueConfig, action)
-        );
-      });
+    const connection = await this.connectionFactory.create();
+    const channel = await connection.createChannel();
+    this.logger.trace("got channel for queue '%s'", queueConfig.name);
+    await this.setupChannel<T>(channel, queueConfig);
+    return this.subscribeToChannel<T>(channel, queueConfig, action);
   }
 
   private setupChannel<T>(
@@ -40,57 +35,53 @@ export class RabbitMqConsumer {
     return Promise.all(this.getChannelSetup(channel, queueConfig));
   }
 
-  private subscribeToChannel<T>(
+  private async subscribeToChannel<T>(
     channel: amqp.Channel,
     queueConfig: IQueueNameConfig,
     action: (message: T) => Promise<any> | void
   ) {
     this.logger.trace("subscribing to queue '%s'", queueConfig.name);
-    return channel
-      .consume(queueConfig.name, (message) => {
-        let msg: T;
-        Promise.try(() => {
-          msg = this.getMessageObject<T>(message);
-          this.logger.trace(
-            "message arrived from queue '%s' (%j)",
-            queueConfig.name,
-            msg
-          );
-          return action(msg);
-        })
-          .then(() => {
-            this.logger.trace(
-              "message processed from queue '%s' (%j)",
-              queueConfig.name,
-              msg
-            );
-            channel.ack(message);
-          })
-          .catch((err) => {
-            this.logger.error(
-              err,
-              "message processing failed from queue '%j' (%j)",
-              queueConfig,
-              msg
-            );
-            channel.nack(message, false, false);
-          });
-      })
-      .then((opts) => {
-        this.logger.trace(
-          "subscribed to queue '%s' (%s)",
-          queueConfig.name,
-          opts.consumerTag
+    const opts = await channel.consume(queueConfig.name, async (message) => {
+      let msg: T = this.getMessageObject<T>(message);
+      this.logger.trace(
+        "message arrived from queue '%s' (%j)",
+        queueConfig.name,
+        msg
+      );
+      try {
+        await action(msg);
+      } catch (err) {
+        this.logger.error(
+          err,
+          "message processing failed from queue '%j' (%j)",
+          queueConfig,
+          msg
         );
-        return (() => {
-          this.logger.trace(
-            "disposing subscriber to queue '%s' (%s)",
-            queueConfig.name,
-            opts.consumerTag
-          );
-          return Promise.resolve(channel.cancel(opts.consumerTag)).return();
-        }) as IRabbitMqConsumerDisposer;
-      });
+        channel.nack(message, false, false);
+        return;
+      }
+      this.logger.trace(
+        "message processed from queue '%s' (%j)",
+        queueConfig.name,
+        msg
+      );
+      channel.ack(message);
+    });
+    this.logger.trace(
+      "subscribed to queue '%s' (%s)",
+      queueConfig.name,
+      opts.consumerTag
+    );
+    return (async () => {
+      this.logger.trace(
+        "disposing subscriber to queue '%s' (%s)",
+        queueConfig.name,
+        opts.consumerTag
+      );
+      await channel.cancel(opts.consumerTag);
+      await channel.close();
+      return Promise.resolve();
+    }) as IRabbitMqConsumerDisposer;
   }
 
   protected getMessageObject<T>(message: amqp.Message) {
