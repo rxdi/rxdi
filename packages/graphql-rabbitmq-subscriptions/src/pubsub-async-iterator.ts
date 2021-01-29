@@ -1,5 +1,6 @@
+import { IQueueNameConfig } from '@rxdi/rabbitmq-pubsub';
 import { $$asyncIterator } from 'iterall';
-import { PubSubEngine } from 'graphql-subscriptions';
+import { AmqpPubSub } from './amqp-pubsub';
 
 /**
  * A class for digesting PubSubEngine events via the new AsyncIterator interface.
@@ -36,16 +37,16 @@ export class PubSubAsyncIterator<T> implements AsyncIterator<T> {
   private eventsArray: string[];
   private allSubscribed: Promise<number[]>;
   private listening: boolean;
-  private pubsub: PubSubEngine;
+  private pubsub: AmqpPubSub;
 
-  constructor(pubsub: PubSubEngine, eventNames: string | string[]) {
+  constructor(pubsub: AmqpPubSub, eventNames: string | string[], options?: IQueueNameConfig) {
     this.pubsub = pubsub;
     this.pullQueue = [];
     this.pushQueue = [];
     this.listening = true;
     this.eventsArray =
       typeof eventNames === 'string' ? [eventNames] : eventNames;
-    this.allSubscribed = this.subscribeAll();
+    this.allSubscribed = this.subscribeAll(options);
   }
 
   public async next() {
@@ -98,10 +99,10 @@ export class PubSubAsyncIterator<T> implements AsyncIterator<T> {
     }
   }
 
-  private subscribeAll() {
+  private subscribeAll(options: Partial<IQueueNameConfig>) {
     return Promise.all(
       this.eventsArray.map(eventName =>
-        this.pubsub.subscribe(eventName, this.pushValue.bind(this), {}),
+        this.pubsub.subscribe(eventName, this.pushValue.bind(this), options),
       ),
     );
   }

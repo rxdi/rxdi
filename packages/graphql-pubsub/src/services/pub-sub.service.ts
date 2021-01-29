@@ -37,8 +37,8 @@ export class PubSubService {
     }
   }
 
-  asyncIterator<T>(event): AsyncIterator<T> {
-    return this.sub.asyncIterator<T>(event);
+  asyncIterator<T>(event, options?): AsyncIterator<T> {
+    return (this as unknown)['sub'].asyncIterator<T>(event, options);
   }
 
   publish(signal: string, data: any): Promise<void> {

@@ -1,4 +1,3 @@
-import { PubSubEngine } from "graphql-subscriptions";
 import { PubSubAsyncIterator } from "./pubsub-async-iterator";
 import {
   RabbitMqSingletonConnectionFactory,
@@ -18,7 +17,7 @@ export interface PubSubRabbitMQBusOptions {
   logger?: Logger;
 }
 
-export class AmqpPubSub implements PubSubEngine {
+export class AmqpPubSub {
   private consumer: RabbitMqSubscriber;
   private producer: RabbitMqPublisher;
   private subscriptionMap: {
@@ -44,15 +43,15 @@ export class AmqpPubSub implements PubSubEngine {
     this.producer = new RabbitMqPublisher(logger, factory);
   }
 
-  public async publish(trigger: string, payload: any): Promise<void> {
+  public async publish(trigger: string, payload: any, config?: IQueueNameConfig): Promise<void> {
     this.logger.trace("publishing for queue '%s' (%j)", trigger, payload);
-    this.producer.publish(trigger, payload);
+    this.producer.publish(trigger, payload, config);
   }
 
   public async subscribe<T>(
     trigger: string,
     onMessage: (m: T) => Promise<void>,
-    options: Partial<IQueueNameConfig> = {}
+    options?: Partial<IQueueNameConfig>
   ): Promise<number> {
     const triggerName: string = this.triggerTransform(trigger, options);
     const id = this.currentSubscriptionId++;
@@ -135,11 +134,11 @@ export class AmqpPubSub implements PubSubEngine {
     );
   }
 
-  public asyncIterator<T>(triggers: string | string[]): AsyncIterator<T> {
-    return new PubSubAsyncIterator<T>(this, triggers);
+  public asyncIterator<T>(triggers: string | string[], options?: IQueueNameConfig): AsyncIterator<T> {
+    return new PubSubAsyncIterator<T>(this, triggers, options);
   }
 
-  private onMessage(
+  private async onMessage(
     channel: string,
     message: string
   ): Promise<IRabbitMqSubscriberDisposer> {
@@ -156,7 +155,7 @@ export class AmqpPubSub implements PubSubEngine {
     );
     for (const subId of subscribers) {
       const [triggerName, listener] = this.subscriptionMap[subId];
-      listener(message);
+      await listener(message);
     }
   }
 }
