@@ -23,6 +23,9 @@ export class RabbitMqSubscriber {
     const queueConfig = asPubSubQueueNameConfig(queue);
     const connection = await this.connectionFactory.create();
     const channel = await connection.createChannel();
+    if (options.prefetch) {
+      await channel.prefetch(options.prefetch, options.globalPrefetch);
+    }
     this.logger.trace("got channel for queue '%s'", queueConfig.name);
     const queueName = await this.setupChannel<T>(channel, {
       ...queueConfig,
@@ -113,9 +116,6 @@ export class RabbitMqSubscriber {
       queueConfig.dlq,
       this.getQueueSettings()
     );
-    if (queueConfig.prefetch) {
-      await channel.prefetch(queueConfig.prefetch, queueConfig.globalPrefetch);
-    }
     await channel.bindQueue(result.queue, queueConfig.dlx, "");
     return result.queue;
   }

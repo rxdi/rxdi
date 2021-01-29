@@ -22,6 +22,7 @@ export class RabbitMqConsumer {
     const queueConfig = asQueueNameConfig(queue);
     const connection = await this.connectionFactory.create();
     const channel = await connection.createChannel();
+ 
     this.logger.trace("got channel for queue '%s'", queueConfig.name);
     await this.setupChannel<T>(channel, queueConfig);
     return this.subscribeToChannel<T>(channel, queueConfig, action);

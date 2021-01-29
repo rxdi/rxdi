@@ -13,13 +13,17 @@ export class RabbitMqPublisher {
 
   async publish<T>(
     queue: string | IQueueNameConfig,
-    message: T
+    message: T,
+    options?: IQueueNameConfig
   ): Promise<void> {
     const queueConfig = asPubSubQueueNameConfig(queue);
 
     try {
       const connection = await this.connectionFactory.create();
       const channel = await connection.createChannel();
+      if (options.prefetch) {
+        channel.prefetch(options.prefetch, options.globalPrefetch);
+      }
       await this.setupChannel<T>(channel, queueConfig);
       channel.publish(queueConfig.dlx, "", this.getMessageBuffer(message));
       this.logger.trace(

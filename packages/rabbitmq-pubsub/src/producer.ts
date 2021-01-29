@@ -13,12 +13,16 @@ export class RabbitMqProducer {
 
   async publish<T>(
     queue: string | IQueueNameConfig,
-    message: T
+    message: T,
+    options?: IQueueNameConfig
   ): Promise<void> {
     const queueConfig = asQueueNameConfig(queue);
     const settings = this.getQueueSettings(queueConfig.dlx);
     const connection = await this.connectionFactory.create();
     const channel = await connection.createChannel();
+    if (options.prefetch) {
+      await channel.prefetch(options.prefetch, options.globalPrefetch);
+    }
     await channel.assertQueue(queueConfig.name, settings);
     if (
       !channel.sendToQueue(queueConfig.name, this.getMessageBuffer(message), {
