@@ -19,6 +19,7 @@ export interface IQueueNameConfig {
   name: string;
   dlq: string;
   dlx: string;
+  strictName?: boolean;
 }
 
 export class DefaultQueueNameConfig implements IQueueNameConfig {

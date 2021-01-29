@@ -29,7 +29,7 @@ export class RabbitMqSubscriber {
     this.logger.trace("got channel for queue '%s'", queueConfig.name);
     const queueName = await this.setupChannel<T>(channel, {
       ...queueConfig,
-      prefetch: options?.prefetch,
+      ...options
     });
 
     this.logger.debug(
@@ -113,7 +113,7 @@ export class RabbitMqSubscriber {
       this.getDLSettings()
     );
     let result = await channel.assertQueue(
-      queueConfig.dlq,
+      queueConfig.strictName ? queueConfig.name : queueConfig.dlq,
       this.getQueueSettings()
     );
     await channel.bindQueue(result.queue, queueConfig.dlx, "");
