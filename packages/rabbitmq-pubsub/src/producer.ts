@@ -20,7 +20,7 @@ export class RabbitMqProducer {
     const settings = this.getQueueSettings(queueConfig.dlx);
     const connection = await this.connectionFactory.create();
     const channel = await connection.createChannel();
-    if (options.prefetch) {
+    if (options?.prefetch) {
       await channel.prefetch(options.prefetch, options.globalPrefetch);
     }
     await channel.assertQueue(queueConfig.name, settings);

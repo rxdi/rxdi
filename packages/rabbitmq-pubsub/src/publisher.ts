@@ -21,7 +21,7 @@ export class RabbitMqPublisher {
     try {
       const connection = await this.connectionFactory.create();
       const channel = await connection.createChannel();
-      if (options.prefetch) {
+      if (options?.prefetch) {
         channel.prefetch(options.prefetch, options.globalPrefetch);
       }
       await this.setupChannel<T>(channel, queueConfig);
