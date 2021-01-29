@@ -10,6 +10,12 @@ export interface IQueueNameConfig {
    *  https://www.squaremobius.net/amqp.node/channel_api.html#channel_prefetch
    */
   prefetch?: number;
+
+  /**
+   *  If we set global to true we will apply prefetch count globally for the queue
+   *  The count given is the maximum number of messages
+   */
+  globalPrefetch?: boolean;
   name: string;
   dlq: string;
   dlx: string;

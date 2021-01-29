@@ -114,7 +114,7 @@ export class RabbitMqSubscriber {
       this.getQueueSettings()
     );
     if (queueConfig.prefetch) {
-      await channel.prefetch(queueConfig.prefetch);
+      await channel.prefetch(queueConfig.prefetch, queueConfig.globalPrefetch);
     }
     await channel.bindQueue(result.queue, queueConfig.dlx, "");
     return result.queue;
