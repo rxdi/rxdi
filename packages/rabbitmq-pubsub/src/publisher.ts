@@ -61,7 +61,7 @@ export class RabbitMqPublisher {
 
   protected getSettings(): amqp.Options.AssertQueue {
     return {
-      durable: false,
+      durable: true,
       autoDelete: true,
     };
   }

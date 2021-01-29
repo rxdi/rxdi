@@ -17,13 +17,17 @@ export class RabbitMqSubscriber {
 
   async subscribe<T>(
     queue: string | IQueueNameConfig,
-    action: (message: T) => Promise<IRabbitMqSubscriberDisposer>
+    action: (message: T) => Promise<IRabbitMqSubscriberDisposer>,
+    options?: Partial<IQueueNameConfig>
   ): Promise<IRabbitMqSubscriberDisposer> {
     const queueConfig = asPubSubQueueNameConfig(queue);
     const connection = await this.connectionFactory.create();
     const channel = await connection.createChannel();
     this.logger.trace("got channel for queue '%s'", queueConfig.name);
-    const queueName = await this.setupChannel<T>(channel, queueConfig);
+    const queueName = await this.setupChannel<T>(channel, {
+      ...queueConfig,
+      prefetch: options?.prefetch,
+    });
 
     this.logger.debug(
       "queue name generated for subscription queue '(%s)' is '(%s)'",
@@ -109,6 +113,9 @@ export class RabbitMqSubscriber {
       queueConfig.dlq,
       this.getQueueSettings()
     );
+    if (queueConfig.prefetch) {
+      await channel.prefetch(queueConfig.prefetch);
+    }
     await channel.bindQueue(result.queue, queueConfig.dlx, "");
     return result.queue;
   }
@@ -122,7 +129,7 @@ export class RabbitMqSubscriber {
 
   protected getDLSettings(): amqp.Options.AssertQueue {
     return {
-      durable: false,
+      durable: true,
       autoDelete: true,
     };
   }

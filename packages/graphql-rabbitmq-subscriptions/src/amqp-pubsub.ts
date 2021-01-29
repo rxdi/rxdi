@@ -7,6 +7,7 @@ import {
   IRabbitMqConnectionConfig,
   IRabbitMqConsumerDisposer,
   IRabbitMqSubscriberDisposer,
+  IQueueNameConfig,
 } from "@rxdi/rabbitmq-pubsub";
 import { createChildLogger, Logger } from "./child-logger";
 
@@ -21,7 +22,7 @@ export class AmqpPubSub implements PubSubEngine {
   private consumer: RabbitMqSubscriber;
   private producer: RabbitMqPublisher;
   private subscriptionMap: {
-    [subId: number]: [string, (m: string) => Promise<void>];
+    [subId: number]: [string, (m: unknown) => Promise<void>];
   } = {};
   private subsRefsMap: { [trigger: string]: Array<number> } = {};
   private currentSubscriptionId: number = 0;
@@ -48,10 +49,10 @@ export class AmqpPubSub implements PubSubEngine {
     this.producer.publish(trigger, payload);
   }
 
-  public async subscribe(
+  public async subscribe<T>(
     trigger: string,
-    onMessage: (m: string) => Promise<void>,
-    options?: Object
+    onMessage: (m: T) => Promise<void>,
+    options: Partial<IQueueNameConfig> = {}
   ): Promise<number> {
     const triggerName: string = this.triggerTransform(trigger, options);
     const id = this.currentSubscriptionId++;
@@ -70,7 +71,8 @@ export class AmqpPubSub implements PubSubEngine {
     try {
       const disposer = await this.consumer.subscribe<string>(
         triggerName,
-        (msg) => this.onMessage(triggerName, msg)
+        (msg) => this.onMessage(triggerName, msg),
+        options
       );
       this.subsRefsMap[triggerName] = [
         ...(this.subsRefsMap[triggerName] || []),
@@ -89,7 +91,6 @@ export class AmqpPubSub implements PubSubEngine {
     }
   }
 
-  
   public unsubscribe(subId: number) {
     const [triggerName = null] = this.subscriptionMap[subId] || [];
     const refs = this.subsRefsMap[triggerName];
@@ -102,21 +103,36 @@ export class AmqpPubSub implements PubSubEngine {
     let newRefs: number[];
     if (refs.length === 1) {
       newRefs = [];
-      this.unsubscribeChannelMap[subId]().then(() => {
-        this.logger.trace("cancelled channel from subscribing to queue '%s'", triggerName);
-      }).catch(err => {
-        this.logger.error(err, "channel cancellation failed from queue '%j'", triggerName);
-      });
+      this.unsubscribeChannelMap[subId]()
+        .then(() => {
+          this.logger.trace(
+            "cancelled channel from subscribing to queue '%s'",
+            triggerName
+          );
+        })
+        .catch((err) => {
+          this.logger.error(
+            err,
+            "channel cancellation failed from queue '%j'",
+            triggerName
+          );
+        });
     } else {
       const index = refs.indexOf(subId);
       if (index !== -1) {
         newRefs = [...refs.slice(0, index), ...refs.slice(index + 1)];
       }
-      this.logger.trace("removing triggerName from listening '%s' ", triggerName);
+      this.logger.trace(
+        "removing triggerName from listening '%s' ",
+        triggerName
+      );
     }
     this.subsRefsMap[triggerName] = newRefs;
     delete this.subscriptionMap[subId];
-    this.logger.trace("list of subscriptions still available '(%j)'", this.subscriptionMap);
+    this.logger.trace(
+      "list of subscriptions still available '(%j)'",
+      this.subscriptionMap
+    );
   }
 
   public asyncIterator<T>(triggers: string | string[]): AsyncIterator<T> {
@@ -149,5 +165,5 @@ export type Path = Array<string | number>;
 export type Trigger = string | Path;
 export type TriggerTransform = (
   trigger: Trigger,
-  channelOptions?: Object
+  channelOptions?: Partial<IQueueNameConfig>
 ) => string;
