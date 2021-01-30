@@ -140,7 +140,7 @@ export type EffectTypes = keyof typeof EffectTypes;
       resolver.subscribe = function subscribe(...args: any[]) {
         return originalSubscribe.bind(resolver.target)(
           resolver.target,
-          ...args
+          ...args.filter(i => typeof i !== 'undefined')
         );
       };
     }
