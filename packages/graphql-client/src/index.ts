@@ -123,13 +123,25 @@ export class GraphqlModule {
                       operation === "subscription"
                     );
                   },
-                  new WebSocketLink(
-                    new SubscriptionClient(pubsub, {
-                      lazy: true,
-                      connectionParams: headers,
-                      reconnect: true,
-                    })
-                  ),
+                  (() => {
+                    const wsLink = new WebSocketLink(
+                      new SubscriptionClient(pubsub, {
+                        lazy: true,
+                        connectionParams: () => ({
+                          get authorization() {
+                              return headers['authorization'];
+                          }
+                      }),
+                      connectionCallback: (error) => {
+                          if (error?.['message'] === "Unauthorized") {
+                            wsLink['subscriptionClient'].close(false, false);
+                          }
+                        },
+                        reconnect: true,
+                      })
+                    );
+                    return wsLink;
+                  })(),
                   createHttpLink({ uri })
                 )
               ),
