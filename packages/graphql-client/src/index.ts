@@ -129,12 +129,13 @@ export class GraphqlModule {
                         lazy: true,
                         connectionParams: () => ({
                           get authorization() {
-                              return headers['authorization'];
-                          }
-                      }),
-                      connectionCallback: (error) => {
-                          if (error?.['message'] === "Unauthorized") {
-                            wsLink['subscriptionClient'].close(false, false);
+                            return headers["authorization"];
+                          },
+                        }),
+                        connectionCallback: (error) => {
+                          console.error("[Subscription]: ", error);
+                          if (error?.["message"] === "Unauthorized") {
+                            wsLink["subscriptionClient"].close(false, false);
                           }
                         },
                         reconnect: true,
