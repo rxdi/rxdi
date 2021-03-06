@@ -1,0 +1,56 @@
+## 0.7.113 (2021-03-06)
+
+
+### Bug Fixes
+
+* **AMQP:** added new version of the class ([21aeacc](https://github.com/rxdi/mono/commit/21aeaccfb12f278a00aec4747c98503473bec17d))
+* **compressor:** added class with static methods and re-exported inside index ([b3e5429](https://github.com/rxdi/mono/commit/b3e54297dd78749bac964e56c64cbf16a22bcbef))
+* **graphql:** filtered unknown arguments ([6a0be24](https://github.com/rxdi/mono/commit/6a0be241a119d2a417994477354ff8450c977526))
+* **graphql:** removed custom directive from export ([800eded](https://github.com/rxdi/mono/commit/800eded6dbec7493a24845f3ed93f6b4d4a18594))
+* **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
+* **graphql-client:** subscription websocket link now takes authorization token lazily ([c0b525c](https://github.com/rxdi/mono/commit/c0b525c9ce86b7f56ccbaee804dd1d14103ee69e))
+* **graphql-pubsub:** added connection with credentials for amqp protocol ([3c8b320](https://github.com/rxdi/mono/commit/3c8b320f199503fed3e9e4cfd28660c5a3ad2de1))
+* **hapi:** typings for hapi removed from core dependency ([7aebe9c](https://github.com/rxdi/mono/commit/7aebe9c68b559fb2bd4b1f8b6407eb251adc08f9))
+* **Hotkeys:** added complete method to when binding ([6130ebe](https://github.com/rxdi/mono/commit/6130ebe68919a91eadc0acacc1c0306abf2ce781))
+* **Hotkeys:** added observable approach using subject instead of new Observable ([0fc2c89](https://github.com/rxdi/mono/commit/0fc2c89c8bc7bdf848a100ddbbf41d13d4bdfc41))
+* **Hotkeys:** added typing Event since it was missing ([33d6755](https://github.com/rxdi/mono/commit/33d67559adfc304d25786e29b4c15a0226f8ef3f))
+* **Hotkeys:** changed to module property instead of ngModule it will work but it is for different infrastructure ([b5910a7](https://github.com/rxdi/mono/commit/b5910a7d18a041493b7916fe760ea0b7db471031))
+* **Hotkeys:** reverted back logic for binding ([5d83018](https://github.com/rxdi/mono/commit/5d830181d6a5ed611e5ff06f861a9501cb45e6bf))
+* **Hotkeys:** unbinding leads to not subscribing again to observable. we will leave it like so ([4720e9f](https://github.com/rxdi/mono/commit/4720e9f608f15fbb63404c162017607b6020d715))
+* **http:** added export and documentation ([58f7ebb](https://github.com/rxdi/mono/commit/58f7ebbfcbb43939d9eeb6c48e6ac037a5d7b547))
+* **lit-html:** customElement configuration interface re-exported ([c1af1ff](https://github.com/rxdi/mono/commit/c1af1ffce18c52ef2ea438b63c9fa5c2d84201b5))
+* **lit-html:** exported correctly directives ([071dd46](https://github.com/rxdi/mono/commit/071dd46ef626e73f4f346b8bd56ecb2de2d57882))
+* **lit-html:** memory leak was detected when multiple renders occur leading to multiple subscriptions that are subscribing but we cannot unsubscribe them ([2a71649](https://github.com/rxdi/mono/commit/2a7164940b1b6c68cebc29a8444f40fb2e6eabb5))
+* **lit-html:** oh my god :( ([2eb1e25](https://github.com/rxdi/mono/commit/2eb1e25e96e57669e1decfb34f5ed1e8b6983d01))
+* **lit-html:** removed import for directives only async or subscribe directive will be left ([261e9da](https://github.com/rxdi/mono/commit/261e9da94f8be056b3c1912049701f871454ddbc))
+* **main:** main js file was not correct ([32aa94a](https://github.com/rxdi/mono/commit/32aa94a4cae09daadb4287ced9b331ea9ce67b2e))
+* **neo4j:** module fixed ([d4842e8](https://github.com/rxdi/mono/commit/d4842e8e86b851a69c46d18ccca6f31fd11f76e8))
+* **pubsub:** added optional types server and path ([9f1e18f](https://github.com/rxdi/mono/commit/9f1e18f3eab8e5172ea7a7e3e2a97a1914d95c09))
+* **pubsub:** added que strict name to subscriber in order to have the same queue shared between multiple workers ([cb2de4b](https://github.com/rxdi/mono/commit/cb2de4b96f27ca8f95fae2d02f359e4fd349365a))
+* **rabbitmq-pubsub:** added correct dependency ([5ea4b7a](https://github.com/rxdi/mono/commit/5ea4b7af70fc7ed754195b508e48352f60f7310c))
+* **rabbitmq-pubsub:** fixed bug with prefetch of undefined ([e2ddd57](https://github.com/rxdi/mono/commit/e2ddd5702d2dad24ce2bc576e7bdcea2aaa3c3a6))
+* **rabbitmq-pubsub:** version fix ([576665d](https://github.com/rxdi/mono/commit/576665dc9a04cabe13690072d2683cb272b918dd))
+* **Router:** added allowJS ([b15d51f](https://github.com/rxdi/mono/commit/b15d51faf1f7d0bc1709411e44a6e3cdc346d411))
+* **Router:** removed unused things and only router component left ([b474240](https://github.com/rxdi/mono/commit/b4742405f4af74eff341261d3f95429a64da9216))
+* **Router:** static methods ([a2ae8ea](https://github.com/rxdi/mono/commit/a2ae8ea589880f91694609dd49ebcb6fed45b584))
+* **Subscriptions:** removed logic from external dependencies refactored many parts of the pubsub protocol using regular Promise and not bluebird promise ([e3a70df](https://github.com/rxdi/mono/commit/e3a70dfd68885fc5f9742a289be5af3f748f2d99))
+
+
+### Features
+
+* **Channels:** closing channels after operation is done since it was overloading rabbitmq cluster with channels, queues and memory leak appears ([e711c8f](https://github.com/rxdi/mono/commit/e711c8f87aad4644ee720ccac048a8ede90392bb))
+* **compressor:** added new package for compressing with lzw ([f64abce](https://github.com/rxdi/mono/commit/f64abce780824064a8ec9e960bd476cce884333d))
+* **GarbageCollect:** added method to handle unsubscribe from observables ([9313eda](https://github.com/rxdi/mono/commit/9313eda88a7f6b4fce7873931b680218a10c8b7c))
+* **GlobalPrefetch:** added to pusbusb ([dfb9913](https://github.com/rxdi/mono/commit/dfb9913d82c604e95ca99ab6eb89b05203434eff))
+* **graphql-client:** added cancel request handler and options everyone to make his own options ([ea312b7](https://github.com/rxdi/mono/commit/ea312b74b0f0c9c7717c45a3a033ec76fb250aec))
+* **graphql-client:** added importQueryAsync method in order to load async documents when we use compression for example ([c44b651](https://github.com/rxdi/mono/commit/c44b651fe2f859c378e918d9c0286cfa3dcb4d6b))
+* **hapi, core:** added decorator Route to define post and get requests ([92caf6c](https://github.com/rxdi/mono/commit/92caf6c720d97752cc23286dc97dbb3d503f921f))
+* **lit-html:** added h utility function returning template result ([a5a2bd6](https://github.com/rxdi/mono/commit/a5a2bd62cf534150ac051bb901c23f16ee119cbc))
+* **pubsub:** global prefetch added on channel config ([3a32a33](https://github.com/rxdi/mono/commit/3a32a33af44a49099f0156c519b1155877fcbad6))
+* **pubsub:** prefetch property added in order one worker to acknowladge single message then process another ([b16491b](https://github.com/rxdi/mono/commit/b16491b1586a9a5ae6c5e32407d57f7c8347b4f6))
+* **rabbitmq-pubsub:** added new library for handling subscriptions using rabbitmq removed banyan from dependencies ([5225543](https://github.com/rxdi/mono/commit/522554302c5f61f81278392b4f0688aae1738794))
+* **rabbitmq-pubsub:** global prefetch set ([55cedf1](https://github.com/rxdi/mono/commit/55cedf1f72d394229019aa54fd96c950c86a1dbc))
+* **Websocket:** added perMessageDeflate gzip on subscriptions options ([157f29b](https://github.com/rxdi/mono/commit/157f29bddf0e5aeb997d6bed642206076e679439))
+
+
+
