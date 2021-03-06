@@ -80,12 +80,12 @@ interface ApolloClientOptions {
 ```typescript
 import { Injector } from "@rxdi/core";
 import { DocumentTypes } from "../@introspection/documentTypes";
-import { from, Observable } from "rxjs";
+import { of, Observable } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import { IQuery, IMutation, ISubscription } from "../@introspection";
 import { LitElement } from "@rxdi/lit-html";
 import {
-  importQueryAsync,
+  importQuery,
   ApolloClient,
   QueryOptions,
   SubscriptionOptions,
@@ -98,19 +98,19 @@ export class BaseComponent extends LitElement {
   public graphql: ApolloClient;
 
   query<T = IQuery>(options: ImportQueryMixin) {
-    return from(importQueryAsync(options.query)).pipe(
+    return of(importQuery(options.query)).pipe(
       switchMap((query) => this.graphql.query({ ...options, query }) as any)
     ) as Observable<{ data: T }>;
   }
 
   mutate<T = IMutation>(options: ImportMutationMixin) {
-    return from(importQueryAsync(options.mutation)).pipe(
+    return of(importQuery(options.mutation)).pipe(
       switchMap((mutation) => this.graphql.mutate({ ...options, mutation }) as any)
     ) as Observable<{ data: T }>;
   }
 
   subscribe<T = ISubscription>(options: ImportSubscriptionMixin) {
-    return from(importQueryAsync(options.query)).pipe(
+    return of(importQuery(options.query)).pipe(
       switchMap((query) => this.graphql.subscribe({ ...options, query }) as any)
     ) as Observable<{ data: T }>;
   }

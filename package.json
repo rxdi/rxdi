@@ -85,7 +85,10 @@
     "async": "^2.5.0",
     "graphql-subscriptions": "^1.1.0",
     "neo4j-graphql-js": "^2.14.0",
-    "mousetrap": "^1.6.5"
+    "mousetrap": "^1.6.5",
+    "msgpack5": "^5.3.1",
+    "node-lzw": "^0.3.1",
+    "urlsafe-base64": "^1.0.0"
   },
   "devDependencies": {
     "@types/bunyan": "^1.8.0",
