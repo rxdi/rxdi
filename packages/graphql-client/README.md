@@ -28,18 +28,32 @@ import { DOCUMENTS } from './@introspection/documents';
         /* ApolloClientOptions defined above */
       },
       apolloRequestHandler: (operation, forward) => forward(operation)
-      /* 
+      /*
       * Will cancel all request from the same type
       * in order to make only 1 request for specific update or query
       * `false` by default
       */
-      cancelPendingRequests: true, 
+      cancelPendingRequests: true,
     }, DOCUMENTS),
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
 ```
+
+In order to collect `DOCUMENTS` from `.graphql` files we need `@gapi/cli` 
+
+```bash
+npm i -g @gapi/cli
+```
+
+Collect queries/mutations/subscriptions/fragments
+
+```bash
+gapi schema introspect --collect-documents --collect-types
+```
+
+More information can be found [HERE](https://github.com/Stradivario/gapi-cli/wiki/schema)
 
 # ApolloClientOptions interface
 
@@ -67,10 +81,11 @@ interface ApolloClientOptions {
 import { Injector } from "@rxdi/core";
 import { DocumentTypes } from "../@introspection/documentTypes";
 import { from, Observable } from "rxjs";
+import { switchMap } from "rxjs/operators";
 import { IQuery, IMutation, ISubscription } from "../@introspection";
 import { LitElement } from "@rxdi/lit-html";
 import {
-  importQuery,
+  importQueryAsync,
   ApolloClient,
   QueryOptions,
   SubscriptionOptions,
@@ -83,23 +98,20 @@ export class BaseComponent extends LitElement {
   public graphql: ApolloClient;
 
   query<T = IQuery>(options: ImportQueryMixin) {
-    options.query = importQuery(options.query);
-    return from(
-      this.graphql.query.bind(this.graphql)(options) as any
+    return from(importQueryAsync(options.query)).pipe(
+      switchMap((query) => this.graphql.query({ ...options, query }) as any)
     ) as Observable<{ data: T }>;
   }
 
   mutate<T = IMutation>(options: ImportMutationMixin) {
-    options.mutation = importQuery(options.mutation);
-    return from(
-      this.graphql.mutate.bind(this.graphql)(options) as any
+    return from(importQueryAsync(options.mutation)).pipe(
+      switchMap((mutation) => this.graphql.mutate({ ...options, mutation }) as any)
     ) as Observable<{ data: T }>;
   }
 
   subscribe<T = ISubscription>(options: ImportSubscriptionMixin) {
-    options.query = importQuery(options.query);
-    return from(
-      this.graphql.subscribe.bind(this.graphql)(options) as any
+    return from(importQueryAsync(options.query)).pipe(
+      switchMap((query) => this.graphql.subscribe({ ...options, query }) as any)
     ) as Observable<{ data: T }>;
   }
 }
@@ -136,11 +148,7 @@ import { map } from "rxjs/operators";
   template(this: DetailsComponent) {
     return html`
       <div class="container">
-        <card-component>
-          <div slot="content">
-            ${async(this.getProject())}
-          </div>
-        </card-component>
+        ${async(this.project)}
       </div>
     `;
   },
@@ -149,6 +157,11 @@ export class DetailsComponent extends BaseComponent {
   @RouteParams()
   private params: { projectName: string };
 
+  private project: Observable<IProjectType>;
+
+  OnUpdateFirst() {
+    this.project = this.getProject();
+  }
   getProject() {
     return this.query({
       query: "get-project.query.graphql",
@@ -156,18 +169,27 @@ export class DetailsComponent extends BaseComponent {
         name: this.params.projectName,
       },
     }).pipe(
-      map((res) => res.data.getProject),
+      map(({ data }) => data.getProject),
       map(
-        (res) => html`
-          <project-item-component
-            createdAt=${res.createdAt}
-            id=${res.id}
-            name=${res.name}
-            ownedBy=${res.ownedBy}
-          ></project-item-component>
+        (project) => html`
+          <p>${project.createdAt}</p>
+          <p>${project.id}</p>
+          <p>${project.name}</p>
+          <p>${project.ownedBy}</p>
         `
       )
     );
   }
 }
+```
+
+
+# Advanced features
+
+
+Compression of Documents can be done like so
+
+```
+
+
 ```
