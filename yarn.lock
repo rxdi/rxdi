@@ -1377,6 +1377,21 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
+"@rhtml/component@0.0.80":
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/@rhtml/component/-/component-0.0.80.tgz#781ecc954418e2c985a0de51c7ec1f9869e7f173"
+  integrity sha512-Qk1HuAcs0NrIxp4caIooDk0XWgHTJOVrTRLBjk4ncn18CT/OG/zzlARPjG0zIGeZmmV8BogBXpKNuMww+MHaEQ==
+  dependencies:
+    "@rhtml/renderer" "0.0.80"
+    "@rxdi/lit-html" "^0.7.92"
+
+"@rhtml/renderer@0.0.80":
+  version "0.0.80"
+  resolved "https://registry.yarnpkg.com/@rhtml/renderer/-/renderer-0.0.80.tgz#4ce5b31f534403a51c99ac5a0e6585e7da32a676"
+  integrity sha512-LcKf/a2BrM8m/JIzoNyrYmkZ4laSwSkcGuPzmFAzIykR0gHR0K/dAktNApyV/UoPR346hC3xVhuum8O288JxZg==
+  dependencies:
+    "@rxdi/lit-html" "^0.7.92"
+
 "@rxdi/bolt@^0.24.3":
   version "0.24.3"
   resolved "https://registry.yarnpkg.com/@rxdi/bolt/-/bolt-0.24.3.tgz#91c8b9374b005176f1a738662dbdfb77842beb1a"
@@ -1415,6 +1430,49 @@
     temp-write "^3.4.0"
     typeable-promisify "^2.0.1"
     yarn "^1.9.4"
+
+"@rxdi/core@^0.7.92":
+  version "0.7.115"
+  resolved "https://registry.yarnpkg.com/@rxdi/core/-/core-0.7.115.tgz#b7e782eb57c2f84d4371685cd1eabc46bdb1ce77"
+  integrity sha512-ZzyTJFStTaa12jlPtfM3odvybZ+b7vuTDPg3H+tcFYgmw10C6rjNzrLY5B4B3ilxDz4C4sp8HNG9neTro9FjZg==
+  dependencies:
+    reflect-metadata "0.1.13"
+    rxjs "^6.5.3"
+    systemjs "0.21.4"
+
+"@rxdi/graphql-client@^0.7.92":
+  version "0.7.115"
+  resolved "https://registry.yarnpkg.com/@rxdi/graphql-client/-/graphql-client-0.7.115.tgz#5610c267d4254caa44ce23d1e47818430a804700"
+  integrity sha512-dfN7Fo+2ECZ4zE/hS+KV6GtT9zevhIGYb01CrWKfFBGMRsRfnF8UYO9oDy6v0i9NjqUd6I8lR/y4xjgkoiaUHw==
+  dependencies:
+    apollo-cache-inmemory "^1.6.2"
+    apollo-client "^2.6.3"
+    apollo-link "^1.2.12"
+    apollo-link-context "^1.0.18"
+    apollo-link-http "^1.5.15"
+    apollo-link-ws "^1.0.18"
+    subscriptions-transport-ws "^0.9.16"
+
+"@rxdi/lit-html@^0.7.92":
+  version "0.7.115"
+  resolved "https://registry.yarnpkg.com/@rxdi/lit-html/-/lit-html-0.7.115.tgz#fb551ef942c2a6cc215d13bf9c414632bc3b7cf5"
+  integrity sha512-U9y/O3DK9WAcZUtttpyMWAmljKc+KqheUKZhcUtjDJtR72gCGQ8NvUPSev7Ny/TE4+GlutM5NQgyTThgpneh/Q==
+
+"@rxdi/ui-kit@0.7.127":
+  version "0.7.127"
+  resolved "https://registry.yarnpkg.com/@rxdi/ui-kit/-/ui-kit-0.7.127.tgz#8120956b3bb7bec573522f83e75741457001c015"
+  integrity sha512-MKCNOupwwTdlHUK5YeGvr777ITA5CazBy2M+TsIJ/XNlPzLfGeIvsjO7PH9f4rX1X/LX+VeOodZhmAeJJEW+yA==
+  dependencies:
+    "@rxdi/core" "^0.7.92"
+    "@rxdi/graphql-client" "^0.7.92"
+    animejs "^3.1.0"
+    graphql-tag "^2.10.1"
+    infinite-carousel-wc "^0.5.3"
+    js-yaml "^3.13.1"
+    marked "^1.2.5"
+    router-slot "^1.5.2"
+    shades "^2.1.0"
+    sortablejs "^1.10.1"
 
 "@schematics/schematics@0.13.10":
   version "0.13.10"
@@ -2032,6 +2090,11 @@ amqplib@^0.6.0:
     readable-stream "1.x >=1.1.9"
     safe-buffer "~5.1.2"
     url-parse "~1.4.3"
+
+animejs@^3.1.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/animejs/-/animejs-3.2.1.tgz#de9fe2e792f44a777a7fdf6ae160e26604b0cdda"
+  integrity sha512-sWno3ugFryK5nhiDm/2BKeFCpZv7vzerWUcUPyAZLDhMek3+S/p418ldZJbJXo5ZUOpfm2kP2XRO4NJcULMy9A==
 
 ansi-escapes@^3.0.0:
   version "3.2.0"
@@ -3645,6 +3708,11 @@ create-hmac@^1.1.0, create-hmac@^1.1.4, create-hmac@^1.1.7:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+credit-card-type@9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/credit-card-type/-/credit-card-type-9.1.0.tgz#54dd96c93b6579623e9c8656e6798fc2b93f5f05"
+  integrity sha512-CpNFuLxiPFxuZqhSKml3M+t0K/484pMAnfYWH14JoD7OZMnmC0Lmo+P7JX9SobqFpRoo7ifA18kOHdxJywYPEA==
+
 cross-fetch@2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-2.2.2.tgz#a47ff4f7fc712daba8f6a695a11c948440d45723"
@@ -5125,6 +5193,11 @@ graphql-subscriptions@^1.1.0:
   dependencies:
     iterall "^1.2.1"
 
+graphql-tag@^2.10.1:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.11.0.tgz#1deb53a01c46a7eb401d6cb59dec86fa1cccbffd"
+  integrity sha512-VmsD5pJqWJnQZMUeRwrDhfgoyqcfwEkvtpANqcoUG8/tOLkwNgU9mzub/Mc78OJMhHjx7gfAMTxzdG43VGg3bA==
+
 graphql-tag@^2.9.2:
   version "2.10.3"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.10.3.tgz#ea1baba5eb8fc6339e4c4cf049dabe522b0edf03"
@@ -5576,6 +5649,11 @@ inert@^5.1.3:
     hoek "6.x.x"
     joi "14.x.x"
     lru-cache "4.1.x"
+
+infinite-carousel-wc@^0.5.3:
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/infinite-carousel-wc/-/infinite-carousel-wc-0.5.4.tgz#c88a161ec19bb5ecf53f01493c208fc331a2a14e"
+  integrity sha512-woSc++/JAC8tvrkpSkXtiqf6j1oGVyHqOQzGeFM75xZNQHt+cImZYz1K7h3IqiPrXzFWolDY+l0pS4Htj+9MxQ==
 
 inflight@^1.0.4:
   version "1.0.6"
@@ -7011,6 +7089,11 @@ map-visit@^1.0.0:
   integrity sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
   dependencies:
     object-visit "^1.0.0"
+
+marked@^1.2.5:
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-1.2.9.tgz#53786f8b05d4c01a2a5a76b7d1ec9943d29d72dc"
+  integrity sha512-H8lIX2SvyitGX+TRdtS06m1jHMijKN/XjfH6Ooii9fvxMlh8QdqBfBDkGUpMWH2kQNrtixjzYUa3SH8ROTgRRw==
 
 md5.js@^1.3.4:
   version "1.3.5"
@@ -9000,7 +9083,7 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-router-slot@^1.5.4:
+router-slot@^1.5.2, router-slot@^1.5.4:
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/router-slot/-/router-slot-1.5.4.tgz#2262a1eaf49962e3f922f84ae4692abe0b25a59c"
   integrity sha512-tHqDp0ZZ/KF+j3+OlPbxHoYRkMrHQrxU8D0kUoUhZEevj+j/sMV2pXmZ2jL4oND2o6PyTsCYz1VRqZr7mBfaTg==
@@ -9187,6 +9270,11 @@ sha.js@^2.4.0, sha.js@^2.4.11, sha.js@^2.4.8:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
+shades@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/shades/-/shades-2.1.0.tgz#5cefc51f6294769e3413d4e4050c9d4e7b00b245"
+  integrity sha512-6D+4+lPBjc95ptStD9PzOfrEc2d7zwxWVn2SFEbYaI4EXB5+tcChhyGwOEvbEjGb+d1QS44AcYcSYgWNz5grzg==
+
 shallow-copy@~0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/shallow-copy/-/shallow-copy-0.0.1.tgz#415f42702d73d810330292cc5ee86eae1a11a170"
@@ -9321,6 +9409,11 @@ sort-object@^3.0.2:
     sort-asc "^0.2.0"
     sort-desc "^0.2.0"
     union-value "^1.0.1"
+
+sortablejs@^1.10.1:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.13.0.tgz#3ab2473f8c69ca63569e80b1cd1b5669b51269e9"
+  integrity sha512-RBJirPY0spWCrU5yCmWM1eFs/XgX2J5c6b275/YyxFRgnzPhKl/TDeU2hNR8Dt7ITq66NRPM4UlOt+e5O4CFHg==
 
 source-map-resolve@^0.5.0:
   version "0.5.3"
