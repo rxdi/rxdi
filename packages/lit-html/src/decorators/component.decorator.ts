@@ -1,5 +1,5 @@
-import { CSSResult } from '../lit-element/lib/css-tag';
-import { TemplateResult, html, render as renderer } from '../lit-html/lit-html';
+import { CSSResult } from 'lit';
+import { TemplateResult, html, render as renderer } from 'lit';
 import { RXDIElement } from './tokens';
 
 export interface CustomElementConfig<T> {
@@ -9,7 +9,7 @@ export interface CustomElementConfig<T> {
   styles?: CSSResult[];
   useShadow?: boolean;
   extends?: string;
-  container?: Element | DocumentFragment;
+  container?: HTMLElement | DocumentFragment;
   providers?: Function[];
   unsubscribeOnDestroy?: boolean;
   /**
@@ -73,7 +73,7 @@ const standardCustomElement = (
   };
 };
 
-export const customElement = <T>(
+const customElement = <T>(
   tag: string,
   config: CustomElementConfig<T> = {} as CustomElementConfig<T>
 ) => <K extends new (...args: any[]) => {}>(Base: K) => {
@@ -176,29 +176,29 @@ export const customElement = <T>(
         config.template = () => html``;
       }
       // Check if element is pure HTMLElement or LitElement
-      if (!this['performUpdate']) {
-        config.template = config.template.bind(this);
-        const clone = document.importNode(
-          config.template(this as never).getTemplateElement().content,
-          true
-        );
-        if (config.style) {
-          const style = document.createElement('style');
-          style.type = 'text/css';
-          if (style['styleSheet']) {
-            // This is required for IE8 and below.
-            style['styleSheet'].cssText = config.style.toString();
-          } else {
-            style.appendChild(document.createTextNode(config.style.toString()));
-          }
-          clone.append(style);
-        }
-        if (config.useShadow) {
-          this['attachShadow']({ mode: 'open' }).append(clone);
-        } else {
-          this['appendChild'](clone);
-        }
-      }
+      // if (!this['performUpdate']) {
+      //   config.template = config.template.bind(this);
+      //   const clone = document.importNode(
+      //     config.template(this as never),
+      //     true
+      //   );
+      //   if (config.style) {
+      //     const style = document.createElement('style');
+      //     style.type = 'text/css';
+      //     if (style['styleSheet']) {
+      //       // This is required for IE8 and below.
+      //       style['styleSheet'].cssText = config.style.toString();
+      //     } else {
+      //       style.appendChild(document.createTextNode(config.style.toString()));
+      //     }
+      //     clone.append(style);
+      //   }
+      //   if (config.useShadow) {
+      //     this['attachShadow']({ mode: 'open' }).append(clone);
+      //   } else {
+      //     this['appendChild'](clone);
+      //   }
+      // }
       connectedCallback.call(this);
       OnInit.call(this);
     }

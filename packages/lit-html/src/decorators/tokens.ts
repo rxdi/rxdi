@@ -1,6 +1,4 @@
-import { CSSResult } from '../lit-element/lib/css-tag';
-import { CSSResultArray } from '../lit-element/lit-element';
-import { TemplateResult } from '../lit-html/lit-html';
+import { CSSResult, CSSResultArray, TemplateResult } from 'lit';
 
 export declare class Subscription {
   static EMPTY: Subscription;
@@ -10,7 +8,6 @@ export declare class Subscription {
   constructor(unsubscribe?: () => void);
   unsubscribe(): void;
 }
-
 
 export class RXDIElement extends HTMLElement {
   public static setElement?<T>(component: T, document: RXDIElement): T;
