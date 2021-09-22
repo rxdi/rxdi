@@ -1,4 +1,4 @@
-## [0.7.117](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.117) (2021-03-12)
+## [0.7.118](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.118) (2021-09-22)
 
 
 ### Bug Fixes
@@ -7,11 +7,11 @@
 * **compressor:** added class with static methods and re-exported inside index ([b3e5429](https://github.com/rxdi/mono/commit/b3e54297dd78749bac964e56c64cbf16a22bcbef))
 * **compressor:** added correct types to compress and decompress ([e7df20a](https://github.com/rxdi/mono/commit/e7df20a5d768d11939f192a66139b306b2deaf16))
 * **credit-card-form:** added correct dependencies ([a3cdac8](https://github.com/rxdi/mono/commit/a3cdac815b01abcbfddd3157868cf1eadce743bc))
-* **graphql:** filtered unknown arguments ([6a0be24](https://github.com/rxdi/mono/commit/6a0be241a119d2a417994477354ff8450c977526))
-* **graphql:** removed custom directive from export ([800eded](https://github.com/rxdi/mono/commit/800eded6dbec7493a24845f3ed93f6b4d4a18594))
-* **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
 * **graphql-client:** subscription websocket link now takes authorization token lazily ([c0b525c](https://github.com/rxdi/mono/commit/c0b525c9ce86b7f56ccbaee804dd1d14103ee69e))
 * **graphql-pubsub:** added connection with credentials for amqp protocol ([3c8b320](https://github.com/rxdi/mono/commit/3c8b320f199503fed3e9e4cfd28660c5a3ad2de1))
+* **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
+* **graphql:** filtered unknown arguments ([6a0be24](https://github.com/rxdi/mono/commit/6a0be241a119d2a417994477354ff8450c977526))
+* **graphql:** removed custom directive from export ([800eded](https://github.com/rxdi/mono/commit/800eded6dbec7493a24845f3ed93f6b4d4a18594))
 * **hapi:** typings for hapi removed from core dependency ([7aebe9c](https://github.com/rxdi/mono/commit/7aebe9c68b559fb2bd4b1f8b6407eb251adc08f9))
 * **Hotkeys:** added complete method to when binding ([6130ebe](https://github.com/rxdi/mono/commit/6130ebe68919a91eadc0acacc1c0306abf2ce781))
 * **Hotkeys:** added observable approach using subject instead of new Observable ([0fc2c89](https://github.com/rxdi/mono/commit/0fc2c89c8bc7bdf848a100ddbbf41d13d4bdfc41))
@@ -50,6 +50,7 @@
 * **graphql-client:** added importQueryAsync method in order to load async documents when we use compression for example ([c44b651](https://github.com/rxdi/mono/commit/c44b651fe2f859c378e918d9c0286cfa3dcb4d6b))
 * **hapi, core:** added decorator Route to define post and get requests ([92caf6c](https://github.com/rxdi/mono/commit/92caf6c720d97752cc23286dc97dbb3d503f921f))
 * **lit-html:** added h utility function returning template result ([a5a2bd6](https://github.com/rxdi/mono/commit/a5a2bd62cf534150ac051bb901c23f16ee119cbc))
+* **lit-html:** bumped to 2.0.0 refactored code to fit new exports ([bf1a100](https://github.com/rxdi/mono/commit/bf1a100cd1c95dfa115278546b19147b9eab2110))
 * **pubsub:** global prefetch added on channel config ([3a32a33](https://github.com/rxdi/mono/commit/3a32a33af44a49099f0156c519b1155877fcbad6))
 * **pubsub:** prefetch property added in order one worker to acknowladge single message then process another ([b16491b](https://github.com/rxdi/mono/commit/b16491b1586a9a5ae6c5e32407d57f7c8347b4f6))
 * **rabbitmq-pubsub:** added new library for handling subscriptions using rabbitmq removed banyan from dependencies ([5225543](https://github.com/rxdi/mono/commit/522554302c5f61f81278392b4f0688aae1738794))
