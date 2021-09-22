@@ -33,7 +33,7 @@ interface Subscribable<T> {
 
 class ObserveDirective extends AsyncDirective {
   observable: Subscribable<unknown> | undefined;
-  unsubscribe: Unsubscribable;
+  subscription: Unsubscribable;
   // When the observable changes, unsubscribe to the old one and
   // subscribe to the new one
   render(asyncResult: Subscribable<unknown>) {
@@ -42,7 +42,7 @@ class ObserveDirective extends AsyncDirective {
       return '';
     }
     if (this.observable !== asyncResult) {
-      this.unsubscribe.unsubscribe();
+      this.unsubscribe();
       this.observable = asyncResult;
       if (this.isConnected) {
         this.subscribe(asyncResult);
@@ -50,17 +50,24 @@ class ObserveDirective extends AsyncDirective {
     }
     return noChange;
   }
+
   // Subscribes to the observable, calling the directive's asynchronous
   // setValue API each time the value changes
   subscribe(observable: Subscribable<unknown>) {
-    this.unsubscribe = observable.subscribe((v: unknown) => {
+    this.subscription = observable.subscribe((v: unknown) => {
       this.setValue(v);
     });
   }
   // When the directive is disconnected from the DOM, unsubscribe to ensure
   // the directive instance can be garbage collected
   disconnected() {
-    this.unsubscribe.unsubscribe();
+    this.unsubscribe();
+  }
+
+  unsubscribe() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
   // If the subtree the directive is in was disconneted and subsequently
   // re-connected, re-subscribe to make the directive operable again
