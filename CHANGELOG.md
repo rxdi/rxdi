@@ -1,4 +1,4 @@
-## [0.7.118](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.118) (2021-09-22)
+## [0.7.119](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.119) (2021-09-22)
 
 
 ### Bug Fixes
@@ -20,6 +20,7 @@
 * **Hotkeys:** reverted back logic for binding ([5d83018](https://github.com/rxdi/mono/commit/5d830181d6a5ed611e5ff06f861a9501cb45e6bf))
 * **Hotkeys:** unbinding leads to not subscribing again to observable. we will leave it like so ([4720e9f](https://github.com/rxdi/mono/commit/4720e9f608f15fbb63404c162017607b6020d715))
 * **http:** added export and documentation ([58f7ebb](https://github.com/rxdi/mono/commit/58f7ebbfcbb43939d9eeb6c48e6ac037a5d7b547))
+* **lit-html:** async directive fix for unsubscribe ([e28b52f](https://github.com/rxdi/mono/commit/e28b52f57c2e56c85c00380a0e64735fccf33685))
 * **lit-html:** customElement configuration interface re-exported ([c1af1ff](https://github.com/rxdi/mono/commit/c1af1ffce18c52ef2ea438b63c9fa5c2d84201b5))
 * **lit-html:** exported correctly directives ([071dd46](https://github.com/rxdi/mono/commit/071dd46ef626e73f4f346b8bd56ecb2de2d57882))
 * **lit-html:** memory leak was detected when multiple renders occur leading to multiple subscriptions that are subscribing but we cannot unsubscribe them ([2a71649](https://github.com/rxdi/mono/commit/2a7164940b1b6c68cebc29a8444f40fb2e6eabb5))
