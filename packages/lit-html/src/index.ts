@@ -2,6 +2,7 @@ export * from './decorators/index';
 export * from './async';
 export * from './reactive-element/index';
 export * from './lit-html/lit-html';
+
 export * from './lit-element/index';
 export * from './lit-html/directives/class-map';
 export * from './lit-html/directives/async-append';

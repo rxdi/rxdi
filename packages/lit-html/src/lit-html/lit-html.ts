@@ -5,6 +5,7 @@
  */
 
 // IMPORTANT: these imports must be type-only
+  // @ts-nocheck
 import type {Directive, DirectiveResult, PartInfo} from './directive';
 
 const DEV_MODE = true;
@@ -43,11 +44,11 @@ if (DEV_MODE) {
 const wrap =
   ENABLE_SHADYDOM_NOPATCH &&
   window.ShadyDOM?.inUse &&
-  window.ShadyDOM?.noPatch === true
-    ? window.ShadyDOM!.wrap
+  (window as any).ShadyDOM?.noPatch === true
+    ? (window as any).ShadyDOM!.wrap
     : (node: Node) => node;
 
-const trustedTypes = (globalThis as unknown as Partial<Window>).trustedTypes;
+const trustedTypes = (globalThis as unknown as Partial<Window>)['trustedTypes'];
 
 /**
  * Our TrustedTypePolicy for HTML which is declared using the html template
@@ -279,8 +280,9 @@ export interface CompiledTemplate extends Omit<Template, 'el'> {
   // el is overridden to be optional. We initialize it on first render
   el?: HTMLTemplateElement;
 
+
   // The prepared HTML string to create a template element from.
-  h: TrustedHTML;
+  h: any;
 }
 
 /**
@@ -821,7 +823,7 @@ class Template {
 
   // Overridden via `litHtmlPolyfillSupport` to provide platform support.
   /** @nocollapse */
-  static createElement(html: TrustedHTML, _options?: RenderOptions) {
+  static createElement(html: any, _options?: RenderOptions) {
     const el = d.createElement('template');
     el.innerHTML = html as unknown as string;
     return el;

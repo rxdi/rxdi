@@ -104,7 +104,7 @@ globalThis[`litHtmlPolyfillSupport${DEV_MODE ? `DevMode` : ``}`] ??= (
   // webcomponentsjs and polyfill-support in either order
   if (
     window.ShadyCSS === undefined ||
-    (window.ShadyCSS.nativeShadow && !window.ShadyCSS.ApplyShim)
+    (window.ShadyCSS.nativeShadow && !(window as any).ShadyCSS.ApplyShim)
   ) {
     return;
   }
@@ -117,8 +117,8 @@ globalThis[`litHtmlPolyfillSupport${DEV_MODE ? `DevMode` : ``}`] ??= (
   const wrap =
     ENABLE_SHADYDOM_NOPATCH &&
     window.ShadyDOM?.inUse &&
-    window.ShadyDOM?.noPatch === true
-      ? window.ShadyDOM!.wrap
+    (window as any).ShadyDOM?.noPatch === true
+      ? (window as any).ShadyDOM!.wrap
       : (node: Node) => node;
 
   const needsPrepareStyles = (name: string | undefined) =>
@@ -149,7 +149,7 @@ globalThis[`litHtmlPolyfillSupport${DEV_MODE ? `DevMode` : ``}`] ??= (
     scopeCssStore.delete(name);
     // ShadyCSS removes scopes and removes the style under ShadyDOM and leaves
     // it under native Shadow DOM
-    window.ShadyCSS!.prepareTemplateStyles(template, name);
+    (window as any).ShadyCSS!.prepareTemplateStyles(template, name);
     // Note, under native Shadow DOM, the style is added to the beginning of the
     // template. It must be moved to the *end* of the template so it doesn't
     // mess up part indices.
@@ -179,7 +179,7 @@ globalThis[`litHtmlPolyfillSupport${DEV_MODE ? `DevMode` : ``}`] ??= (
     const scope = options?.scope;
     if (scope !== undefined) {
       if (!window.ShadyCSS!.nativeShadow) {
-        window.ShadyCSS!.prepareTemplateDom(element, scope);
+        (window as any).ShadyCSS!.prepareTemplateDom(element, scope);
       }
       // Process styles only if this scope is being prepared. Otherwise,
       // leave styles as is for back compat with Lit1.

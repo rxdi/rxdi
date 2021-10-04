@@ -135,7 +135,7 @@ export const hydrate = (
   // templates
   const stack: Array<ChildPartState> = [];
 
-  const walker = document.createTreeWalker(
+  const walker = (document as any).createTreeWalker(
     container,
     NodeFilter.SHOW_COMMENT,
     null,

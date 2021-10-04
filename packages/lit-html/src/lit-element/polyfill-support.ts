@@ -57,7 +57,7 @@ globalThis[`litElementPolyfillSupport${DEV_MODE ? `DevMode` : ``}`] ??= ({
   // webcomponentsjs and polyfill-support in either order
   if (
     window.ShadyCSS === undefined ||
-    (window.ShadyCSS.nativeShadow && !window.ShadyCSS.ApplyShim)
+    (window.ShadyCSS.nativeShadow && !(window as any).ShadyCSS.ApplyShim)
   ) {
     return;
   }

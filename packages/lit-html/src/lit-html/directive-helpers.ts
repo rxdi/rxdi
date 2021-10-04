@@ -22,8 +22,8 @@ const ENABLE_SHADYDOM_NOPATCH = true;
 const wrap =
   ENABLE_SHADYDOM_NOPATCH &&
   window.ShadyDOM?.inUse &&
-  window.ShadyDOM?.noPatch === true
-    ? window.ShadyDOM!.wrap
+  (window as any).ShadyDOM?.noPatch === true
+    ? (window as any).ShadyDOM!.wrap
     : (node: Node) => node;
 
 /**

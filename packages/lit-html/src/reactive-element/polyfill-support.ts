@@ -58,7 +58,7 @@ globalThis[`reactiveElementPolyfillSupport${DEV_MODE ? `DevMode` : ``}`] ??= ({
   // webcomponentsjs and polyfill-support in either order
   if (
     window.ShadyCSS === undefined ||
-    (window.ShadyCSS.nativeShadow && !window.ShadyCSS.ApplyShim)
+    (window.ShadyCSS.nativeShadow && !(window as any).ShadyCSS.ApplyShim)
   ) {
     return;
   }
@@ -75,9 +75,9 @@ globalThis[`reactiveElementPolyfillSupport${DEV_MODE ? `DevMode` : ``}`] ??= ({
   if (
     window.ShadyDOM &&
     window.ShadyDOM.inUse &&
-    window.ShadyDOM.noPatch === true
+    (window as any).ShadyDOM.noPatch === true
   ) {
-    window.ShadyDOM.patchElementProto(elementProto);
+    (window as any).ShadyDOM.patchElementProto(elementProto);
   }
 
   /**
@@ -109,7 +109,7 @@ globalThis[`reactiveElementPolyfillSupport${DEV_MODE ? `DevMode` : ``}`] ??= ({
         );
         window.ShadyCSS?.ScopingShim?.prepareAdoptedCssText(css, name);
         if (this.constructor._$handlesPrepareStyles === undefined) {
-          window.ShadyCSS!.prepareTemplateStyles(
+          (window as any).ShadyCSS!.prepareTemplateStyles(
             document.createElement('template'),
             name
           );

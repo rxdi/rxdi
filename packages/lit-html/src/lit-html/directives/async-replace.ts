@@ -16,7 +16,6 @@ export class AsyncReplaceDirective extends AsyncDirective {
   private __weakThis = new PseudoWeakRef(this);
   private __pauser = new Pauser();
 
-  // @ts-expect-error value not used, but we want a nice parameter for docs
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   render<T>(value: AsyncIterable<T>, _mapper?: Mapper<T>) {
     return noChange;
