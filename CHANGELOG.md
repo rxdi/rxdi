@@ -1,4 +1,4 @@
-## [0.7.126](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.126) (2021-10-04)
+## [0.7.127](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.127) (2021-10-04)
 
 
 ### Bug Fixes
@@ -23,6 +23,7 @@
 * **lit-html:** added correct re-exports ([9722efd](https://github.com/rxdi/mono/commit/9722efd025721e1b14fdd94d16b29f22537dcacb))
 * **lit-html:** async directive fix for unsubscribe ([e28b52f](https://github.com/rxdi/mono/commit/e28b52f57c2e56c85c00380a0e64735fccf33685))
 * **lit-html:** customElement configuration interface re-exported ([c1af1ff](https://github.com/rxdi/mono/commit/c1af1ffce18c52ef2ea438b63c9fa5c2d84201b5))
+* **lit-html:** customElement registry is throwing error ([065c796](https://github.com/rxdi/mono/commit/065c7962cd1f8407b9dac4fd60219663e1531634))
 * **lit-html:** exported correctly directives ([071dd46](https://github.com/rxdi/mono/commit/071dd46ef626e73f4f346b8bd56ecb2de2d57882))
 * **lit-html:** exports changed ([3ff3d9e](https://github.com/rxdi/mono/commit/3ff3d9e8e9c0f8d110ee65e577a4be9a68f28fa0))
 * **lit-html:** lit-element re-exported from index ([fde569b](https://github.com/rxdi/mono/commit/fde569b1a4863d5ea6e9a5378985920ca8ed6dbc))
