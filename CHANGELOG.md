@@ -1,4 +1,4 @@
-## [0.7.121](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.121) (2021-10-04)
+## [0.7.122](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.122) (2021-10-04)
 
 
 ### Bug Fixes
@@ -24,6 +24,7 @@
 * **lit-html:** async directive fix for unsubscribe ([e28b52f](https://github.com/rxdi/mono/commit/e28b52f57c2e56c85c00380a0e64735fccf33685))
 * **lit-html:** customElement configuration interface re-exported ([c1af1ff](https://github.com/rxdi/mono/commit/c1af1ffce18c52ef2ea438b63c9fa5c2d84201b5))
 * **lit-html:** exported correctly directives ([071dd46](https://github.com/rxdi/mono/commit/071dd46ef626e73f4f346b8bd56ecb2de2d57882))
+* **lit-html:** exports changed ([3ff3d9e](https://github.com/rxdi/mono/commit/3ff3d9e8e9c0f8d110ee65e577a4be9a68f28fa0))
 * **lit-html:** memory leak was detected when multiple renders occur leading to multiple subscriptions that are subscribing but we cannot unsubscribe them ([2a71649](https://github.com/rxdi/mono/commit/2a7164940b1b6c68cebc29a8444f40fb2e6eabb5))
 * **lit-html:** oh my god :( ([2eb1e25](https://github.com/rxdi/mono/commit/2eb1e25e96e57669e1decfb34f5ed1e8b6983d01))
 * **lit-html:** removed import for directives only async or subscribe directive will be left ([261e9da](https://github.com/rxdi/mono/commit/261e9da94f8be056b3c1912049701f871454ddbc))
