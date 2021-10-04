@@ -1,5 +1,6 @@
-import { CSSResult, LitElement } from 'lit-element';
-import { TemplateResult, html } from 'lit-element';
+import { CSSResult } from '../reactive-element/css-tag';
+import { LitElement } from '../lit-element';
+import { TemplateResult, html } from '../lit-html/lit-html';
 
 export interface CustomElementConfig<T> {
   selector: string;
