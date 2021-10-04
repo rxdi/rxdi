@@ -1,23 +1,23 @@
 {
-  "name": "@rxdi/forms",
-  "version": "0.7.124",
-  "main": "./dist/index.js",
-  "author": "Kristiyan Tachev",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/rxdi/forms"
-  },
-  "scripts": {
-    "build": "tsc || true"
-  },
-  "devDependencies": {
-    "@rxdi/lit-html": "^0.7.124",
-    "@types/node": "^12.0.10",
-    "rxjs": "^6.5.3",
-    "typescript": "^3.9.3"
-  },
-  "types": "./dist/index.d.ts",
-  "module": "./dist/index.js",
-  "typings": "./dist/index.d.ts"
+ "name": "@rxdi/forms",
+ "version": "0.7.124",
+ "main": "./dist/index.js",
+ "author": "Kristiyan Tachev",
+ "license": "MIT",
+ "repository": {
+  "type": "git",
+  "url": "https://github.com/rxdi/forms"
+ },
+ "scripts": {
+  "build": "tsc || true"
+ },
+ "devDependencies": {
+  "@rxdi/lit-html": "^0.7.124",
+  "@types/node": "^12.0.10",
+  "rxjs": "^6.5.3",
+  "typescript": "^4.3.5"
+ },
+ "types": "./dist/index.d.ts",
+ "module": "./dist/index.js",
+ "typings": "./dist/index.d.ts"
 }
