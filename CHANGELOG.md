@@ -1,4 +1,4 @@
-## [0.7.119](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.119) (2021-09-22)
+## [0.7.120](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.120) (2021-10-04)
 
 
 ### Bug Fixes
@@ -50,6 +50,7 @@
 * **graphql-client:** added cancel request handler and options everyone to make his own options ([ea312b7](https://github.com/rxdi/mono/commit/ea312b74b0f0c9c7717c45a3a033ec76fb250aec))
 * **graphql-client:** added importQueryAsync method in order to load async documents when we use compression for example ([c44b651](https://github.com/rxdi/mono/commit/c44b651fe2f859c378e918d9c0286cfa3dcb4d6b))
 * **hapi, core:** added decorator Route to define post and get requests ([92caf6c](https://github.com/rxdi/mono/commit/92caf6c720d97752cc23286dc97dbb3d503f921f))
+* **lit-html:** added decorators to be part of the bundle since Deno is complaining about decorators.js from cdn ([f0214aa](https://github.com/rxdi/mono/commit/f0214aa2860b2e1b7bb2227ca8992cba4eca2948))
 * **lit-html:** added h utility function returning template result ([a5a2bd6](https://github.com/rxdi/mono/commit/a5a2bd62cf534150ac051bb901c23f16ee119cbc))
 * **lit-html:** bumped to 2.0.0 refactored code to fit new exports ([bf1a100](https://github.com/rxdi/mono/commit/bf1a100cd1c95dfa115278546b19147b9eab2110))
 * **pubsub:** global prefetch added on channel config ([3a32a33](https://github.com/rxdi/mono/commit/3a32a33af44a49099f0156c519b1155877fcbad6))
