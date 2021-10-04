@@ -128,7 +128,22 @@ const customElement = <T>(
       OnUpdateFirst.call(this);
     }
   };
+  const registeredElement = window.customElements.get(tag);
+  if (registeredElement) {
+    console.error(`** IMPORTANT!!! **
+------------------------------------------
+<${tag}></${tag}> Component re-defined multiple times and it is already registered inside customElements registry
+Possible Solutions:
+* Bundle problem where multiple versions of the component are used
+* @Component decorator is used twice for the same component
+* Defined "selector" with the same name in multiple components
 
+** If this is Server Side Rendering you can ignore this message **
+------------------------------------------
+`);
+
+    return registeredElement as never;
+  }
   if (typeof ModifiedClass === 'function') {
     legacyCustomElement(tag, ModifiedClass as never, {
       extends: config.extends,
