@@ -3,6 +3,7 @@ export * from './async';
 export * from '@lit/reactive-element/decorators';
 export * from '@lit/reactive-element';
 export * from 'lit-html';
+export * from 'lit-element';
 export * from 'lit-element/lit-element';
 export * from 'lit-html/directives/class-map';
 export * from 'lit-html/directives/async-append';
