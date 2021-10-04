@@ -18,10 +18,10 @@ class ModuleDeclarator {
     computeSymbol(options) {
         const target = Object.assign({}, options);
         if (options.type !== undefined) {
-            target.symbol = strings_1.classify(options.name).concat(strings_1.capitalize(options.type));
+            target.symbol = (0, strings_1.classify)(options.name).concat((0, strings_1.capitalize)(options.type));
         }
         else {
-            target.symbol = strings_1.classify(options.name);
+            target.symbol = (0, strings_1.classify)(options.name);
         }
         return target;
     }

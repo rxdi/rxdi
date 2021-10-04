@@ -13,9 +13,9 @@ const ELEMENT_TYPE = 'controller';
 function main(options) {
     options = transform(options);
     return (tree, context) => {
-        return schematics_1.branchAndMerge(schematics_1.chain([
-            source_root_helpers_1.mergeSourceRoot(options),
-            schematics_1.mergeWith(generate(options)),
+        return (0, schematics_1.branchAndMerge)((0, schematics_1.chain)([
+            (0, source_root_helpers_1.mergeSourceRoot)(options),
+            (0, schematics_1.mergeWith)(generate(options)),
             addDeclarationToModule(options),
         ]))(tree, context);
     };
@@ -32,14 +32,14 @@ function transform(source) {
         target.language !== undefined ? target.language : defaults_1.DEFAULT_LANGUAGE;
     target.path = target.flat
         ? target.path
-        : core_1.join(target.path, target.name);
+        : (0, core_1.join)(target.path, target.name);
     return target;
 }
 function generate(options) {
-    return (context) => schematics_1.apply(schematics_1.url(core_1.join('./files', options.language)), [
-        options.spec ? schematics_1.noop() : schematics_1.filter(path => !path.endsWith('.spec.ts')),
-        schematics_1.template(Object.assign(Object.assign({}, core_1.strings), options)),
-        schematics_1.move(options.path),
+    return (context) => (0, schematics_1.apply)((0, schematics_1.url)((0, core_1.join)('./files', options.language)), [
+        options.spec ? (0, schematics_1.noop)() : (0, schematics_1.filter)(path => !path.endsWith('.spec.ts')),
+        (0, schematics_1.template)(Object.assign(Object.assign({}, core_1.strings), options)),
+        (0, schematics_1.move)(options.path),
     ])(context);
 }
 function addDeclarationToModule(options) {

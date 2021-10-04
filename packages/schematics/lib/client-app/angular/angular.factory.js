@@ -12,12 +12,12 @@ const source_root_helpers_1 = require("../../../utils/source-root.helpers");
 function main(options) {
     options = transform(options);
     return (tree, context) => {
-        return schematics_1.branchAndMerge(schematics_1.chain([
+        return (0, schematics_1.branchAndMerge)((0, schematics_1.chain)([
             createAngularApplication(options),
-            source_root_helpers_1.mergeSourceRoot(options),
+            (0, source_root_helpers_1.mergeSourceRoot)(options),
             addDeclarationToModule(options),
             addGlobalPrefix(),
-            schematics_1.mergeWith(generate(options)),
+            (0, schematics_1.mergeWith)(generate(options)),
         ]))(tree, context);
     };
 }
@@ -30,20 +30,20 @@ function transform(source) {
     target.type = 'module';
     const location = new name_parser_1.NameParser().parse(target);
     target.name = core_1.strings.dasherize(location.name);
-    target.path = path_1.join(core_1.strings.dasherize(location.path), target.name);
+    target.path = (0, path_1.join)(core_1.strings.dasherize(location.path), target.name);
     return target;
 }
 function generate(options) {
-    return (context) => schematics_1.apply(schematics_1.url('./files'), [
-        schematics_1.template(Object.assign(Object.assign({}, core_1.strings), options)),
-        schematics_1.move(options.path),
+    return (context) => (0, schematics_1.apply)((0, schematics_1.url)('./files'), [
+        (0, schematics_1.template)(Object.assign(Object.assign({}, core_1.strings), options)),
+        (0, schematics_1.move)(options.path),
     ])(context);
 }
 function createAngularApplication(options) {
     if (!options.initApp) {
-        return schematics_1.noop();
+        return (0, schematics_1.noop)();
     }
-    return schematics_1.externalSchematic('@schematics/angular', 'ng-new', {
+    return (0, schematics_1.externalSchematic)('@schematics/angular', 'ng-new', {
         name: options.directory,
         version: '7.0.0',
     });

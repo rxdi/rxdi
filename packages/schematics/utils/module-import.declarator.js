@@ -26,10 +26,10 @@ class ModuleImportDeclarator {
     computeRelativePath(options) {
         let importModulePath;
         if (options.type !== undefined) {
-            importModulePath = core_1.normalize(`/${options.path}/${options.name}.${options.type}`);
+            importModulePath = (0, core_1.normalize)(`/${options.path}/${options.name}.${options.type}`);
         }
         else {
-            importModulePath = core_1.normalize(`/${options.path}/${options.name}`);
+            importModulePath = (0, core_1.normalize)(`/${options.path}/${options.name}`);
         }
         return this.solver.relative(options.module, importModulePath);
     }

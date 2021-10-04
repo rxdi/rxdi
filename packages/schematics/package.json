@@ -1,23 +1,23 @@
 {
- "name": "@rxdi/schematics",
- "version": "0.7.124",
- "description": "",
- "scripts": {
-  "build": "rm -rf utils lib && tsc && cp -r ./src/* .",
-  "npm-publish": "npm publish --update-readme --access public",
-  "test": "echo Test Schematics"
- },
- "dependencies": {
-  "@angular-devkit/core": "^7.3.7",
-  "@angular-devkit/schematics": "^7.3.7",
-  "@angular-devkit/schematics-cli": "^0.13.7",
-  "chalk": "^2.4.2",
-  "node-emoji": "^1.10.0",
-  "ts-morph": "^1.3.1"
- },
- "schematics": "./collection.json",
- "devDependencies": {
-  "@types/node": "^12.0.10",
-  "typescript": "^4.3.5"
- }
+  "name": "@rxdi/schematics",
+  "version": "0.7.125",
+  "description": "",
+  "scripts": {
+    "build": "rm -rf utils lib && tsc && cp -r ./src/* .",
+    "npm-publish": "npm publish --update-readme --access public",
+    "test": "echo Test Schematics"
+  },
+  "dependencies": {
+    "@angular-devkit/core": "^7.3.7",
+    "@angular-devkit/schematics": "^7.3.7",
+    "@angular-devkit/schematics-cli": "^0.13.7",
+    "chalk": "^2.4.2",
+    "node-emoji": "^1.10.0",
+    "ts-morph": "^1.3.1"
+  },
+  "schematics": "./collection.json",
+  "devDependencies": {
+    "@types/node": "^12.0.10",
+    "typescript": "^4.3.5"
+  }
 }

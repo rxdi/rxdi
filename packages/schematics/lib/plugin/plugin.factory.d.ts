@@ -1,3 +1,3 @@
 import { Rule } from '@angular-devkit/schematics';
-import { PluginOptions } from './plugin.schema';
-export declare function main(options: PluginOptions): Rule;
+import { ControllerOptions } from './controller.schema';
+export declare function main(options: ControllerOptions): Rule;

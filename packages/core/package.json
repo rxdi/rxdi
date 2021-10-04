@@ -1,73 +1,73 @@
 {
- "name": "@rxdi/core",
- "version": "0.7.124",
- "description": "",
- "main": "./dist/index.js",
- "types": "./dist/index.d.ts",
- "module": "./dist/index.js",
- "typings": "./dist/index.d.ts",
- "files": [
-  "dist"
- ],
- "scripts": {
-  "start": "gapi start --local --path=./src/testing-app/main.ts",
-  "build": "tsc || true",
-  "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-  "pretest": "npm run lint",
-  "test-browser": "gapi testing browser",
-  "test": "gapi testing node"
- },
- "bin": {
-  "rxdi": "./dist/bin/root.js"
- },
- "repository": {
-  "type": "git",
-  "url": "https://github.com/rxdi/core"
- },
- "author": "Kristiyan Tachev (@Stradivario)",
- "license": "MIT",
- "bugs": {
-  "url": "https://github.com/rxdi/core/issues"
- },
- "homepage": "https://github.com/rxdi/core/blob/master/README.md",
- "dependencies": {
-  "reflect-metadata": "0.1.13",
-  "rxjs": "^6.5.3",
-  "systemjs": "0.21.4"
- },
- "devDependencies": {
-  "@types/jest": "^24.0.22",
-  "@types/node": "^12.0.10",
-  "@types/systemjs": "^0.20.6",
-  "jest": "^24.8.0",
-  "jest-cli": "^24.8.1",
-  "ts-jest": "^24.0.2",
-  "tslint": "^5.20.1",
-  "tslint-language-service": "^0.9.9",
-  "typescript": "^4.3.5"
- },
- "jest": {
-  "testEnvironment": "node",
-  "testPathIgnorePatterns": [
-   "/node_modules/"
+  "name": "@rxdi/core",
+  "version": "0.7.125",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "files": [
+    "dist"
   ],
-  "coverageReporters": [
-   "lcov",
-   "html"
-  ],
-  "rootDir": "./",
-  "moduleFileExtensions": [
-   "ts",
-   "tsx",
-   "js",
-   "json",
-   "node"
-  ],
-  "transform": {
-   "\\.(ts|tsx)$": "ts-jest"
+  "scripts": {
+    "start": "gapi start --local --path=./src/testing-app/main.ts",
+    "build": "tsc || true",
+    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
+    "pretest": "npm run lint",
+    "test-browser": "gapi testing browser",
+    "test": "gapi testing node"
   },
-  "testRegex": "/src/.*\\.spec.(ts|tsx|js)$",
-  "verbose": true,
-  "collectCoverage": true
- }
+  "bin": {
+    "rxdi": "./dist/bin/root.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rxdi/core"
+  },
+  "author": "Kristiyan Tachev (@Stradivario)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rxdi/core/issues"
+  },
+  "homepage": "https://github.com/rxdi/core/blob/master/README.md",
+  "dependencies": {
+    "reflect-metadata": "0.1.13",
+    "rxjs": "^6.5.3",
+    "systemjs": "0.21.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.22",
+    "@types/node": "^12.0.10",
+    "@types/systemjs": "^0.20.6",
+    "jest": "^24.8.0",
+    "jest-cli": "^24.8.1",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.20.1",
+    "tslint-language-service": "^0.9.9",
+    "typescript": "^4.3.5"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "coverageReporters": [
+      "lcov",
+      "html"
+    ],
+    "rootDir": "./",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "node"
+    ],
+    "transform": {
+      "\\.(ts|tsx)$": "ts-jest"
+    },
+    "testRegex": "/src/.*\\.spec.(ts|tsx|js)$",
+    "verbose": true,
+    "collectCoverage": true
+  }
 }

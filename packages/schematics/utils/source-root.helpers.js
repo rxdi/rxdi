@@ -17,8 +17,8 @@ function mergeSourceRoot(options) {
         const defaultSourceRoot = options.sourceRoot !== undefined ? options.sourceRoot : defaults_1.DEFAULT_PATH_NAME;
         options.path =
             options.path !== undefined
-                ? core_1.join(core_1.normalize(defaultSourceRoot), options.path)
-                : core_1.normalize(defaultSourceRoot);
+                ? (0, core_1.join)((0, core_1.normalize)(defaultSourceRoot), options.path)
+                : (0, core_1.normalize)(defaultSourceRoot);
         return host;
     };
 }

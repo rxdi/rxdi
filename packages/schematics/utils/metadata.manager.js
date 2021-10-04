@@ -7,7 +7,7 @@ class MetadataManager {
         this.content = content;
     }
     insert(metadata, symbol, staticOptions) {
-        const source = typescript_1.createSourceFile('filename.ts', this.content, typescript_1.ScriptTarget.ES2017);
+        const source = (0, typescript_1.createSourceFile)('filename.ts', this.content, typescript_1.ScriptTarget.ES2017);
         const decoratorNodes = this.getDecoratorMetadata(source, '@Module');
         const node = decoratorNodes[0];
         const matchingProperties = node.properties

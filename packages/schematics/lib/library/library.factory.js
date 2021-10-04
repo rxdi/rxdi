@@ -6,10 +6,10 @@ const schematics_1 = require("@angular-devkit/schematics");
 const defaults_1 = require("../defaults");
 function main(options) {
     options = transform(options);
-    return schematics_1.chain([
+    return (0, schematics_1.chain)([
         updateTsConfig(options.name, options.prefix, options.path),
         addLibraryToCliOptions(options.path, options.name),
-        schematics_1.branchAndMerge(schematics_1.mergeWith(generate(options))),
+        (0, schematics_1.branchAndMerge)((0, schematics_1.mergeWith)(generate(options))),
     ]);
 }
 exports.main = main;
@@ -23,8 +23,8 @@ function transform(options) {
     target.name = core_1.strings.dasherize(target.name);
     target.path =
         target.path !== undefined
-            ? core_1.join(core_1.normalize(defaultSourceRoot), target.path)
-            : core_1.normalize(defaultSourceRoot);
+            ? (0, core_1.join)((0, core_1.normalize)(defaultSourceRoot), target.path)
+            : (0, core_1.normalize)(defaultSourceRoot);
     target.prefix = target.prefix || '@app';
     return target;
 }
@@ -32,7 +32,7 @@ function updateJsonFile(host, path, callback) {
     const source = host.read(path);
     if (source) {
         const sourceText = source.toString('utf-8');
-        const json = core_1.parseJson(sourceText);
+        const json = (0, core_1.parseJson)(sourceText);
         callback(json);
         host.overwrite(path, JSON.stringify(json, null, 2));
     }
@@ -43,7 +43,7 @@ function updateTsConfig(packageName, packagePrefix, root) {
         if (!host.exists('tsconfig.json')) {
             return host;
         }
-        const distRoot = core_1.join(root, packageName, 'src');
+        const distRoot = (0, core_1.join)(root, packageName, 'src');
         const packageKey = packagePrefix
             ? packagePrefix + '/' + packageName
             : packageName;
@@ -71,8 +71,8 @@ function updateTsConfig(packageName, packagePrefix, root) {
 }
 function addLibraryToCliOptions(projectRoot, projectName) {
     const project = {
-        root: core_1.join(projectRoot, projectName),
-        sourceRoot: core_1.join(projectRoot, projectName, 'src'),
+        root: (0, core_1.join)(projectRoot, projectName),
+        sourceRoot: (0, core_1.join)(projectRoot, projectName, 'src'),
     };
     return (host) => {
         const nestCliFileExists = host.exists('nest-cli.json');
@@ -89,9 +89,9 @@ function addLibraryToCliOptions(projectRoot, projectName) {
     };
 }
 function generate(options) {
-    const path = core_1.join(options.path, options.name);
-    return schematics_1.apply(schematics_1.url(core_1.join('./files', options.language)), [
-        schematics_1.template(Object.assign(Object.assign({}, core_1.strings), options)),
-        schematics_1.move(path),
+    const path = (0, core_1.join)(options.path, options.name);
+    return (0, schematics_1.apply)((0, schematics_1.url)((0, core_1.join)('./files', options.language)), [
+        (0, schematics_1.template)(Object.assign(Object.assign({}, core_1.strings), options)),
+        (0, schematics_1.move)(path),
     ]);
 }

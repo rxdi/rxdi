@@ -5,7 +5,7 @@ const core_1 = require("@angular-devkit/core");
 const schematics_1 = require("@angular-devkit/schematics");
 const defaults_1 = require("../defaults");
 function main(options) {
-    return schematics_1.mergeWith(generate(transform(options)));
+    return (0, schematics_1.mergeWith)(generate(transform(options)));
 }
 exports.main = main;
 function transform(options) {
@@ -17,8 +17,8 @@ function transform(options) {
     return target;
 }
 function generate(options) {
-    return schematics_1.apply(schematics_1.url(core_1.join('./files', options.language)), [
-        schematics_1.template(Object.assign(Object.assign({}, core_1.strings), options)),
-        schematics_1.move(options.project),
+    return (0, schematics_1.apply)((0, schematics_1.url)((0, core_1.join)('./files', options.language)), [
+        (0, schematics_1.template)(Object.assign(Object.assign({}, core_1.strings), options)),
+        (0, schematics_1.move)(options.project),
     ]);
 }

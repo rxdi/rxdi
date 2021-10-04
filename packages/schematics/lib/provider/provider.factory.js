@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.main = void 0;
 const core_1 = require("@angular-devkit/core");
 const schematics_1 = require("@angular-devkit/schematics");
 const module_declarator_1 = require("../../utils/module.declarator");
@@ -36,7 +35,7 @@ function transform(options) {
 function generate(options) {
     return (context) => schematics_1.apply(schematics_1.url(core_1.join('./files', options.language)), [
         options.spec ? schematics_1.noop() : schematics_1.filter(path => !path.endsWith('.spec.ts')),
-        schematics_1.template(Object.assign(Object.assign({}, core_1.strings), options)),
+        schematics_1.template(Object.assign({}, core_1.strings, options)),
         schematics_1.move(options.path),
     ])(context);
 }

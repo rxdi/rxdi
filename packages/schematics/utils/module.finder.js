@@ -17,7 +17,7 @@ class ModuleFinder {
         }
         const moduleFilename = directory.subfiles.find(filename => /\.module\.(t|j)s/.test(filename));
         return moduleFilename !== undefined
-            ? core_1.join(directory.path, moduleFilename.valueOf())
+            ? (0, core_1.join)(directory.path, moduleFilename.valueOf())
             : this.findIn(directory.parent);
     }
 }
