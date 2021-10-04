@@ -1,4 +1,4 @@
-## [0.7.125](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.125) (2021-10-04)
+## [0.7.126](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.126) (2021-10-04)
 
 
 ### Bug Fixes
@@ -27,6 +27,7 @@
 * **lit-html:** exports changed ([3ff3d9e](https://github.com/rxdi/mono/commit/3ff3d9e8e9c0f8d110ee65e577a4be9a68f28fa0))
 * **lit-html:** lit-element re-exported from index ([fde569b](https://github.com/rxdi/mono/commit/fde569b1a4863d5ea6e9a5378985920ca8ed6dbc))
 * **lit-html:** memory leak was detected when multiple renders occur leading to multiple subscriptions that are subscribing but we cannot unsubscribe them ([2a71649](https://github.com/rxdi/mono/commit/2a7164940b1b6c68cebc29a8444f40fb2e6eabb5))
+* **lit-html:** missing type leading to non-compiled version ([a9c4c16](https://github.com/rxdi/mono/commit/a9c4c16ef4e661745d852324f34004daf6fc25c8))
 * **lit-html:** oh my god :( ([2eb1e25](https://github.com/rxdi/mono/commit/2eb1e25e96e57669e1decfb34f5ed1e8b6983d01))
 * **lit-html:** removed import for directives only async or subscribe directive will be left ([261e9da](https://github.com/rxdi/mono/commit/261e9da94f8be056b3c1912049701f871454ddbc))
 * **main:** main js file was not correct ([32aa94a](https://github.com/rxdi/mono/commit/32aa94a4cae09daadb4287ced9b331ea9ce67b2e))
