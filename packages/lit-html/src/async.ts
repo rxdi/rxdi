@@ -1,6 +1,6 @@
 import { noChange, Part } from 'lit';
-import { directive } from 'lit/directive';
-import { AsyncDirective } from 'lit/async-directive';
+import { directive } from 'lit/directive.js';
+import { AsyncDirective } from 'lit/async-directive.js';
 
 interface Unsubscribable {
   unsubscribe(): void;
