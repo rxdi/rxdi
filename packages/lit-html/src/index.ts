@@ -1,6 +1,6 @@
 export * from './decorators/index';
-export * from './lit-decorators/index';
 export * from './async';
+export * from '@lit/reactive-element/decorators';
 export * from '@lit/reactive-element';
 export * from 'lit-html';
 export * from 'lit-element/lit-element';
