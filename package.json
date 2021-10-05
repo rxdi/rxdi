@@ -34,6 +34,7 @@
  "homepage": "https://github.com/rxdi/mono#readme",
  "dependencies": {
   "reflect-metadata": "0.1.13",
+  "@abraham/reflection": "^0.8.0",
   "@gapi/playground": "1.8.79",
   "apollo-errors": "1.9.0",
   "credit-card-type": "^9.1.0",
@@ -74,7 +75,6 @@
   "apollo-link-http": "^1.5.15",
   "apollo-link-ws": "^1.0.18",
   "subscriptions-transport-ws": "^0.9.16",
-  "systemjs": "0.21.4",
   "hapi": "^18.1.0",
   "inert": "^5.1.3",
   "coveralls": "3.0.5",
@@ -119,7 +119,6 @@
   "@cdm-logger/server": "^3.0.2",
   "@types/jest": "^24.0.22",
   "@types/node": "^12.0.10",
-  "@types/systemjs": "^0.20.6",
   "@types/graphql": "^14.5.0",
   "@types/hapi": "^18.0.4",
   "@types/nedb": "^1.8.6",

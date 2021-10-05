@@ -1,15 +1,19 @@
 ## Powerful Dependency Injection inside Browser and Node using Typescript and RXJS 6
-***
+
+---
+
 > The idea behind [@rxdi](https://github.com/rxdi) is to create independent, dependency injection that can be used everywhere,
 > Node and Browser with purpose also to share the same code without chainging nothing!
 > First steps where with platform called [@gapi](https://github.com/Stradivario/gapi) you can check repository [@gapi/core](https://github.com/Stradivario/gapi-core).
 > Then because of the needs of the platform i decided to develop this Reactive Dependency Injection container helping me build progressive applications.
 > Hope you like my journey!
 > Any help and suggestions are appreciated!
-Main repository [@rxdi/core](https://github.com/rxdi/core) 
-***
+> Main repository [@rxdi/core](https://github.com/rxdi/core)
+
+---
 
 #### Example starter projects:
+
 [Client Side](https://github.com/rxdi/starter-client-side)
 
 [Client Side Advanced](https://github.com/rxdi/starter-client-side-advanced)
@@ -17,7 +21,7 @@ Main repository [@rxdi/core](https://github.com/rxdi/core)
 [Server Side](https://github.com/rxdi/starter-server-side)
 
 More examples for [@rxdi](https://www.npmjs.com/~rxdi) infrastructure you can check inside [@gapi](https://www.npmjs.com/~gapi) namespace.
- 
+
 ##### @Beta Decentralized node_modules using ipfs network with rxdi infrastructure
 
 > Install `@rxdi/core` global so we will have `rxdi` command available `npm i -g @rxdi/core`
@@ -35,6 +39,7 @@ More examples for [@rxdi](https://www.npmjs.com/~rxdi) infrastructure you can ch
 > No more package downtime!
 
 ## Installation and basic examples:
+
 ##### To install this library, run:
 
 ```bash
@@ -44,126 +49,112 @@ npm install @rxdi/core
 ## Simplest app
 
 main.ts
+
 ```typescript
 import { Bootstrap } from '@rxdi/core';
 import { AppModule } from './app/app.module';
 
 Bootstrap(AppModule, {
-    init: false, // if init is false you can set specifically which parts of the system should initialize their constructors
-    initOptions: {
-        services: true,
-        components: true,
-        effects: true,
-        controllers: true,
-        plugins: true,
-        pluginsAfter: true,
-        pluginsBefore: true
-    },
-    logger: {
-        logging: true,
-        date: true,
-        hashes: true,
-        exitHandler: true,
-        fileService: true
-    }
-})
-.subscribe(
-    () => console.log('App Started!'),
-    (err) => console.error(err)
+ init: false, // if init is false you can set specifically which parts of the system should initialize their constructors
+ initOptions: {
+  services: true,
+  components: true,
+  effects: true,
+  controllers: true,
+  plugins: true,
+  pluginsAfter: true,
+  pluginsBefore: true,
+ },
+ logger: {
+  logging: true,
+  date: true,
+  hashes: true,
+  exitHandler: true,
+ },
+}).subscribe(
+ () => console.log('App Started!'),
+ (err) => console.error(err),
 );
 ```
 
 app.module.ts
+
 ```typescript
-import { Module } from "@rxdi/core";
+import { Module } from '@rxdi/core';
 import { UserModule } from './user/user.module';
 
 @Module({
-    imports: [UserModule]
+ imports: [UserModule],
 })
 export class AppModule {}
 ```
 
-
-
 user.module.ts
+
 ```typescript
-
-
 import { Module } from '@rxdi/core';
 import { UserService } from './services';
 import { Observable } from 'rxjs';
 
 @Module({
-    services: [
-        UserService,
-        {
-            provide: 'createUniqueHash',
-            useDynamic: {
-                fileName: 'createUniqueHash',
-                namespace: '@helpers',
-                extension: 'js',
-                typings: '',
-                outputFolder: '/node_modules/',
-                link: 'https://ipfs.infura.io/ipfs/QmdQtC3drfQ6M6GFpDdrhYRKoky8BycKzWbTkc4NEzGLug'
-            }
-        },
-        {
-            provide: 'testFactoryAsync',
-            lazy: true,
-            useFactory: async () => {
-                return new Promise((resolve) => {
-                    setTimeout(() => resolve('dad2a'), 0);
-                })
-            }
-        },
-        {
-            provide: 'testFactorySync',
-            useFactory: () => {
-                return 'dada';
-            }
-        },
-        {
-            provide: 'testValue2',
-            useValue: 'dadada'
-        },
-        {
-            provide: 'testChainableFactoryFunction',
-            // lazy: true, if you don't provide lazy parameter your factory will remain Observable so you can chain it inside constructor
-            useFactory: () => new Observable(o => o.next(15))
-        },
-    ]
+ services: [
+  UserService,
+  {
+   provide: 'createUniqueHash',
+  },
+  {
+   provide: 'testFactoryAsync',
+   lazy: true,
+   useFactory: async () => {
+    return new Promise((resolve) => {
+     setTimeout(() => resolve('dad2a'), 0);
+    });
+   },
+  },
+  {
+   provide: 'testFactorySync',
+   useFactory: () => {
+    return 'dada';
+   },
+  },
+  {
+   provide: 'testValue2',
+   useValue: 'dadada',
+  },
+  {
+   provide: 'testChainableFactoryFunction',
+   // lazy: true, if you don't provide lazy parameter your factory will remain Observable so you can chain it inside constructor
+   useFactory: () => new Observable((o) => o.next(15)),
+  },
+ ],
 })
 export class UserModule {}
 ```
 
 user.service.ts
+
 ```typescript
-import { Service, Inject } from "@rxdi/core";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { Service, Inject } from '@rxdi/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Service()
 export class UserService {
-    constructor(
-        @Inject('createUniqueHash') private ipfsDownloadedFactory: { testKey: () => string },
-        @Inject('testFactoryAsync') private testFactoryAsync: { testKey: () => string },
-        @Inject('testChainableFactoryFunction') private chainableFactory: Observable<number>
-
-    ) {
-        console.log('UserService', this.ipfsDownloadedFactory.testKey(), this.testFactoryAsync);
-        this.chainableFactory
-            .pipe(
-                map((res) => res)
-            )
-            .subscribe(value => console.log('Value chaining factory ', value));
-
-    }
+ constructor(
+  @Inject('createUniqueHash') private ipfsDownloadedFactory: { testKey: () => string },
+  @Inject('testFactoryAsync') private testFactoryAsync: { testKey: () => string },
+  @Inject('testChainableFactoryFunction') private chainableFactory: Observable<number>,
+ ) {
+  console.log('UserService', this.ipfsDownloadedFactory.testKey(), this.testFactoryAsync);
+  this.chainableFactory
+   .pipe(map((res) => res))
+   .subscribe((value) => console.log('Value chaining factory ', value));
+ }
 }
 ```
 
-
 Result
+
 ```typescript
 1529604446114 Bootstrap -> @Module('AppModule')(adb785e839fa19736cea0920cd39b783): loading...
 1529604446116 Bootstrap -> @Module('UserModule')(9ed4f039657f52019d2d9adb0f9df09f): loading...
@@ -189,8 +180,6 @@ Started!
 AppStopped
 ```
 
-
-
 ### ForRoot configuration for modules
 
 ```typescript
@@ -198,45 +187,32 @@ import { Module, ModuleWithServices, InjectionToken } from '@rxdi/core';
 
 @Service()
 export class MODULE_DI_CONFIG {
-    text: string = 'Hello world';
+ text: string = 'Hello world';
 }
-
 
 export const MY_MODULE_CONFIG = new InjectionToken<MODULE_DI_CONFIG>('my-module-config');
 
-
 @Module({
-  imports: []
+ imports: [],
 })
 export class YourModule {
-  public static forRoot(config?: any): ModuleWithServices {
-    return {
-      module: YourModule,
-      services: [
-          { provide: MY_MODULE_CONFIG, useValue: { text: 'Hello world' } },
-          { provide: MY_MODULE_CONFIG, useClass: MODULE_DI_CONFIG },
-          { 
-            provide: MY_MODULE_CONFIG,
-            useFactory: () => {
-                return {text: 'Hello world'};
-            }
-          },
-          {
-            provide: 'ipfsDownloadableFactory',
-            useDynamic: {
-                fileName: 'createUniqueHash',
-                namespace: '@helpers',
-                extension: 'js',
-                typings: '',
-                outputFolder: '/node_modules/',
-                link: 'https://ipfs.infura.io/ipfs/QmdQtC3drfQ6M6GFpDdrhYRKoky8BycKzWbTkc4NEzGLug'
-            }
-          }
-      ],
-      components: [],
-      frameworkImports: []
-    }
-  }
+ public static forRoot(config?: any): ModuleWithServices {
+  return {
+   module: YourModule,
+   services: [
+    { provide: MY_MODULE_CONFIG, useValue: { text: 'Hello world' } },
+    { provide: MY_MODULE_CONFIG, useClass: MODULE_DI_CONFIG },
+    {
+     provide: MY_MODULE_CONFIG,
+     useFactory: () => {
+      return { text: 'Hello world' };
+     },
+    },
+   ],
+   components: [],
+   frameworkImports: [],
+  };
+ }
 }
 ```
 
@@ -252,11 +228,13 @@ npm i -g @gapi/cli
 ```
 
 Start with `@gapi/cli`
+
 ```bash
 gapi start --local --parcel
 ```
 
 Build with `@gapi/cli`
+
 ```bash
 gapi build
 ```
@@ -264,6 +242,7 @@ gapi build
 Or you can install Parcel globally and use instead of `@gapi/cli`
 
 Install Parcel:
+
 ```bash
 npm install -g parcel-bundler
 ```
@@ -277,6 +256,7 @@ parcel build src/main.ts --target node
 This command will generate single file from this application inside `dist/main.js` with mappings `dist/main.map`
 
 Starting bundled application
+
 ```bash
 node ./dist/main.js
 ```
@@ -285,20 +265,16 @@ Important!
 
 This will not bundle your node modules only rxdi application.
 
-
 If you want to start app with `ts-node` for example you need to set inside `tsconfig.json` -> compilerOptions: {}
 
 ```json
 {
-    "compilerOptions": {
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true
-    }
+ "compilerOptions": {
+  "emitDecoratorMetadata": true,
+  "experimentalDecorators": true
+ }
 }
-
 ```
-
-
 
 # Possible pattern with `@rxdi/core`
 
@@ -308,38 +284,38 @@ import { switchMap } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 
 setup({
-  services: [
-    {
-      provide: 'gosho',
-      lazy: true,
-      useFactory: async () => 'yey'
-    }
-  ]
+ services: [
+  {
+   provide: 'gosho',
+   lazy: true,
+   useFactory: async () => 'yey',
+  },
+ ],
 })
-  .pipe(
-    switchMap(ctx =>
-      combineLatest(
-        setup({
-          services: [
-            {
-              provide: 'pesho',
-              useFactory: () => (ctx as any).get('gosho')
-            }
-          ]
-        }),
-        setup({
-          services: []
-        }),
-        setup({
-          services: []
-        }),
-        setup({
-          services: []
-        })
-      )
-    )
-  )
-  .subscribe(ctx => {
-    console.log((ctx as any).get('pesho'));
-  });
-````
+ .pipe(
+  switchMap((ctx) =>
+   combineLatest(
+    setup({
+     services: [
+      {
+       provide: 'pesho',
+       useFactory: () => (ctx as any).get('gosho'),
+      },
+     ],
+    }),
+    setup({
+     services: [],
+    }),
+    setup({
+     services: [],
+    }),
+    setup({
+     services: [],
+    }),
+   ),
+  ),
+ )
+ .subscribe((ctx) => {
+  console.log((ctx as any).get('pesho'));
+ });
+```
