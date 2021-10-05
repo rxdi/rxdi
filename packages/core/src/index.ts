@@ -1,4 +1,4 @@
-import 'reflect-metadata';
+import '@abraham/reflection';
 
 export * from './container/index';
 export * from './decorators/index';
