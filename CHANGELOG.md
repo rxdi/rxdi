@@ -1,4 +1,4 @@
-## [0.7.130](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.130) (2021-10-06)
+## [0.7.131](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.131) (2021-10-06)
 
 
 ### Bug Fixes
@@ -8,6 +8,7 @@
 * **compressor:** added correct types to compress and decompress ([e7df20a](https://github.com/rxdi/mono/commit/e7df20a5d768d11939f192a66139b306b2deaf16))
 * **core:** removed bin from package.json ([2fb387a](https://github.com/rxdi/mono/commit/2fb387a752daa7e109f842fc0049b3e2abb6d37e))
 * **credit-card-form:** added correct dependencies ([a3cdac8](https://github.com/rxdi/mono/commit/a3cdac815b01abcbfddd3157868cf1eadce743bc))
+* **graphql-client:** fixed missing export of GraphQLRequest from apollo-link ([ed35dbf](https://github.com/rxdi/mono/commit/ed35dbf99869ef25634f1307b6e819d742bd140c))
 * **graphql-client:** subscription websocket link now takes authorization token lazily ([c0b525c](https://github.com/rxdi/mono/commit/c0b525c9ce86b7f56ccbaee804dd1d14103ee69e))
 * **graphql-pubsub:** added connection with credentials for amqp protocol ([3c8b320](https://github.com/rxdi/mono/commit/3c8b320f199503fed3e9e4cfd28660c5a3ad2de1))
 * **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
