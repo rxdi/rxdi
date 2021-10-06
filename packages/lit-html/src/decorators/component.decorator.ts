@@ -1,6 +1,6 @@
 import { CSSResult } from '../reactive-element/css-tag';
 import { LitElement } from '../lit-element';
-import { TemplateResult, html } from '../lit-html/lit-html';
+import { TemplateResult, html, render } from '../lit-html/lit-html';
 
 export interface CustomElementConfig<T> {
   selector: string;
@@ -8,6 +8,7 @@ export interface CustomElementConfig<T> {
   style?: CSSResult;
   styles?: CSSResult[];
   extends?: string;
+  container?: HTMLElement | DocumentFragment;
 }
 
 // From the TC39 Decorators proposal
@@ -102,6 +103,20 @@ const customElement = <T>(
     }
 
     OnInit() {
+      if (config.container) {
+        render(config.template.call(this), config.container);
+        if (config.style) {
+          const style = document.createElement('style');
+          style.type = 'text/css';
+          if (style['styleSheet']) {
+            // This is required for IE8 and below.
+            style['styleSheet'].cssText = config.style.toString();
+          } else {
+            style.appendChild(document.createTextNode(config.style.toString()));
+          }
+          config.container.prepend(style);
+        }
+      }
       return OnInit.call(this);
     }
 
