@@ -506,7 +506,7 @@ export interface DirectiveParent {
 const getTemplateHtml = (
   strings: TemplateStringsArray,
   type: ResultType
-): [TrustedHTML, Array<string | undefined>] => {
+): [any, Array<string | undefined>] => {
   // Insert makers into the template HTML to represent the position of
   // bindings. The following code scans the template strings to determine the
   // syntactic position of the bindings. They can be in text position, where
@@ -652,14 +652,14 @@ const getTemplateHtml = (
           (attrNameEndIndex === -2 ? (attrNames.push(undefined), i) : end);
   }
 
-  const htmlResult: string | TrustedHTML =
+  const htmlResult: string | any =
     html + (strings[l] || '<?>') + (type === SVG_RESULT ? '</svg>' : '');
 
   // Returned as an array for terseness
   return [
     policy !== undefined
       ? policy.createHTML(htmlResult)
-      : (htmlResult as unknown as TrustedHTML),
+      : (htmlResult as unknown),
     attrNames,
   ];
 };
