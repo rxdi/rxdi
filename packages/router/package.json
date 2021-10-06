@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/router",
-  "version": "0.7.129",
+  "version": "0.7.130",
   "main": "./dist/index.js",
   "author": "Kristiyan Tachev",
   "license": "MIT",
@@ -15,8 +15,8 @@
     "router-slot": "^1.5.4"
   },
   "devDependencies": {
-    "@rxdi/core": "^0.7.129",
-    "@rxdi/lit-html": "^0.7.129"
+    "@rxdi/core": "^0.7.130",
+    "@rxdi/lit-html": "^0.7.130"
   },
   "types": "./dist/index.d.ts",
   "module": "./dist/index.js",
