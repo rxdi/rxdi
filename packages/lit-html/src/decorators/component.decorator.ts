@@ -8,6 +8,29 @@ export interface CustomElementConfig<T> {
   style?: CSSResult;
   styles?: CSSResult[];
   extends?: string;
+  /**
+   * Intended only for first render inside the DOM
+   * for example we want app-component to be rendered
+   * inside body of the html page we could do
+   *
+```
+import { Component, html } from '@rxdi/lit-html';
+
+@Component({
+  selector: 'app-component',
+  template() {
+    return html`
+      <router-outlet>
+        <navbar-component slot="header"></navbar-component>
+        <footer-component slot="footer"></footer-component>
+      </router-outlet>
+    `;
+  },
+  container: document.body,
+})
+export class AppComponent extends HTMLElement {}
+```
+   */
   container?: HTMLElement | DocumentFragment;
 }
 
