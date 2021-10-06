@@ -1,25 +1,25 @@
 {
-  "name": "@rxdi/install",
-  "version": "0.7.127",
-  "description": "",
-  "main": "./dist/index.js",
-  "scripts": {
-    "build": "tsc || true",
-    "test": "echo Test Install"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/rxdi/install"
-  },
-  "bin": {
-    "rxdi-install": "index.js"
-  },
-  "author": "Kristiyan Tachev",
-  "license": "MIT",
-  "dependencies": {
-    "@rxdi/core": "^0.7.127"
-  },
-  "devDependencies": {
-    "@types/node": "^12.0.10"
-  }
+ "name": "@rxdi/install",
+ "version": "0.7.128",
+ "description": "",
+ "main": "./dist/index.js",
+ "scripts": {
+  "build": "tsc || true",
+  "test": "echo Test Install"
+ },
+ "repository": {
+  "type": "git",
+  "url": "https://github.com/rxdi/install"
+ },
+ "bin": {
+  "rxdi-install": "index.js"
+ },
+ "author": "Kristiyan Tachev",
+ "license": "MIT",
+ "dependencies": {
+  "@rxdi/core": "^0.7.128"
+ },
+ "devDependencies": {
+  "@types/node": "^12.0.10"
+ }
 }

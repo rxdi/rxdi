@@ -1,6 +1,6 @@
 {
  "name": "@rxdi/core",
- "version": "0.7.127",
+ "version": "0.7.128",
  "description": "",
  "main": "./dist/index.js",
  "types": "./dist/index.d.ts",
@@ -16,9 +16,6 @@
   "pretest": "npm run lint",
   "test-browser": "gapi testing browser",
   "test": "gapi testing node"
- },
- "bin": {
-  "rxdi": "./dist/bin/root.js"
  },
  "repository": {
   "type": "git",
