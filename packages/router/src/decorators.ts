@@ -25,11 +25,11 @@ export class UserProfile extends LitElement {
 ```
    */
 export function RouteParams() {
-  return function(target: Object, propertyKey: string) {
-    Object.defineProperty(target, propertyKey, {
-      get: function() {
-        return this.location.params;
-      }
-    });
-  };
+ return function (target: Object, propertyKey: string) {
+  Object.defineProperty(target, propertyKey, {
+   get: function () {
+    return this.location.params;
+   },
+  });
+ };
 }
