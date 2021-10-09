@@ -1,4 +1,4 @@
-## [0.7.133](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.133) (2021-10-06)
+## [0.7.134](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.134) (2021-10-09)
 
 
 ### Bug Fixes
@@ -14,6 +14,7 @@
 * **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
 * **graphql:** filtered unknown arguments ([6a0be24](https://github.com/rxdi/mono/commit/6a0be241a119d2a417994477354ff8450c977526))
 * **graphql:** removed custom directive from export ([800eded](https://github.com/rxdi/mono/commit/800eded6dbec7493a24845f3ed93f6b4d4a18594))
+* **graphql:** removed docs folder since it is unused [ci-skip] ([2f3537d](https://github.com/rxdi/mono/commit/2f3537d5198b042e6b57594ab43f016fca5e01f0))
 * **hapi:** typings for hapi removed from core dependency ([7aebe9c](https://github.com/rxdi/mono/commit/7aebe9c68b559fb2bd4b1f8b6407eb251adc08f9))
 * **Hotkeys:** added complete method to when binding ([6130ebe](https://github.com/rxdi/mono/commit/6130ebe68919a91eadc0acacc1c0306abf2ce781))
 * **Hotkeys:** added observable approach using subject instead of new Observable ([0fc2c89](https://github.com/rxdi/mono/commit/0fc2c89c8bc7bdf848a100ddbbf41d13d4bdfc41))
@@ -45,6 +46,7 @@
 * **Router:** added allowJS ([b15d51f](https://github.com/rxdi/mono/commit/b15d51faf1f7d0bc1709411e44a6e3cdc346d411))
 * **Router:** removed unused things and only router component left ([b474240](https://github.com/rxdi/mono/commit/b4742405f4af74eff341261d3f95429a64da9216))
 * **Router:** static methods ([a2ae8ea](https://github.com/rxdi/mono/commit/a2ae8ea589880f91694609dd49ebcb6fed45b584))
+* **router:** typings when defining component inside forRoot ([5f296e7](https://github.com/rxdi/mono/commit/5f296e7bd618d07e08efd444e4a125b4ed17a630))
 * **Subscriptions:** removed logic from external dependencies refactored many parts of the pubsub protocol using regular Promise and not bluebird promise ([e3a70df](https://github.com/rxdi/mono/commit/e3a70dfd68885fc5f9742a289be5af3f748f2d99))
 
 
