@@ -13,7 +13,6 @@
   "test": "echo Test Graphql client"
  },
  "dependencies": {
-  "apollo-utilities": "^1.3.4",
   "@apollo/client": "^3.4.16",
   "subscriptions-transport-ws": "^0.9.19"
  },

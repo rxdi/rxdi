@@ -15,10 +15,10 @@ import {
  split,
  Observable,
  from,
-} from '@apollo/client';
+} from '@apollo/client/core';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { getMainDefinition } from 'apollo-utilities';
+import { getMainDefinition } from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
 
 @Module({})
@@ -158,7 +158,8 @@ export {
  QueryOptions,
  SubscriptionOptions,
  MutationOptions,
-} from '@apollo/client';
+ PossibleTypesMap,
+} from '@apollo/client/core';
 export { InMemoryCache } from '@apollo/client/cache';
 
 export { DataProxy } from '@apollo/client/cache';
