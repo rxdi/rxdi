@@ -1,6 +1,5 @@
 import { Module, ModuleWithServices } from '@rxdi/core';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from '@apollo/client/cache';
 import {
  ApolloClient,
  GraphqlDocuments,
@@ -8,12 +7,19 @@ import {
  noopHeaders,
  Definintion,
 } from './graphql.injection';
-import { ApolloClient as ApolloClientOriginal } from 'apollo-client';
-import { concat, ApolloLink, split, Observable, from } from 'apollo-link';
-import { WebSocketLink } from 'apollo-link-ws';
+import {
+ createHttpLink,
+ ApolloClient as ApolloClientOriginal,
+ concat,
+ ApolloLink,
+ split,
+ Observable,
+ from,
+} from '@apollo/client';
+import { WebSocketLink } from '@apollo/client/link/ws';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { getMainDefinition } from 'apollo-utilities';
-import { setContext } from 'apollo-link-context';
+import { setContext } from '@apollo/client/link/context';
 
 @Module({})
 export class GraphqlModule {
@@ -57,11 +63,11 @@ export class GraphqlModule {
          }),
          new ApolloLink(
           typeof apolloRequestHandler === 'function'
-           ? apolloRequestHandler
+           ? (apolloRequestHandler as never)
            : (operation, forward) => {
               /* Start cancel request */
               if (cancelPendingRequests) {
-               return new Observable((observer) => {
+               return new Observable((observer: any) => {
                 const context = operation.getContext();
 
                 const connectionHandle = forward(operation).subscribe({
@@ -147,8 +153,12 @@ export class GraphqlModule {
 
 export * from './graphql.injection';
 export * from './graphq.helpers';
-export { QueryOptions, SubscriptionOptions, MutationOptions } from 'apollo-client';
-export { IntrospectionFragmentMatcher, InMemoryCache } from 'apollo-cache-inmemory';
+export {
+ GraphQLRequest,
+ QueryOptions,
+ SubscriptionOptions,
+ MutationOptions,
+} from '@apollo/client';
+export { InMemoryCache } from '@apollo/client/cache';
 
-export { DataProxy } from 'apollo-cache';
-export { GraphQLRequest } from 'apollo-link';
+export { DataProxy } from '@apollo/client/cache';

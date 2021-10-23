@@ -1,7 +1,6 @@
 import { InjectionToken } from '@rxdi/core';
-import { ApolloClient as AC, ApolloClientOptions } from 'apollo-client';
-import { NormalizedCacheObject, InMemoryCache } from 'apollo-cache-inmemory';
-import { RequestHandler } from 'apollo-link';
+import { ApolloClient as AC, ApolloClientOptions, RequestHandler } from '@apollo/client';
+import { NormalizedCacheObject, InMemoryCache } from '@apollo/client/cache';
 
 export const ApolloClient = new InjectionToken<AC<NormalizedCacheObject>>('apollo-link');
 export interface ApolloClient extends AC<NormalizedCacheObject> {}
