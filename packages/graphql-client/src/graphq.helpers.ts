@@ -1,3 +1,4 @@
+import { PossibleTypesMap } from '@apollo/client/core';
 import { Container } from '@rxdi/core';
 
 export function importQuery<T>(search: T) {
@@ -14,3 +15,19 @@ export function importQuery<T>(search: T) {
  }
  return result;
 }
+
+export interface IntrospectionQuery {
+ __schema: { types: { name: string; possibleTypes: { name: string }[] }[] };
+}
+
+export const convertToPossibleTypes = (introspectionQuery: IntrospectionQuery) =>
+ introspectionQuery.__schema.types.reduce(
+  (acc, curr) => ({
+   ...acc,
+   [curr.name]: curr.possibleTypes.map((type) => type.name),
+  }),
+  {} as PossibleTypesMap,
+ );
+
+/* Utility function helping us to get a new object using the apollo-store */
+export const deepCopy = <T>(state: T): T => JSON.parse(JSON.stringify(state));
