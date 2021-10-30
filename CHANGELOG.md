@@ -1,4 +1,4 @@
-## [0.7.134](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.134) (2021-10-09)
+## [0.7.135](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.135) (2021-10-30)
 
 
 ### Bug Fixes
@@ -52,6 +52,7 @@
 
 ### Features
 
+* **apollo-client:** updated to latest version ([2d56542](https://github.com/rxdi/mono/commit/2d5654232648a7347c8b5b5612f2bce991f4ea09))
 * **Changelog:** added conventional changelog automatically generated ([a23a855](https://github.com/rxdi/mono/commit/a23a855e2ac67aa5bc375e3147fed1a7fc5751a6))
 * **Channels:** closing channels after operation is done since it was overloading rabbitmq cluster with channels, queues and memory leak appears ([e711c8f](https://github.com/rxdi/mono/commit/e711c8f87aad4644ee720ccac048a8ede90392bb))
 * **compressor:** added new package for compressing with lzw ([f64abce](https://github.com/rxdi/mono/commit/f64abce780824064a8ec9e960bd476cce884333d))
@@ -60,6 +61,8 @@
 * **GlobalPrefetch:** added to pusbusb ([dfb9913](https://github.com/rxdi/mono/commit/dfb9913d82c604e95ca99ab6eb89b05203434eff))
 * **graphql-client:** added cancel request handler and options everyone to make his own options ([ea312b7](https://github.com/rxdi/mono/commit/ea312b74b0f0c9c7717c45a3a033ec76fb250aec))
 * **graphql-client:** added importQueryAsync method in order to load async documents when we use compression for example ([c44b651](https://github.com/rxdi/mono/commit/c44b651fe2f859c378e918d9c0286cfa3dcb4d6b))
+* **graphql-client:** deep copy method introduced ([4e88198](https://github.com/rxdi/mono/commit/4e881984308d3ad51b5cae434a8c0203ddd051ab))
+* **graphql-client:** little modification to remove extra dependency react not using barrel export from apollo ([f38f011](https://github.com/rxdi/mono/commit/f38f011f3393c0f4a8a0da345df5f84a9698c01b))
 * **hapi, core:** added decorator Route to define post and get requests ([92caf6c](https://github.com/rxdi/mono/commit/92caf6c720d97752cc23286dc97dbb3d503f921f))
 * **lit-html:** added decorators to be part of the bundle since Deno is complaining about decorators.js from cdn ([f0214aa](https://github.com/rxdi/mono/commit/f0214aa2860b2e1b7bb2227ca8992cba4eca2948))
 * **lit-html:** added dependencies instead of just lit ([bed8bc8](https://github.com/rxdi/mono/commit/bed8bc8abdf2d8a090e676e2464566bbbbbd67ee))
