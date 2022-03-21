@@ -9,7 +9,7 @@ export interface CustomElementConfig<T> {
   style?: CSSResult;
   styles?: CSSResult[];
   extends?: string;
-  directives?: (Function | { html(template: TemplateResult): TemplateResult })[];
+  modifier?: (Function | { html(template: TemplateResult): TemplateResult })[];
   /**
    * Intended only for first render inside the DOM
    * for example we want app-component to be rendered
@@ -155,8 +155,8 @@ const customElement = <T>(
       OnInit.call(this);
     }
     render() {
-      if (config.directives?.length) {
-        return pipe(...(config.directives.map(v => v['html'])))(config.template.call(this));
+      if (config.modifier?.length) {
+        return pipe(...(config.modifier.map(v => v['html'])))(config.template.call(this));
       }
       return config.template.call(this);
     }

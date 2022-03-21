@@ -69,7 +69,7 @@ export class MyModifier extends LitElement {
     }
   }
 
-  public static html(template: TemplateResult) {
+  public static modifier(template: TemplateResult) {
     return html`<my-modifier>${template}</my-modifier>`;
   }
 }
