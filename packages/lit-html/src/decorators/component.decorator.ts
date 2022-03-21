@@ -1,6 +1,7 @@
 import { CSSResult } from '../reactive-element/css-tag';
 import { LitElement } from '../lit-element';
 import { TemplateResult, html, render } from '../lit-html/lit-html';
+import { pipe } from './helpers';
 
 export interface CustomElementConfig<T> {
   selector: string;
@@ -8,6 +9,7 @@ export interface CustomElementConfig<T> {
   style?: CSSResult;
   styles?: CSSResult[];
   extends?: string;
+  directives?: (Function | { html(template: TemplateResult): TemplateResult })[];
   /**
    * Intended only for first render inside the DOM
    * for example we want app-component to be rendered
@@ -96,15 +98,15 @@ const customElement = <T>(
     );
   }
   config.styles = config.styles || [];
-  const OnInit = Base.prototype.OnInit || function () {};
-  const OnDestroy = Base.prototype.OnDestroy || function () {};
-  const OnUpdate = Base.prototype.OnUpdate || function () {};
-  const OnUpdateFirst = Base.prototype.OnUpdateFirst || function () {};
-  const connectedCallback = Base.prototype.connectedCallback || function () {};
+  const OnInit = Base.prototype.OnInit || function () { };
+  const OnDestroy = Base.prototype.OnDestroy || function () { };
+  const OnUpdate = Base.prototype.OnUpdate || function () { };
+  const OnUpdateFirst = Base.prototype.OnUpdateFirst || function () { };
+  const connectedCallback = Base.prototype.connectedCallback || function () { };
   const disconnectedCallback =
-    Base.prototype.disconnectedCallback || function () {};
-  const update = Base.prototype.update || function () {};
-  const firstUpdated = Base.prototype.firstUpdated || function () {};
+    Base.prototype.disconnectedCallback || function () { };
+  const update = Base.prototype.update || function () { };
+  const firstUpdated = Base.prototype.firstUpdated || function () { };
 
   if (!config.template) {
     config.template = Base.prototype.render || (() => html``);
@@ -153,6 +155,9 @@ const customElement = <T>(
       OnInit.call(this);
     }
     render() {
+      if (config.directives?.length) {
+        return pipe(...(config.directives.map(v => v['html'])))(config.template.call(this));
+      }
       return config.template.call(this);
     }
 

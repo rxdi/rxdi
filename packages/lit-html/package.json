@@ -9,7 +9,7 @@
     "url": "https://github.com/rxdi/lit-html"
   },
   "scripts": {
-    "build": "tsc || true"
+    "build": "npx tsc || true"
   },
   "dependencies": {},
   "devDependencies": {
