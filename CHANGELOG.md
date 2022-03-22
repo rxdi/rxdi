@@ -1,4 +1,4 @@
-## [0.7.138](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.138) (2022-03-21)
+## [0.7.139](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.139) (2022-03-22)
 
 
 ### Bug Fixes
@@ -69,6 +69,7 @@
 * **lit-html:** added decorators to be part of the bundle since Deno is complaining about decorators.js from cdn ([f0214aa](https://github.com/rxdi/mono/commit/f0214aa2860b2e1b7bb2227ca8992cba4eca2948))
 * **lit-html:** added dependencies instead of just lit ([bed8bc8](https://github.com/rxdi/mono/commit/bed8bc8abdf2d8a090e676e2464566bbbbbd67ee))
 * **lit-html:** added h utility function returning template result ([a5a2bd6](https://github.com/rxdi/mono/commit/a5a2bd62cf534150ac051bb901c23f16ee119cbc))
+* **lit-html:** added pipe function and multiple modifiers ([70419f5](https://github.com/rxdi/mono/commit/70419f5bd4606a46b9c46072b4bf24ddeff9fcd7))
 * **lit-html:** bumped to 2.0.0 refactored code to fit new exports ([bf1a100](https://github.com/rxdi/mono/commit/bf1a100cd1c95dfa115278546b19147b9eab2110))
 * **lit-html:** modifiers logic added ([5808050](https://github.com/rxdi/mono/commit/5808050c71f778a379e6d88986deb980383302ec))
 * **lit-html:** removed dependencies added monorepo packages to be on one place due to DENO build fails ([af937e7](https://github.com/rxdi/mono/commit/af937e7379b3e11b621becae3efbb16aa84b4f28))
