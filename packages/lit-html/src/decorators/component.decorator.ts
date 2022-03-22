@@ -1,7 +1,8 @@
 import { CSSResult } from '../reactive-element/css-tag';
 import { LitElement } from '../lit-element';
 import { TemplateResult, html, render } from '../lit-html/lit-html';
-import { pipe } from './helpers';
+
+export const pipe = (...fns: Function[]) => (x: TemplateResult) => fns.reduce((v, f) => f.call(this, v), x);
 
 export interface CustomElementConfig<T> {
   selector: string;
@@ -9,7 +10,7 @@ export interface CustomElementConfig<T> {
   style?: CSSResult;
   styles?: CSSResult[];
   extends?: string;
-  modifier?: (Function | { html(template: TemplateResult): TemplateResult })[];
+  modifiers?: (Function | { html(template: TemplateResult): TemplateResult })[];
   /**
    * Intended only for first render inside the DOM
    * for example we want app-component to be rendered
@@ -155,8 +156,9 @@ const customElement = <T>(
       OnInit.call(this);
     }
     render() {
-      if (config.modifier?.length) {
-        return pipe(...(config.modifier.map(v => v['html'])))(config.template.call(this));
+
+      if (config.modifiers?.length) {
+        return pipe(...(config.modifiers.map(v => v['modifier'])))(config.template.call(this));
       }
       return config.template.call(this);
     }
