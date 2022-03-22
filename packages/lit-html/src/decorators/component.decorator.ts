@@ -2,7 +2,6 @@ import { CSSResult } from '../reactive-element/css-tag';
 import { LitElement } from '../lit-element';
 import { TemplateResult, html, render } from '../lit-html/lit-html';
 
-export const pipe = (...fns: Function[]) => (x: TemplateResult) => fns.reduce((v, f) => f.call(this, v), x);
 
 export interface CustomElementConfig<T> {
   selector: string;
@@ -156,8 +155,8 @@ const customElement = <T>(
       OnInit.call(this);
     }
     render() {
-
       if (config.modifiers?.length) {
+        const pipe = (...fns: Function[]) => (x: TemplateResult) => fns.reduce((v, f) => f.call(this, v), x);
         return pipe(...(config.modifiers.map(v => v['modifier'])))(config.template.call(this));
       }
       return config.template.call(this);
