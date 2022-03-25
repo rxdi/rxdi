@@ -1,15 +1,28 @@
-import { CSSResult } from '../reactive-element/css-tag';
 import { LitElement } from '../lit-element';
-import { TemplateResult, html, render } from '../lit-html/lit-html';
+import { html, render, TemplateResult } from '../lit-html/lit-html';
+import { CSSResult } from '../reactive-element/css-tag';
 
+export interface CustomAttributeRegistry {
+  define(name: string, modifier: Function | Modifier): void;
+  get(element: HTMLElement, attrName: string): any;
+}
+export interface ModifierOptions {
+  name: string;
+  registry?: CustomAttributeRegistry;
+}
+export interface Modifier extends Function {
+  name: string;
+  options(): ModifierOptions;
+}
 
 export interface CustomElementConfig<T> {
   selector: string;
-  template?: (self: T) => TemplateResult;
+  template?: (this: T) => TemplateResult;
   style?: CSSResult;
   styles?: CSSResult[];
   extends?: string;
-  modifiers?: (Function | { html(template: TemplateResult): TemplateResult })[];
+  registry?: (this: T) => CustomAttributeRegistry;
+  modifiers?: Modifier[];
   /**
    * Intended only for first render inside the DOM
    * for example we want app-component to be rendered
@@ -84,9 +97,10 @@ const standardCustomElement = (
         clazz,
         options as ElementDefinitionOptions
       );
-    },
+    }
   };
 };
+const isFunction = (v: Function) => typeof v === 'function';
 
 const customElement = <T>(
   tag: string,
@@ -156,8 +170,46 @@ const customElement = <T>(
     }
     render() {
       if (config.modifiers?.length) {
-        const pipe = (...fns: Function[]) => (x: TemplateResult) => fns.reduce((v, f) => f.call(this, v), x);
-        return pipe(...(config.modifiers.map(v => v['modifier'])))(config.template.call(this));
+        for (const modifier of config.modifiers) {
+
+          if (!modifier) {
+            throw new Error(
+              `Provided null value inside modifiers for component "${config.selector}"`
+            );
+          }
+
+          if (!modifier.options) {
+            throw new Error(
+              `Missing options for attribute inside ${modifier.name}`
+            );
+          }
+
+          if (typeof modifier.options !== 'function') {
+            throw new Error(
+              `Modifier options is not a function ${modifier.name} and component "${config.selector}"`
+            );
+          }
+
+          const options = modifier.options.call(this) as ModifierOptions;
+
+          if (!options?.name) {
+            throw new Error(
+              `Missing attribute name for ${modifier.name} inside component "${config.selector}"`
+            );
+          }
+          const registry = (isFunction(config.registry)
+            ? config.registry.call(this)
+            : options.registry) as CustomAttributeRegistry;
+
+          if (!registry) {
+            throw new Error(
+              `Missing attribute registry for attribute "${options.name}" and no default registry specified inside component "${config.selector}"`
+            );
+          }
+
+          registry.define(options.name, modifier);
+
+        }
       }
       return config.template.call(this);
     }
@@ -175,22 +227,22 @@ const customElement = <T>(
   const registeredElement = window.customElements.get(tag);
   if (registeredElement) {
     console.error(`** IMPORTANT!!! **
-------------------------------------------
-<${tag}></${tag}> Component re-defined multiple times and it is already registered inside customElements registry
+              ------------------------------------------
+< ${tag} > </${tag}> Component re-defined multiple times and it is already registered inside customElements registry
 Possible Solutions:
 * Bundle problem where multiple versions of the component are used
-* @Component decorator is used twice for the same component
-* Defined "selector" with the same name in multiple components
+            * @Component decorator is used twice for the same component
+              * Defined "selector" with the same name in multiple components
 
-** If this is Server Side Rendering you can ignore this message **
-------------------------------------------
-`);
+                ** If this is Server Side Rendering you can ignore this message **
+                  ------------------------------------------
+                    `);
 
     return registeredElement as never;
   }
   if (typeof ModifiedClass === 'function') {
     legacyCustomElement(tag, ModifiedClass as never, {
-      extends: config.extends,
+      extends: config.extends
     });
   } else {
     standardCustomElement(tag, ModifiedClass, { extends: config.extends });
