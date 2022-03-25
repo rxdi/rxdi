@@ -5,6 +5,7 @@ import { CSSResult } from '../reactive-element/css-tag';
 export interface CustomAttributeRegistry {
   define(name: string, modifier: Function | Modifier): void;
   get(element: HTMLElement, attrName: string): any;
+  unsubscribe(): void;
 }
 export interface ModifierOptions {
   name: string;
@@ -121,7 +122,7 @@ const customElement = <T>(
     Base.prototype.disconnectedCallback || function () { };
   const update = Base.prototype.update || function () { };
   const firstUpdated = Base.prototype.firstUpdated || function () { };
-
+  let registry: CustomAttributeRegistry;
   if (!config.template) {
     config.template = Base.prototype.render || (() => html``);
   }
@@ -162,13 +163,13 @@ const customElement = <T>(
     disconnectedCallback() {
       OnDestroy.call(this);
       disconnectedCallback.call(this);
+      registry?.unsubscribe();
+      registry = null;
     }
 
     connectedCallback() {
       connectedCallback.call(this);
       OnInit.call(this);
-    }
-    render() {
       if (config.modifiers?.length) {
         for (const modifier of config.modifiers) {
 
@@ -197,10 +198,11 @@ const customElement = <T>(
               `Missing attribute name for ${modifier.name} inside component "${config.selector}"`
             );
           }
-          const registry = (isFunction(config.registry)
-            ? config.registry.call(this)
-            : options.registry) as CustomAttributeRegistry;
-
+          if (!registry) {
+            registry = (isFunction(config.registry)
+              ? config.registry.call(this)
+              : options.registry) as CustomAttributeRegistry;
+          }
           if (!registry) {
             throw new Error(
               `Missing attribute registry for attribute "${options.name}" and no default registry specified inside component "${config.selector}"`
@@ -211,6 +213,8 @@ const customElement = <T>(
 
         }
       }
+    }
+    render() {
       return config.template.call(this);
     }
 
