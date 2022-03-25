@@ -1,4 +1,4 @@
-## [0.7.141](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.141) (2022-03-25)
+## [0.7.142](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.142) (2022-03-25)
 
 
 ### Bug Fixes
@@ -26,6 +26,7 @@
 * **http:** added export and documentation ([58f7ebb](https://github.com/rxdi/mono/commit/58f7ebbfcbb43939d9eeb6c48e6ac037a5d7b547))
 * **lit-html:** added correct re-exports ([9722efd](https://github.com/rxdi/mono/commit/9722efd025721e1b14fdd94d16b29f22537dcacb))
 * **lit-html:** async directive fix for unsubscribe ([e28b52f](https://github.com/rxdi/mono/commit/e28b52f57c2e56c85c00380a0e64735fccf33685))
+* **lit-html:** custom attribute registry unsubscribtion from events ([16de121](https://github.com/rxdi/mono/commit/16de121a6e4dc1cb265f63299e8342c94a0b4456))
 * **lit-html:** customElement configuration interface re-exported ([c1af1ff](https://github.com/rxdi/mono/commit/c1af1ffce18c52ef2ea438b63c9fa5c2d84201b5))
 * **lit-html:** customElement registry is throwing error ([065c796](https://github.com/rxdi/mono/commit/065c7962cd1f8407b9dac4fd60219663e1531634))
 * **lit-html:** decorator for component  was missing property container which is important to inject first element rendered on the page with router ([8f35df8](https://github.com/rxdi/mono/commit/8f35df80eb47925ef9f88d90bc8534142ea0057c))
