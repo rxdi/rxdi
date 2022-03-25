@@ -1,4 +1,4 @@
-## [0.7.140](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.140) (2022-03-22)
+## [0.7.141](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.141) (2022-03-25)
 
 
 ### Bug Fixes
@@ -56,6 +56,7 @@
 ### Features
 
 * **apollo-client:** updated to latest version ([2d56542](https://github.com/rxdi/mono/commit/2d5654232648a7347c8b5b5612f2bce991f4ea09))
+* **attribute-registry:** added generic way of defining dynamic attributes using @rhtml/custom-attributes ([630a200](https://github.com/rxdi/mono/commit/630a20083648412b79dfd63f6f7728728b408efa))
 * **Changelog:** added conventional changelog automatically generated ([a23a855](https://github.com/rxdi/mono/commit/a23a855e2ac67aa5bc375e3147fed1a7fc5751a6))
 * **Channels:** closing channels after operation is done since it was overloading rabbitmq cluster with channels, queues and memory leak appears ([e711c8f](https://github.com/rxdi/mono/commit/e711c8f87aad4644ee720ccac048a8ede90392bb))
 * **compressor:** added new package for compressing with lzw ([f64abce](https://github.com/rxdi/mono/commit/f64abce780824064a8ec9e960bd476cce884333d))
