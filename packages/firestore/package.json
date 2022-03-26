@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/firestore",
-  "version": "0.7.143",
+  "version": "0.7.144",
   "main": "./dist/index.js",
   "author": "Kristiyan Tachev",
   "license": "MIT",
@@ -21,6 +21,6 @@
   },
   "devDependencies": {
     "typescript": "^4.3.5",
-    "@rxdi/core": "^0.7.143"
+    "@rxdi/core": "^0.7.144"
   }
 }

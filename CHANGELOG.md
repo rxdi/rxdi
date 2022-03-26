@@ -1,4 +1,4 @@
-## [0.7.143](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.143) (2022-03-26)
+## [0.7.144](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.144) (2022-03-26)
 
 
 ### Bug Fixes
@@ -38,6 +38,7 @@
 * **lit-html:** missing type leading to non-compiled version ([a9c4c16](https://github.com/rxdi/mono/commit/a9c4c16ef4e661745d852324f34004daf6fc25c8))
 * **lit-html:** oh my god :( ([2eb1e25](https://github.com/rxdi/mono/commit/2eb1e25e96e57669e1decfb34f5ed1e8b6983d01))
 * **lit-html:** pipe function is not correctly implemented ([7a16c3b](https://github.com/rxdi/mono/commit/7a16c3b1fcb3e4df18e33850415c411f94c20a4f))
+* **lit-html:** registry is set on a global level not in for cicle ([f1ca0c0](https://github.com/rxdi/mono/commit/f1ca0c00d5418210e1e61c19daed5cbd3dfe183d))
 * **lit-html:** removed import for directives only async or subscribe directive will be left ([261e9da](https://github.com/rxdi/mono/commit/261e9da94f8be056b3c1912049701f871454ddbc))
 * **lit-html:** renamed directives to modifiers ([a011444](https://github.com/rxdi/mono/commit/a0114449339fa49ef466e8cbb0bac6ebf1fe18f2))
 * **lit-html:** trusted html type removed since it is not recommended to be used at the moment ([227ec08](https://github.com/rxdi/mono/commit/227ec0883cfff11d1cbe363ce534e81b306cefc6))
