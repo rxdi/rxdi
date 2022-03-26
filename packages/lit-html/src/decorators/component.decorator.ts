@@ -169,6 +169,9 @@ const customElement = <T>(
     connectedCallback() {
       connectedCallback.call(this);
       OnInit.call(this);
+      if (isFunction(config.registry)) {
+        registry = config.registry.call(this);
+      }
       if (config.modifiers?.length) {
         for (const modifier of config.modifiers) {
 
@@ -197,11 +200,11 @@ const customElement = <T>(
               `Missing attribute name for ${modifier.name} inside component "${config.selector}"`
             );
           }
-          if (!registry) {
-            registry = (isFunction(config.registry)
-              ? config.registry.call(this)
-              : options.registry) as CustomAttributeRegistry;
+
+          if (!options.registry) {
+            registry = options.registry;
           }
+
           if (!registry) {
             throw new Error(
               `Missing attribute registry for attribute "${options.selector}" and no default registry specified inside component "${config.selector}"`
