@@ -8,11 +8,10 @@ export interface CustomAttributeRegistry {
   unsubscribe(): void;
 }
 export interface ModifierOptions {
-  name: string;
+  selector: string;
   registry?: CustomAttributeRegistry;
 }
 export interface Modifier extends Function {
-  name: string;
   options(): ModifierOptions;
 }
 
@@ -193,7 +192,7 @@ const customElement = <T>(
 
           const options = modifier.options.call(this) as ModifierOptions;
 
-          if (!options?.name) {
+          if (!options?.selector) {
             throw new Error(
               `Missing attribute name for ${modifier.name} inside component "${config.selector}"`
             );
@@ -205,11 +204,11 @@ const customElement = <T>(
           }
           if (!registry) {
             throw new Error(
-              `Missing attribute registry for attribute "${options.name}" and no default registry specified inside component "${config.selector}"`
+              `Missing attribute registry for attribute "${options.selector}" and no default registry specified inside component "${config.selector}"`
             );
           }
 
-          registry.define(options.name, modifier);
+          registry.define(options.selector, modifier);
 
         }
       }
