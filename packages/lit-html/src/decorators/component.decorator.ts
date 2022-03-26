@@ -201,7 +201,7 @@ const customElement = <T>(
             );
           }
 
-          if (!options.registry) {
+          if (!registry && options.registry) {
             registry = options.registry;
           }
 
