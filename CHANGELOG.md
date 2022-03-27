@@ -1,4 +1,4 @@
-## [0.7.145](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.145) (2022-03-26)
+## [0.7.146](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.146) (2022-03-27)
 
 
 ### Bug Fixes
@@ -34,6 +34,7 @@
 * **lit-html:** exports changed ([3ff3d9e](https://github.com/rxdi/mono/commit/3ff3d9e8e9c0f8d110ee65e577a4be9a68f28fa0))
 * **lit-html:** instead of name now it is called selector ([3c582c9](https://github.com/rxdi/mono/commit/3c582c90ce3f53e0d870f84cff9f5c186515398a))
 * **lit-html:** lit-element re-exported from index ([fde569b](https://github.com/rxdi/mono/commit/fde569b1a4863d5ea6e9a5378985920ca8ed6dbc))
+* **lit-html:** little refactoring for modifiers ([dd03894](https://github.com/rxdi/mono/commit/dd0389430846694929607e49ab2bc01ab705dde9))
 * **lit-html:** memory leak was detected when multiple renders occur leading to multiple subscriptions that are subscribing but we cannot unsubscribe them ([2a71649](https://github.com/rxdi/mono/commit/2a7164940b1b6c68cebc29a8444f40fb2e6eabb5))
 * **lit-html:** missing type leading to non-compiled version ([a9c4c16](https://github.com/rxdi/mono/commit/a9c4c16ef4e661745d852324f34004daf6fc25c8))
 * **lit-html:** oh my god :( ([2eb1e25](https://github.com/rxdi/mono/commit/2eb1e25e96e57669e1decfb34f5ed1e8b6983d01))
