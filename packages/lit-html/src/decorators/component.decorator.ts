@@ -9,10 +9,10 @@ export interface CustomAttributeRegistry {
 }
 export interface ModifierOptions {
   selector: string;
-  registry?: CustomAttributeRegistry;
+  registry?(this: HTMLElement): CustomAttributeRegistry;
 }
-export interface Modifier extends Function {
-  options(): ModifierOptions;
+export interface Modifier {
+  options: ModifierOptions;
 }
 
 export interface CustomElementConfig<T> {
@@ -183,35 +183,28 @@ const customElement = <T>(
 
           if (!modifier.options) {
             throw new Error(
-              `Missing options for attribute inside ${modifier.name}`
+              `Missing options for attribute inside ${config.selector}`
             );
           }
 
-          if (typeof modifier.options !== 'function') {
+
+          if (!modifier.options?.selector) {
             throw new Error(
-              `Modifier options is not a function ${modifier.name} and component "${config.selector}"`
+              `Missing attribute selector inside component "${config.selector}"`
             );
           }
 
-          const options = modifier.options.call(this) as ModifierOptions;
-
-          if (!options?.selector) {
-            throw new Error(
-              `Missing attribute name for ${modifier.name} inside component "${config.selector}"`
-            );
-          }
-
-          if (!registry && options.registry) {
-            registry = options.registry;
+          if (!registry && typeof modifier.options.registry === 'function') {
+            registry = modifier.options.registry.call(this);
           }
 
           if (!registry) {
             throw new Error(
-              `Missing attribute registry for attribute "${options.selector}" and no default registry specified inside component "${config.selector}"`
+              `Missing attribute registry for attribute "${modifier.options.selector}" and no default registry specified inside component "${config.selector}"`
             );
           }
 
-          registry.define(options.selector, modifier);
+          registry.define(modifier.options.selector, modifier);
 
         }
       }
