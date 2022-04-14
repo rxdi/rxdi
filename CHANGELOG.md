@@ -1,4 +1,4 @@
-## [0.7.147](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.147) (2022-04-14)
+## [0.7.148](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.148) (2022-04-14)
 
 
 ### Bug Fixes
@@ -8,6 +8,7 @@
 * **compressor:** added correct types to compress and decompress ([e7df20a](https://github.com/rxdi/mono/commit/e7df20a5d768d11939f192a66139b306b2deaf16))
 * **core:** removed bin from package.json ([2fb387a](https://github.com/rxdi/mono/commit/2fb387a752daa7e109f842fc0049b3e2abb6d37e))
 * **credit-card-form:** added correct dependencies ([a3cdac8](https://github.com/rxdi/mono/commit/a3cdac815b01abcbfddd3157868cf1eadce743bc))
+* **forms:** added element focus on validate ([0e0bef7](https://github.com/rxdi/mono/commit/0e0bef78a8e4248622288e7fd629d4bc1b36901d))
 * **forms:** inputs now defaults to value provided inside form group ([b0c99a0](https://github.com/rxdi/mono/commit/b0c99a01c322ae85cbe61a29ecf21ac5b0d87cd1))
 * **graphql-client:** fixed missing export of GraphQLRequest from apollo-link ([ed35dbf](https://github.com/rxdi/mono/commit/ed35dbf99869ef25634f1307b6e819d742bd140c))
 * **graphql-client:** subscription websocket link now takes authorization token lazily ([c0b525c](https://github.com/rxdi/mono/commit/c0b525c9ce86b7f56ccbaee804dd1d14103ee69e))
