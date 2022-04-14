@@ -80,24 +80,22 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
     return this._valueChanges.asObservable();
   }
 
-  public updateValueAndValidity() {
+  public async updateValueAndValidity() {
     this.resetErrors();
-    const inputs = this.querySelectorAllInputs()
-      .map(i => {
+    const inputs = await Promise.all(this.querySelectorAllInputs()
+      .map(async i => {
         i.setCustomValidity('');
         this.setElementValidity(i);
         this.setElementDirty(i);
-        return i;
-      })
-      .map(input => this.validate(input))
-      .filter(e => e.errors.length);
+        return await this.validate(i);
+      }));
     this.getParentElement().requestUpdate();
-    return inputs;
+    return inputs.filter(e => e.errors.length);
   }
 
   private updateValueAndValidityOnEvent(method: Function) {
     const self = this;
-    return function (
+    return async function (
       this: AbstractInput,
       event: { target: AbstractInput }
     ) {
@@ -140,16 +138,16 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
       }
 
       self.resetErrors();
-      const isValid = self.applyValidationContext(self.validate(this));
+      const isValid = self.applyValidationContext(await self.validate(this));
       if (self.options.strict) {
         if (isValid) {
-          self.setElementValidity(this, isValid);
+          await self.setElementValidity(this, isValid);
           self.setValue(this.name as keyof T, value);
         }
         self.parentElement.requestUpdate();
         return method.call(self.parentElement, event);
       }
-      self.setElementValidity(this, isValid);
+      await self.setElementValidity(this, isValid);
       self.setValue(this.name as keyof T, value);
       self.parentElement.requestUpdate();
       return method.call(self.parentElement, event);
@@ -219,18 +217,18 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
         const attr = customAttributes.find(a => a.name.startsWith('#'));
         this.parentElement[attr.name.replace('#', '')] = el;
       }
-      el.addEventListener('blur', () => {
+      el.addEventListener('blur', async () => {
         this.setElementDirty(el);
-        this.parentElement.requestUpdate();
-        this.setElementValidity(el);
+        await this.parentElement.requestUpdate();
+        await this.setElementValidity(el);
       });
       el[strategy] = this.updateValueAndValidityOnEvent(el[strategy]);
       return el;
     });
   }
 
-  setElementValidity(el: AbstractInput, validity?: boolean) {
-    const isValid = validity || this.applyValidationContext(this.validate(el));
+  async setElementValidity(el: AbstractInput, validity?: boolean) {
+    const isValid = validity || this.applyValidationContext(await this.validate(el));
     el['valid'] = isValid;
     el['invalid'] = !isValid;
   }
@@ -257,7 +255,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
     return isInputPresent.length;
   }
 
-  public validate(element: AbstractInput): ErrorObject {
+  public async validate(element: AbstractInput): Promise<ErrorObject> {
     let errors = [];
 
     element.setCustomValidity('');
@@ -275,7 +273,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
         element
       };
     }
-    errors = this.mapInputErrors(element);
+    errors = await this.mapInputErrors(element);
     if (!errors.length) {
       return { errors: [], element };
     }
@@ -285,23 +283,22 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
     return { element, errors };
   }
 
-  private mapInputErrors(element: AbstractInput) {
-    return (this.validators.get(element.name) || [])
-      .map(v => {
-        this.errors[element.name] = this.errors[element.name] || {};
-        const error = v.bind(this.getParentElement())(element);
-        // if (error) {
-        //   element.focus();
-        // }
-        if (error && error.key) {
-          this.errors[element.name][error.key] = error.message;
-          this.errorMap.set(v, error.key);
-          return { key: error.key, message: error.message };
-        } else if (this.errorMap.has(v)) {
-          delete this.errors[element.name][this.errorMap.get(v)];
-        }
-      })
-      .filter(i => !!i);
+  private async mapInputErrors(element: AbstractInput) {
+    const res = await Promise.all((this.validators.get(element.name) || []).map(async v => {
+      this.errors[element.name] = this.errors[element.name] || {};
+      const error = await v.bind(this.getParentElement())(element);
+      // if (error) {
+      //   element.focus();
+      // }
+      if (error && error.key) {
+        this.errors[element.name][error.key] = error.message;
+        this.errorMap.set(v, error.key);
+        return { key: error.key, message: error.message };
+      } else if (this.errorMap.has(v)) {
+        delete this.errors[element.name][this.errorMap.get(v)];
+      }
+    }));
+    return res.filter(i => !!i);
   }
 
   public get(name: keyof T) {
