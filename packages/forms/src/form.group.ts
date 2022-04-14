@@ -97,7 +97,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
 
   private updateValueAndValidityOnEvent(method: Function) {
     const self = this;
-    return function(
+    return function (
       this: AbstractInput,
       event: { target: AbstractInput }
     ) {
@@ -107,9 +107,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
         ...((self
           .getFormElement()
           .querySelectorAll(selector) as any) as Map<
-          string,
-          NodeListOf<Element>
-        >).values()
+            string,
+            NodeListOf<Element>
+          >).values()
       ].length;
       let value = this.value as any;
       if (
@@ -132,7 +132,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
         if (!self.options.multi && this.type === 'checkbox') {
           value = inputsWithBindings.map(e => e.value);
         }
-  
+
         if (self.options.multi) {
           inputsWithBindings.forEach(el => (el.checked = false));
           this.checked = true;
@@ -178,8 +178,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
     ) as HTMLFormElement;
     if (!form) {
       throw new Error(
-        `Form element with name "${this.options.name}" not present inside ${
-          this.getParentElement().outerHTML
+        `Form element with name "${this.options.name}" not present inside ${this.getParentElement().outerHTML
         } component`
       );
     }
@@ -192,9 +191,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
 
   private querySelectAll(name: string) {
     return [...((<never>this.form.querySelectorAll(name)) as Map<
-    string,
-    AbstractInput
-  >).values()]
+      string,
+      AbstractInput
+    >).values()]
   }
   public querySelectorAllInputs() {
     return [
@@ -209,7 +208,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
     return inputs.map((el: AbstractInput) => {
       const strategy = `on${this.options.strategy}`;
       if (!el[strategy]) {
-        el[strategy] = function() {};
+        el[strategy] = function () { };
       }
       const customAttributes = Object.keys(el.attributes)
         .map(k =>
@@ -251,8 +250,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
 
     if (!isInputPresent.length) {
       throw new Error(
-        `Missing input element with name ${input.name} for form ${
-          this.getFormElement().name
+        `Missing input element with name ${input.name} for form ${this.getFormElement().name
         }`
       );
     }
@@ -352,11 +350,12 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
     return this.value[name];
   }
 
-  public setValue(name: keyof T, value: string | boolean | number) {
+  public setValue(name: keyof T, value: any) {
+    const input = this.get(name);
+    input.value = value;
     const values = this.value;
     values[name as string] = value;
     this.value = values;
-    return values;
   }
 
   public setFormValue(value: T) {
@@ -370,7 +369,10 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
 
   public setInputs(inputs: AbstractInput[]) {
     this.inputs = new Map<keyof T, AbstractInput>(
-      inputs.map(e => [e.name as keyof T, e])
+      inputs.map(e => {
+        e.value = this.getValue(e.name as keyof T) as never;
+        return [e.name as keyof T, e];
+      })
     );
   }
 
