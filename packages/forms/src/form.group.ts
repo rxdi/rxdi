@@ -290,9 +290,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
       .map(v => {
         this.errors[element.name] = this.errors[element.name] || {};
         const error = v.bind(this.getParentElement())(element);
-        if (error) {
-          element.focus();
-        }
+        // if (error) {
+        //   element.focus();
+        // }
         if (error && error.key) {
           this.errors[element.name][error.key] = error.message;
           this.errorMap.set(v, error.key);
