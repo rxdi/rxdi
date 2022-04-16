@@ -197,6 +197,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
     return [
       ...this.querySelectAll('input'),
       ...this.querySelectAll('select'),
+      ...this.querySelectAll('textarea'),
     ]
       .filter(el => this.isInputPresentOnStage(el))
       .filter(el => !!el.name);
