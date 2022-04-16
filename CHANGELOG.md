@@ -1,4 +1,4 @@
-## [0.7.150](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.150) (2022-04-14)
+## [0.7.151](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.151) (2022-04-16)
 
 
 ### Bug Fixes
@@ -9,6 +9,7 @@
 * **core:** removed bin from package.json ([2fb387a](https://github.com/rxdi/mono/commit/2fb387a752daa7e109f842fc0049b3e2abb6d37e))
 * **credit-card-form:** added correct dependencies ([a3cdac8](https://github.com/rxdi/mono/commit/a3cdac815b01abcbfddd3157868cf1eadce743bc))
 * **forms:** added element focus on validate ([0e0bef7](https://github.com/rxdi/mono/commit/0e0bef78a8e4248622288e7fd629d4bc1b36901d))
+* **forms:** added query select by textarea ([0cccbd7](https://github.com/rxdi/mono/commit/0cccbd7c26d869b80ffcfc42f73080130cbd4c23))
 * **forms:** inputs now defaults to value provided inside form group ([b0c99a0](https://github.com/rxdi/mono/commit/b0c99a01c322ae85cbe61a29ecf21ac5b0d87cd1))
 * **forms:** reverted back focus ([f97f8b6](https://github.com/rxdi/mono/commit/f97f8b66d4392dd3ea5d720aa99f6ac64f827197))
 * **graphql-client:** fixed missing export of GraphQLRequest from apollo-link ([ed35dbf](https://github.com/rxdi/mono/commit/ed35dbf99869ef25634f1307b6e819d742bd140c))
