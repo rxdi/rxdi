@@ -1,17 +1,14 @@
 import { Injectable, Inject } from '@rxdi/core';
-import * as neo4jgql from 'neo4j-graphql-js';
-import { NEO4J_MODULE_CONFIG } from '../injection.tokens';
-import { GRAPHQL_PLUGIN_CONFIG } from '@rxdi/graphql';
+import { NEO4J_DRIVER, NEO4J_MODULE_CONFIG, Relationship, RelationshipMap, RelationshipType } from '../injection.tokens';
 import { mergeSchemas } from 'graphql-tools';
 import * as neo4j from 'neo4j-driver';
-import { generateTypeDefs } from '../helpers/generate-type-defs';
-import { GraphQLSchema, validateSchema } from 'graphql';
+import { Neo4jGraphQL } from '@neo4j/graphql';
+import { GraphQLObjectType, GraphQLSchema, printSchema, validateSchema } from 'graphql';
 
 @Injectable()
 export class UtilService {
   constructor(
     @Inject(NEO4J_MODULE_CONFIG) private config: NEO4J_MODULE_CONFIG,
-    @Inject(GRAPHQL_PLUGIN_CONFIG) private gqlConfig: GRAPHQL_PLUGIN_CONFIG
   ) { }
 
   private extendSchemaDirectives(
@@ -30,14 +27,21 @@ export class UtilService {
   }
 
   augmentSchema(schema: GraphQLSchema) {
-    this.validateSchema(schema);
-    return this.extendSchemaDirectives(
-      neo4jgql.makeAugmentedSchema({
-        typeDefs: generateTypeDefs(schema),
-        config: this.config.excludedTypes
-      }),
-      schema
-    );
+    return async (driver: NEO4J_DRIVER) => {
+      this.validateSchema(schema);
+
+      const typeDefs = this.generateTypeDefs(schema);
+
+      const neoSchema = new Neo4jGraphQL({
+        typeDefs,
+        driver,
+        assumeValidSDL: true,
+      });
+      return this.extendSchemaDirectives(
+        await neoSchema.getSchema(),
+        schema
+      );
+    }
   }
 
   mergeSchemas(...schemas: GraphQLSchema[]) {
@@ -50,12 +54,50 @@ export class UtilService {
   }
 
   assignDriverToContext() {
-    const driver = neo4j.driver(
+    return neo4j.driver(
       this.config.address || 'bolt://localhost:7687',
       neo4j.auth.basic(this.config.username, this.config.password)
     );
-    this.gqlConfig.graphqlOptions.context = this.gqlConfig.graphqlOptions.context || {};
-    Object.assign(this.gqlConfig.graphqlOptions.context, { driver });
-    return driver;
+  }
+
+  generateTypeDefs(schema: GraphQLSchema) {
+    return Object.values(this.findRelations(schema)).reduce(
+      (curr, prev) => curr.replace(prev.searchIndex, prev.replaceWith),
+      printSchema(schema)
+    );
+  }
+
+  private findRelations(schema: GraphQLSchema) {
+    const relations = {} as RelationshipMap;
+    Object.values(schema.getQueryType()).forEach(field => {
+      if (!field) {
+        return;
+      }
+      if (typeof field === 'string') {
+        return;
+      }
+
+      Object.keys(field).reduce((prev, currentType) => {
+        const type = field[currentType].type as GraphQLObjectType;
+        if (type && typeof type.getFields === 'function') {
+          Object.entries(type.getFields()).map(([key, value]) => {
+            relations[currentType] =
+              relations[currentType] || ({} as RelationshipType);
+            const relation = value['relation'] as Relationship;
+            if (typeof relation === 'object') {
+              relations[currentType].searchIndex = `${key}: ${value.type}`;
+              const cyper =
+                relation.cyper ||
+                `@relationship(type: "${relation.name}", direction: ${relation.direction})`;
+              relations[
+                currentType
+              ].replaceWith = `${relations[currentType].searchIndex} ${cyper}`;
+            }
+          });
+        }
+        return prev;
+      }, {} as RelationshipType);
+    });
+    return relations;
   }
 }

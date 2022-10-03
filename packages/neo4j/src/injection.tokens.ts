@@ -1,15 +1,8 @@
 import { InjectionToken } from '@rxdi/core';
 import { GraphQLObjectType, GraphQLSchema } from 'graphql';
 import { ResponseToolkit } from 'hapi';
-import { neo4jgraphql, AugmentSchemaConfig } from 'neo4j-graphql-js';
+import { Driver } from 'neo4j-driver';
 
-export const Neo4JTypes = new InjectionToken<GraphQLObjectType[]>(
-  'GAPI_NEO4J_TYPES'
-);
-
-interface Neo4JTypesPrivate extends GraphQLObjectType { }
-
-export type Neo4JTypes = Neo4JTypesPrivate[];
 
 export const NEO4J_MODULE_CONFIG = new InjectionToken<NEO4J_MODULE_CONFIG>(
   'GAPI_NEO4J_MODULE_CONFIG'
@@ -40,11 +33,9 @@ export interface RelationshipMap {
 }
 
 export interface NEO4J_MODULE_CONFIG {
-  types?: GraphQLObjectType[];
   username?: string;
   password?: string;
   address?: string | 'bolt://localhost:7687';
-  excludedTypes?: AugmentSchemaConfig;
   debug?: boolean;
   auth?: boolean;
   context?: any;
@@ -56,16 +47,10 @@ export interface NEO4J_MODULE_CONFIG {
   ): Promise<any>;
   schemaOverride?(schema: GraphQLSchema): GraphQLSchema;
 }
-
+/**
+ * Neo4j driver @rxdi injection token
+ */
 export const NEO4J_DRIVER = new InjectionToken('GAPI_NEO4J_MODULE_CONFIG');
-
-const graphRequest: <T>(root, params, ctx, resolveInfo) => Promise<T> = (
-  root,
-  params,
-  ctx,
-  resolveInfo
-) => neo4jgraphql(root, params, ctx, resolveInfo);
-
-export { graphRequest };
+export type NEO4J_DRIVER = Driver;
 
 export { Driver } from 'neo4j-driver';
