@@ -26,8 +26,8 @@
   },
   "homepage": "https://github.com/rxdi/neo4j/blob/master/README.md",
   "dependencies": {
-    "neo4j-driver": "^1.7.2",
-    "neo4j-graphql-js": "^2.14.0"
+    "neo4j-driver": "^5.0.1",
+    "neo4j-graphql-js": "^2.19.4"
   },
   "devDependencies": {
     "graphql": "^14.5.8",

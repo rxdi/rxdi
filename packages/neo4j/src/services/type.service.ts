@@ -35,11 +35,11 @@ export class TypeService {
       ...exclude(c, 'mutation', this.defaultExcludedTypes),
       ...exclude(c, 'query', this.defaultExcludedTypes)
     };
-    c.excludedTypes.mutation.exclude = mapToString(
-      c.excludedTypes.mutation.exclude
+    c.excludedTypes.mutation['exclude'] = mapToString(
+      c.excludedTypes.mutation['exclude']
     );
-    c.excludedTypes.mutation.exclude = mapToString(
-      c.excludedTypes.mutation.exclude
+    c.excludedTypes.mutation['exclude'] = mapToString(
+      c.excludedTypes.mutation['exclude']
     );
     return c;
   }

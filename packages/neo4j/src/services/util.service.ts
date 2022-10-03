@@ -1,18 +1,18 @@
 import { Injectable, Inject } from '@rxdi/core';
-import { GraphQLSchema, validateSchema } from 'graphql';
 import * as neo4jgql from 'neo4j-graphql-js';
 import { NEO4J_MODULE_CONFIG } from '../injection.tokens';
 import { GRAPHQL_PLUGIN_CONFIG } from '@rxdi/graphql';
 import { mergeSchemas } from 'graphql-tools';
-import { v1 as neo4j } from 'neo4j-driver';
+import * as neo4j from 'neo4j-driver';
 import { generateTypeDefs } from '../helpers/generate-type-defs';
+import { GraphQLSchema, validateSchema } from 'graphql';
 
 @Injectable()
 export class UtilService {
   constructor(
     @Inject(NEO4J_MODULE_CONFIG) private config: NEO4J_MODULE_CONFIG,
     @Inject(GRAPHQL_PLUGIN_CONFIG) private gqlConfig: GRAPHQL_PLUGIN_CONFIG
-  ) {}
+  ) { }
 
   private extendSchemaDirectives(
     augmentedSchema: GraphQLSchema,

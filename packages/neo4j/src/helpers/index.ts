@@ -9,7 +9,7 @@ export const exclude = (
 ) => ({
   [type]: {
     exclude: defaultExcludedTypes.concat(
-      ...(c!.excludedTypes![type]!.exclude! as any)
+      ...(c!.excludedTypes![type]!['exclude']! as any)
     )
   }
 });
