@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/graphql-rabbitmq-subscriptions",
-  "version": "0.7.151",
+  "version": "0.7.152",
   "description": "A graphql-subscriptions PubSub Engine using RabbitMQ",
   "main": "dist/index.js",
   "repository": {
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "graphql-subscriptions": "^1.1.0",
-    "@rxdi/rabbitmq-pubsub": "^0.7.151"
+    "@rxdi/rabbitmq-pubsub": "^0.7.152"
   },
   "devDependencies": {
     "@types/node": "^12.0.10",

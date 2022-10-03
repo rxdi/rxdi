@@ -1,4 +1,4 @@
-## [0.7.151](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.151) (2022-04-16)
+## [0.7.152](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.152) (2022-10-03)
 
 
 ### Bug Fixes
@@ -85,6 +85,7 @@
 * **lit-html:** bumped to 2.0.0 refactored code to fit new exports ([bf1a100](https://github.com/rxdi/mono/commit/bf1a100cd1c95dfa115278546b19147b9eab2110))
 * **lit-html:** modifiers logic added ([5808050](https://github.com/rxdi/mono/commit/5808050c71f778a379e6d88986deb980383302ec))
 * **lit-html:** removed dependencies added monorepo packages to be on one place due to DENO build fails ([af937e7](https://github.com/rxdi/mono/commit/af937e7379b3e11b621becae3efbb16aa84b4f28))
+* **neo4j:** bumped version of neo4j driver and neo4j graphql js ([f669981](https://github.com/rxdi/mono/commit/f6699814dee357065c719fa48763e6a0f91e7ea2))
 * **pubsub:** global prefetch added on channel config ([3a32a33](https://github.com/rxdi/mono/commit/3a32a33af44a49099f0156c519b1155877fcbad6))
 * **pubsub:** prefetch property added in order one worker to acknowladge single message then process another ([b16491b](https://github.com/rxdi/mono/commit/b16491b1586a9a5ae6c5e32407d57f7c8347b4f6))
 * **rabbitmq-pubsub:** added new library for handling subscriptions using rabbitmq removed banyan from dependencies ([5225543](https://github.com/rxdi/mono/commit/522554302c5f61f81278392b4f0688aae1738794))
