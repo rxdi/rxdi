@@ -2,6 +2,7 @@ import { InjectionToken } from '@rxdi/core';
 import { GraphQLSchema } from 'graphql';
 import { Driver } from 'neo4j-driver';
 
+
 export const NEO4J_MODULE_CONFIG = new InjectionToken<NEO4J_MODULE_CONFIG>(
   'GAPI_NEO4J_MODULE_CONFIG'
 );
@@ -11,6 +12,7 @@ export interface NEO4J_MODULE_CONFIG {
   password?: string;
   address?: string | 'bolt://localhost:7687';
   schemaOverride?(schema: GraphQLSchema): GraphQLSchema;
+  schema?: Promise<string>;
 }
 
 export interface RelationshipType {

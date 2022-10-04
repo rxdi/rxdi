@@ -47,19 +47,27 @@ export class UtilService {
 
   augmentSchema(schema: GraphQLSchema) {
     return async (driver: NEO4J_DRIVER) => {
+
       this.validateSchema(schema);
+
+      const typedSchema = await this.config.schema;
+
       const typeDefs = this.generateTypeDefs(schema);
-      await this.initOgmClient(typeDefs)(driver)
       const neoSchema = new Neo4jGraphQL({
-        typeDefs,
+        typeDefs: `${typeDefs} ${typedSchema ?? ''}`,
         driver,
         assumeValidSDL: true,
       });
+
       const augmentedSchema = await neoSchema.getSchema();
+
       const newSchema = this.extendSchemaDirectives(
         augmentedSchema,
         schema
       );
+
+      await this.initOgmClient(typeDefs)(driver)
+
       return newSchema;
     }
   }

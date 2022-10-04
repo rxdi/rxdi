@@ -43,7 +43,7 @@ export class Neo4JModule {
               useFactory: (util: UtilService, driver: NEO4J_DRIVER) => async (schema: GraphQLSchema) =>
                 util.augmentSchema(schema)(driver)
             }
-          ])
+          ]),
       ]
     };
   }
