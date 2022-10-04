@@ -1,72 +1,73 @@
 {
-  "name": "@rxdi/neo4j",
-  "version": "0.7.154",
-  "description": "",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "module": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
-  "files": [
-    "dist"
+ "name": "@rxdi/neo4j",
+ "version": "0.7.154",
+ "description": "",
+ "main": "./dist/index.js",
+ "types": "./dist/index.d.ts",
+ "module": "./dist/index.js",
+ "typings": "./dist/index.d.ts",
+ "files": [
+  "dist"
+ ],
+ "scripts": {
+  "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
+  "pretest": "npm run lint",
+  "test": "echo Test Neo4J",
+  "build": "tsc || true"
+ },
+ "repository": {
+  "type": "git",
+  "url": "https://github.com/rxdi/neo4j"
+ },
+ "author": "Kristiyan Tachev (@Stradivario)",
+ "license": "MIT",
+ "bugs": {
+  "url": "https://github.com/rxdi/neo4j/issues"
+ },
+ "homepage": "https://github.com/rxdi/neo4j/blob/master/README.md",
+ "dependencies": {
+  "@neo4j/graphql": "^3.9.0",
+  "@neo4j/graphql-ogm": "^3.9.0",
+  "neo4j-driver": "^5.0.1"
+ },
+ "devDependencies": {
+  "graphql": "^14.5.8",
+  "@types/graphql": "^14.5.0",
+  "graphql-tools": "^5.0.0",
+  "@rxdi/core": "^0.7.153",
+  "@rxdi/graphql": "^0.7.153",
+  "@types/hapi": "^18.0.4",
+  "@types/jest": "^24.0.22",
+  "@types/node": "^12.0.10",
+  "jest": "^24.8.0",
+  "jest-cli": "^24.8.1",
+  "ts-jest": "^24.0.2",
+  "tslint": "^5.20.1",
+  "tslint-language-service": "^0.9.9",
+  "typescript": "^4.3.5"
+ },
+ "jest": {
+  "testEnvironment": "node",
+  "testPathIgnorePatterns": [
+   "/node_modules/"
   ],
-  "scripts": {
-    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-    "pretest": "npm run lint",
-    "test": "echo Test Neo4J",
-    "build": "tsc || true"
+  "coverageReporters": [
+   "lcov",
+   "html"
+  ],
+  "rootDir": "./",
+  "moduleFileExtensions": [
+   "ts",
+   "tsx",
+   "js",
+   "json",
+   "node"
+  ],
+  "transform": {
+   "\\.(ts|tsx)$": "ts-jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/rxdi/neo4j"
-  },
-  "author": "Kristiyan Tachev (@Stradivario)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/rxdi/neo4j/issues"
-  },
-  "homepage": "https://github.com/rxdi/neo4j/blob/master/README.md",
-  "dependencies": {
-    "@neo4j/graphql": "^3.8.0",
-    "neo4j-driver": "^5.0.1"
-  },
-  "devDependencies": {
-    "graphql": "^14.5.8",
-    "@types/graphql": "^14.5.0",
-    "graphql-tools": "^5.0.0",
-    "@rxdi/core": "^0.7.154",
-    "@rxdi/graphql": "^0.7.154",
-    "@types/hapi": "^18.0.4",
-    "@types/jest": "^24.0.22",
-    "@types/node": "^12.0.10",
-    "jest": "^24.8.0",
-    "jest-cli": "^24.8.1",
-    "ts-jest": "^24.0.2",
-    "tslint": "^5.20.1",
-    "tslint-language-service": "^0.9.9",
-    "typescript": "^4.3.5"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "testPathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "coverageReporters": [
-      "lcov",
-      "html"
-    ],
-    "rootDir": "./",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "node"
-    ],
-    "transform": {
-      "\\.(ts|tsx)$": "ts-jest"
-    },
-    "testRegex": "/src/.*\\.spec.(ts|tsx|js)$",
-    "verbose": true,
-    "collectCoverage": true
-  }
+  "testRegex": "/src/.*\\.spec.(ts|tsx|js)$",
+  "verbose": true,
+  "collectCoverage": true
+ }
 }

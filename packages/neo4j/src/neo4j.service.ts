@@ -15,12 +15,15 @@ import {
   printSchema,
   validateSchema
 } from 'graphql';
+import { OGMProvider } from './ogm.provider';
+import { OGM } from '@neo4j/graphql-ogm';
 
 @Injectable()
 export class UtilService {
   constructor(
     @Inject(NEO4J_MODULE_CONFIG)
     private config: NEO4J_MODULE_CONFIG,
+    private ogmProvider: OGMProvider
   ) { }
 
   private extendSchemaDirectives(
@@ -46,16 +49,31 @@ export class UtilService {
     return async (driver: NEO4J_DRIVER) => {
       this.validateSchema(schema);
       const typeDefs = this.generateTypeDefs(schema);
+      await this.initOgmClient(typeDefs)(driver)
       const neoSchema = new Neo4jGraphQL({
         typeDefs,
         driver,
         assumeValidSDL: true,
       });
       const augmentedSchema = await neoSchema.getSchema();
-      return this.extendSchemaDirectives(
+      const newSchema = this.extendSchemaDirectives(
         augmentedSchema,
         schema
       );
+      return newSchema;
+    }
+  }
+
+  initOgmClient(typeDefs: string) {
+    return async (driver: NEO4J_DRIVER) => {
+      const ogm = new OGM({
+        assumeValidSDL: true,
+        assumeValid: true,
+        typeDefs,
+        driver
+      });
+      await ogm.init();
+      this.ogmProvider.client = ogm;
     }
   }
 

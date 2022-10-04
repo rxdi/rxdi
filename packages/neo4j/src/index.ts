@@ -6,9 +6,10 @@ import {
 import { SCHEMA_OVERRIDE } from '@rxdi/graphql';
 import { GraphQLSchema } from 'graphql';
 import { UtilService } from './neo4j.service';
+import { OGMProvider } from './ogm.provider';
 
 @Module({
-  providers: [UtilService]
+  providers: [UtilService, OGMProvider]
 })
 export class Neo4JModule {
   public static forRoot(
