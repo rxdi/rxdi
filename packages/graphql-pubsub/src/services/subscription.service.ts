@@ -19,11 +19,12 @@ import {
 
 @Service()
 export class SubscriptionService implements PluginInterface {
+  public wsServer: SubscriptionServer;
   constructor(
     @Inject(HAPI_SERVER) private server: Server,
     @Inject(GRAPHQL_PLUGIN_CONFIG) private config: GRAPHQL_PLUGIN_CONFIG,
     @Inject(GRAPHQL_PUB_SUB_CONFIG) private pubConfig: GRAPHQL_PUB_SUB_DI_CONFIG
-  ) {}
+  ) { }
 
   OnInit() {
     console.log('Subscription');
@@ -66,10 +67,11 @@ export class SubscriptionService implements PluginInterface {
         currentC.onDisconnect = auth.onSubDisconnect.bind(auth);
       }
     }
-    new SubscriptionServer(currentC, {
+    this.wsServer = new SubscriptionServer(currentC, {
       server: this.server.listener,
       path: '/subscriptions',
       ...this.pubConfig.subscriptionServerOptions,
     });
+
   }
 }
