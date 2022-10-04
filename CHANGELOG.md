@@ -1,4 +1,4 @@
-## [0.7.154](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.154) (2022-10-04)
+## [0.7.155](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.155) (2022-10-04)
 
 
 ### Bug Fixes
@@ -86,6 +86,7 @@
 * **lit-html:** modifiers logic added ([5808050](https://github.com/rxdi/mono/commit/5808050c71f778a379e6d88986deb980383302ec))
 * **lit-html:** removed dependencies added monorepo packages to be on one place due to DENO build fails ([af937e7](https://github.com/rxdi/mono/commit/af937e7379b3e11b621becae3efbb16aa84b4f28))
 * **neo4j:** bumped version of neo4j driver and neo4j graphql js ([f669981](https://github.com/rxdi/mono/commit/f6699814dee357065c719fa48763e6a0f91e7ea2))
+* **neo4j:** orm for neo4j added to the stack ([feeda88](https://github.com/rxdi/mono/commit/feeda88ef9c7ee23f7ccf502a212e1b996ce4878))
 * **neo4j:** removed unused logic added more clear transition to augmented schema from new neo4j graphql package ([58089ff](https://github.com/rxdi/mono/commit/58089ff971674ea12f58ee515df2e5a8a89005ec))
 * **neo4j:** updated library to use latest neo4j graphql official package ([2a853f8](https://github.com/rxdi/mono/commit/2a853f8832facc7a0f28e258eeb2b83a78d8f97f))
 * **pubsub:** global prefetch added on channel config ([3a32a33](https://github.com/rxdi/mono/commit/3a32a33af44a49099f0156c519b1155877fcbad6))
