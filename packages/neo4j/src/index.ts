@@ -3,12 +3,12 @@ import {
   NEO4J_MODULE_CONFIG,
   NEO4J_DRIVER
 } from './injection.tokens';
-import { ON_REQUEST_HANDLER, SCHEMA_OVERRIDE } from '@rxdi/graphql';
+import { SCHEMA_OVERRIDE } from '@rxdi/graphql';
 import { GraphQLSchema } from 'graphql';
-import { UtilService } from './services/util.service';
+import { UtilService } from './neo4j.service';
 
 @Module({
-  providers: []
+  providers: [UtilService]
 })
 export class Neo4JModule {
   public static forRoot(
@@ -17,25 +17,16 @@ export class Neo4JModule {
     return {
       module: Neo4JModule,
       providers: [
+        UtilService,
         {
           provide: NEO4J_MODULE_CONFIG,
           useValue: config
         },
-        ...(config.onRequest
-          ? [
-            {
-              provide: ON_REQUEST_HANDLER,
-              deps: [NEO4J_MODULE_CONFIG],
-              useFactory: (config: NEO4J_MODULE_CONFIG) => config.onRequest
-            }
-          ]
-          : [
-            {
-              provide: NEO4J_DRIVER,
-              deps: [UtilService],
-              useFactory: (util: UtilService) => util.assignDriverToContext()
-            }
-          ]),
+        {
+          provide: NEO4J_DRIVER,
+          deps: [UtilService],
+          useFactory: (util: UtilService) => util.createDriver()
+        },
         ...(config.schemaOverride
           ? [
             {
@@ -59,4 +50,4 @@ export class Neo4JModule {
 }
 
 export * from './injection.tokens';
-export * from './services';
+export * from './neo4j.service';
