@@ -110,16 +110,21 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
           >).values()
       ].length;
       let value = this.value as any;
-      if (
-        hasMultipleBindings === 1 &&
-        (this.type === 'checkbox' || this.type === 'radio')
-      ) {
-        value = String(this.checked);
+
+      if (hasMultipleBindings === 1) {
+        if (this.type === 'radio') {
+          value = String(this.checked);
+        }
+
+        if (this.type === 'checkbox') {
+          value = this.checked;
+        }
       }
 
       if (this.type === 'number') {
         value = Number(value);
       }
+
       const inputsWithBindings = [
         ...((<never>(
           self.getFormElement().querySelectorAll(`input[name="${this.name}"]:checked`)
