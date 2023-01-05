@@ -1,4 +1,4 @@
-## [0.7.156](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.156) (2022-10-04)
+## [0.7.157](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.157) (2023-01-05)
 
 
 ### Bug Fixes
@@ -12,6 +12,7 @@
 * **forms:** added query select by textarea ([0cccbd7](https://github.com/rxdi/mono/commit/0cccbd7c26d869b80ffcfc42f73080130cbd4c23))
 * **forms:** inputs now defaults to value provided inside form group ([b0c99a0](https://github.com/rxdi/mono/commit/b0c99a01c322ae85cbe61a29ecf21ac5b0d87cd1))
 * **forms:** reverted back focus ([f97f8b6](https://github.com/rxdi/mono/commit/f97f8b66d4392dd3ea5d720aa99f6ac64f827197))
+* **forms:** type checkbox was not parsed correctly as a boolean instead it was string ([f2395e0](https://github.com/rxdi/mono/commit/f2395e06f6edeb05be19c7f6a2c5786b45780e3e))
 * **graphql-client:** fixed missing export of GraphQLRequest from apollo-link ([ed35dbf](https://github.com/rxdi/mono/commit/ed35dbf99869ef25634f1307b6e819d742bd140c))
 * **graphql-client:** subscription websocket link now takes authorization token lazily ([c0b525c](https://github.com/rxdi/mono/commit/c0b525c9ce86b7f56ccbaee804dd1d14103ee69e))
 * **graphql-pubsub:** added connection with credentials for amqp protocol ([3c8b320](https://github.com/rxdi/mono/commit/3c8b320f199503fed3e9e4cfd28660c5a3ad2de1))
