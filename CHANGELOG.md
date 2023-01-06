@@ -1,4 +1,4 @@
-## [0.7.157](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.157) (2023-01-05)
+## [0.7.158](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.158) (2023-01-06)
 
 
 ### Bug Fixes
@@ -46,6 +46,7 @@
 * **lit-html:** pipe function is not correctly implemented ([7a16c3b](https://github.com/rxdi/mono/commit/7a16c3b1fcb3e4df18e33850415c411f94c20a4f))
 * **lit-html:** registry is set on a global level not in for cicle ([f1ca0c0](https://github.com/rxdi/mono/commit/f1ca0c00d5418210e1e61c19daed5cbd3dfe183d))
 * **lit-html:** registry not defined define custom registry ([dc7ea8f](https://github.com/rxdi/mono/commit/dc7ea8fe69f9f2dc4f8ab3bb0af9567ab060a7f9))
+* **lit-html:** removed all occurencies of lit html fork and re-exported original lit with version 2.5.0 ([1c5436c](https://github.com/rxdi/mono/commit/1c5436c5527c494a109a0855ff483514af142537))
 * **lit-html:** removed import for directives only async or subscribe directive will be left ([261e9da](https://github.com/rxdi/mono/commit/261e9da94f8be056b3c1912049701f871454ddbc))
 * **lit-html:** renamed directives to modifiers ([a011444](https://github.com/rxdi/mono/commit/a0114449339fa49ef466e8cbb0bac6ebf1fe18f2))
 * **lit-html:** trusted html type removed since it is not recommended to be used at the moment ([227ec08](https://github.com/rxdi/mono/commit/227ec0883cfff11d1cbe363ce534e81b306cefc6))
