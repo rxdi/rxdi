@@ -1,6 +1,4 @@
-import { LitElement } from '../lit-element';
-import { html, render, TemplateResult } from '../lit-html/lit-html';
-import { CSSResult } from '../reactive-element/css-tag';
+import { LitElement, html, render, TemplateResult, CSSResult } from 'lit';
 
 export interface CustomAttributeRegistry {
   define(name: string, modifier: Function | Modifier): void;

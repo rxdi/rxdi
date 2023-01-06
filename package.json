@@ -86,7 +86,8 @@
   "mousetrap": "^1.6.5",
   "msgpack5": "^5.3.1",
   "node-lzw": "^0.3.1",
-  "urlsafe-base64": "^1.0.0"
+  "urlsafe-base64": "^1.0.0",
+  "lit":"^2.5.0"
  },
  "devDependencies": {
   "@types/bunyan": "^1.8.0",
