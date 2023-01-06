@@ -79,7 +79,7 @@
     "readable-stream": "^2.2.9",
     "archiver": "^3.1.1",
     "request": "^2.88.0",
-    "async": "^2.5.0",
+    "async": "^2.6.4",
     "graphql-subscriptions": "^1.1.0",
     "@neo4j/graphql": "^3.9.0",
     "@neo4j/graphql-ogm": "^3.9.0",
