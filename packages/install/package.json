@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/install",
-  "version": "0.7.159",
+  "version": "0.7.160",
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
