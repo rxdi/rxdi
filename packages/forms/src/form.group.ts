@@ -358,6 +358,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
 
   public setValue(name: keyof T, value: any) {
     const input = this.get(name);
+    if (!input) {
+      return;
+    }
     input.value = value;
     const values = this.value;
     values[name as string] = value;
