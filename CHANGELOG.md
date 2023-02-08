@@ -1,4 +1,4 @@
-## [0.7.161](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.161) (2023-01-24)
+## [0.7.162](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.162) (2023-02-08)
 
 
 ### Bug Fixes
@@ -15,6 +15,7 @@
 * **forms:** type checkbox was not parsed correctly as a boolean instead it was string ([f2395e0](https://github.com/rxdi/mono/commit/f2395e06f6edeb05be19c7f6a2c5786b45780e3e))
 * **graphql-client:** fixed missing export of GraphQLRequest from apollo-link ([ed35dbf](https://github.com/rxdi/mono/commit/ed35dbf99869ef25634f1307b6e819d742bd140c))
 * **graphql-client:** subscription websocket link now takes authorization token lazily ([c0b525c](https://github.com/rxdi/mono/commit/c0b525c9ce86b7f56ccbaee804dd1d14103ee69e))
+* **graphql-client:** unauthenticated property can be added which will reload the page if websocket tries to connect with expired token or wrong one ([38ec592](https://github.com/rxdi/mono/commit/38ec592fb15f52c916506ccfad99b64cfa0fa585))
 * **graphql-pubsub:** added connection with credentials for amqp protocol ([3c8b320](https://github.com/rxdi/mono/commit/3c8b320f199503fed3e9e4cfd28660c5a3ad2de1))
 * **graphql-pubsub:** barell export moved to client core ([0e0099c](https://github.com/rxdi/mono/commit/0e0099caf6653e61693c519eae2c22de35fcd14e))
 * **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
