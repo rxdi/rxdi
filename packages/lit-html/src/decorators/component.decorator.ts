@@ -104,6 +104,10 @@ const customElement = <T>(
   tag: string,
   config: CustomElementConfig<T> = {} as CustomElementConfig<T>
 ) => <K extends new (...args: any[]) => {}>(Base: K) => {
+  /* Feature flag implementation where we don't define at all components when they are excluded */
+  if (window._excluded_components?.includes(config.selector)) {
+    return () => null;
+  }
   if (!tag || (tag && tag.indexOf('-') <= 0)) {
     throw new Error(
       `You need at least 1 dash in the custom element name! ${Base}`
@@ -249,3 +253,10 @@ Possible Solutions:
 
 export const Component = <T>(config: CustomElementConfig<T>) =>
   customElement(config.selector, config);
+
+
+declare global {
+  interface Window {
+    _excluded_components: string[];
+  }
+}
