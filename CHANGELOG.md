@@ -1,4 +1,4 @@
-## [0.7.163](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.163) (2023-02-14)
+## [0.7.164](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.164) (2023-02-14)
 
 
 ### Bug Fixes
@@ -31,6 +31,7 @@
 * **Hotkeys:** unbinding leads to not subscribing again to observable. we will leave it like so ([4720e9f](https://github.com/rxdi/mono/commit/4720e9f608f15fbb63404c162017607b6020d715))
 * **http:** added export and documentation ([58f7ebb](https://github.com/rxdi/mono/commit/58f7ebbfcbb43939d9eeb6c48e6ac037a5d7b547))
 * **lit-html:** added correct re-exports ([9722efd](https://github.com/rxdi/mono/commit/9722efd025721e1b14fdd94d16b29f22537dcacb))
+* **lit-html:** added type never to not interfeer with return type of decorator ([5f3f96d](https://github.com/rxdi/mono/commit/5f3f96d365547634b916ca267d743bb2bd7c63d9))
 * **lit-html:** async directive fix for unsubscribe ([e28b52f](https://github.com/rxdi/mono/commit/e28b52f57c2e56c85c00380a0e64735fccf33685))
 * **lit-html:** custom attribute registry unsubscribtion from events ([16de121](https://github.com/rxdi/mono/commit/16de121a6e4dc1cb265f63299e8342c94a0b4456))
 * **lit-html:** customElement configuration interface re-exported ([c1af1ff](https://github.com/rxdi/mono/commit/c1af1ffce18c52ef2ea438b63c9fa5c2d84201b5))
