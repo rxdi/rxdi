@@ -106,7 +106,7 @@ const customElement = <T>(
 ) => <K extends new (...args: any[]) => {}>(Base: K) => {
   /* Feature flag implementation where we don't define at all components when they are excluded */
   if (window._excluded_components?.includes(config.selector)) {
-    return () => null;
+    return Base as never;
   }
   if (!tag || (tag && tag.indexOf('-') <= 0)) {
     throw new Error(
