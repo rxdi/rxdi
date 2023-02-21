@@ -12,17 +12,9 @@ import {
   Metadata,
   ServiceArgumentsInternal
 } from '../../decorators/module/module.interfaces';
-import { BootstrapLogger } from '../bootstrap-logger/index';
-
-const FRIENDLY_ERROR_MESSAGES = {
-  TRY_TO_UNSUBSCRIBE:
-    'Someone try to unsubscribe from collection directly... agghhh.. read docs! Blame: '
-};
 
 @Service()
 export class CacheService {
-  constructor(private logger: BootstrapLogger) {}
-
   public _cachedLayers: BehaviorSubject<
     CacheLayer<CacheLayerItem<any>>[]
   > = new BehaviorSubject([]);
@@ -89,12 +81,10 @@ export class CacheService {
                 ${moduleType} hash: ${dups[0].moduleHash}
                 Modules: [${dups[0].moduleName}, ${dups[1].moduleName}]
 
-                Hint: '${
-                  dups[0].originalName
-                }' class identity hash is identical in both
-                imported files inside ${dups[0].moduleName} and ${
-        dups[1].moduleName
-      }
+                Hint: '${dups[0].originalName
+        }' class identity hash is identical in both
+                imported files inside ${dups[0].moduleName} and ${dups[1].moduleName
+        }
                 consider removing one of the '${dups[0].originalName}'
             `);
     }
@@ -185,9 +175,6 @@ export class CacheService {
     cacheLayer.items.constructor.prototype.unsubsribeFromLayer =
       cacheLayer.items.constructor.prototype.unsubscribe;
     cacheLayer.items.constructor.prototype.unsubscribe = () => {
-      console.error(
-        FRIENDLY_ERROR_MESSAGES.TRY_TO_UNSUBSCRIBE + cacheLayer.name
-      );
     };
   }
 
@@ -196,7 +183,7 @@ export class CacheService {
       .pipe(
         timeoutWith(
           layerInstance.config.cacheFlushInterval ||
-            this.config.cacheFlushInterval,
+          this.config.cacheFlushInterval,
           of(1)
         ),
         skip(1),
