@@ -1,4 +1,4 @@
-## [0.7.164](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.164) (2023-02-14)
+## [0.7.165](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.165) (2023-02-21)
 
 
 ### Bug Fixes
@@ -7,6 +7,7 @@
 * **compressor:** added class with static methods and re-exported inside index ([b3e5429](https://github.com/rxdi/mono/commit/b3e54297dd78749bac964e56c64cbf16a22bcbef))
 * **compressor:** added correct types to compress and decompress ([e7df20a](https://github.com/rxdi/mono/commit/e7df20a5d768d11939f192a66139b306b2deaf16))
 * **core:** removed bin from package.json ([2fb387a](https://github.com/rxdi/mono/commit/2fb387a752daa7e109f842fc0049b3e2abb6d37e))
+* **core:** unsubscribe directly error message is obsolete and should be removed ([fc70634](https://github.com/rxdi/mono/commit/fc706344c4dea016fd63dda20edd40f9bf85d7df))
 * **credit-card-form:** added correct dependencies ([a3cdac8](https://github.com/rxdi/mono/commit/a3cdac815b01abcbfddd3157868cf1eadce743bc))
 * **forms:** added element focus on validate ([0e0bef7](https://github.com/rxdi/mono/commit/0e0bef78a8e4248622288e7fd629d4bc1b36901d))
 * **forms:** added query select by textarea ([0cccbd7](https://github.com/rxdi/mono/commit/0cccbd7c26d869b80ffcfc42f73080130cbd4c23))
