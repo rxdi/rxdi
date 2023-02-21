@@ -14,7 +14,7 @@
   "devDependencies": {
     "@rxdi/lit-html": "^0.7.165",
     "@types/node": "^12.0.10",
-    "rxjs": "^6.5.3",
+    "rxjs": "^7.8.0",
     "typescript": "^4.3.5"
   },
   "types": "./dist/index.d.ts",

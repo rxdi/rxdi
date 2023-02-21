@@ -55,7 +55,7 @@
     "boom": "^7.3.0",
     "fs-extra": "7.0.1",
     "graphql-tester": "0.0.5",
-    "rxjs": "^6.5.3",
+    "rxjs": "^7.8.0",
     "chokidar": "^3.0.2",
     "@angular-devkit/core": "^7.3.7",
     "@angular-devkit/schematics": "^7.3.7",

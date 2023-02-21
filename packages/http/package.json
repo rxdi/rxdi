@@ -28,7 +28,7 @@
   "homepage": "https://github.com/rxdi/mono/blob/master/README.md",
   "dependencies": {
     "@rxdi/core": "^0.7.165",
-    "rxjs": "^6.5.3"
+    "rxjs": "^7.8.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.22",
