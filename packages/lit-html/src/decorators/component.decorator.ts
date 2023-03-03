@@ -19,8 +19,11 @@ export interface CustomElementConfig<T> {
   style?: CSSResult;
   styles?: CSSResult[];
   extends?: string;
+  /** Custom attribute registry it is different than proposed ScopedElementRegistry */
   registry?: (this: T) => CustomAttributeRegistry;
   modifiers?: Modifier[];
+  /** Definitions of custom elements that are imported only for this component */
+  components?: Constructor<any>[];
   /**
    * Intended only for first render inside the DOM
    * for example we want app-component to be rendered
@@ -114,6 +117,8 @@ const customElement = <T>(
     );
   }
   config.styles = config.styles || [];
+  config.components = config.components || [];
+
   const OnInit = Base.prototype.OnInit || function () { };
   const OnDestroy = Base.prototype.OnDestroy || function () { };
   const OnUpdate = Base.prototype.OnUpdate || function () { };
