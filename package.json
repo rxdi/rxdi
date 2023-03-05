@@ -68,7 +68,7 @@
     "glob": "^7.1.2",
     "mkdirp": "^0.5.1",
     "@apollo/client": "^3.7.3",
-    "ws": "6.2.1",
+    "ws": "6.2.2",
     "subscriptions-transport-ws": "^0.9.19",
     "hapi": "^18.1.0",
     "inert": "^5.1.3",
