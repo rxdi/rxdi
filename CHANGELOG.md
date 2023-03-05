@@ -1,4 +1,4 @@
-## [0.7.167](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.167) (2023-03-03)
+## [0.7.168](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.168) (2023-03-05)
 
 
 ### Bug Fixes
@@ -12,6 +12,7 @@
 * **forms:** added element focus on validate ([0e0bef7](https://github.com/rxdi/mono/commit/0e0bef78a8e4248622288e7fd629d4bc1b36901d))
 * **forms:** added query select by textarea ([0cccbd7](https://github.com/rxdi/mono/commit/0cccbd7c26d869b80ffcfc42f73080130cbd4c23))
 * **forms:** inputs now defaults to value provided inside form group ([b0c99a0](https://github.com/rxdi/mono/commit/b0c99a01c322ae85cbe61a29ecf21ac5b0d87cd1))
+* **forms:** removed unnecessery console log ([390c6dd](https://github.com/rxdi/mono/commit/390c6ddf3a3ab5eedacbe754c3d96bd53a86b4f7))
 * **forms:** reverted back focus ([f97f8b6](https://github.com/rxdi/mono/commit/f97f8b66d4392dd3ea5d720aa99f6ac64f827197))
 * **forms:** type checkbox was not parsed correctly as a boolean instead it was string ([f2395e0](https://github.com/rxdi/mono/commit/f2395e06f6edeb05be19c7f6a2c5786b45780e3e))
 * **graphql-client:** fixed missing export of GraphQLRequest from apollo-link ([ed35dbf](https://github.com/rxdi/mono/commit/ed35dbf99869ef25634f1307b6e819d742bd140c))

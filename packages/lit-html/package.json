@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/lit-html",
-  "version": "0.7.167",
+  "version": "0.7.168",
   "main": "./dist/index.js",
   "author": "Kristiyan Tachev",
   "license": "MIT",
