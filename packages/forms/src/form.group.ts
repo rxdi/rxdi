@@ -252,12 +252,6 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
       v => v === input.name
     );
 
-    if (!isInputPresent.length) {
-      console.error(
-        `Missing input element with name ${input.name} for form ${this.getFormElement().name
-        }`
-      );
-    }
     return isInputPresent.length;
   }
 
