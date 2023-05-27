@@ -1,4 +1,4 @@
-## [0.7.168](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.168) (2023-03-05)
+## [0.7.169](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.169) (2023-05-27)
 
 
 ### Bug Fixes
@@ -11,6 +11,7 @@
 * **credit-card-form:** added correct dependencies ([a3cdac8](https://github.com/rxdi/mono/commit/a3cdac815b01abcbfddd3157868cf1eadce743bc))
 * **forms:** added element focus on validate ([0e0bef7](https://github.com/rxdi/mono/commit/0e0bef78a8e4248622288e7fd629d4bc1b36901d))
 * **forms:** added query select by textarea ([0cccbd7](https://github.com/rxdi/mono/commit/0cccbd7c26d869b80ffcfc42f73080130cbd4c23))
+* **forms:** added set timeout to init form in order for the first render to pass and to apply form validation and find the correct inputs (this change is due to rx-graph component initial rendering which happens on the second render ([6d96e49](https://github.com/rxdi/mono/commit/6d96e496a0a9a58dfd76b44e831dd382ff95853a))
 * **forms:** inputs now defaults to value provided inside form group ([b0c99a0](https://github.com/rxdi/mono/commit/b0c99a01c322ae85cbe61a29ecf21ac5b0d87cd1))
 * **forms:** removed unnecessery console log ([390c6dd](https://github.com/rxdi/mono/commit/390c6ddf3a3ab5eedacbe754c3d96bd53a86b4f7))
 * **forms:** reverted back focus ([f97f8b6](https://github.com/rxdi/mono/commit/f97f8b66d4392dd3ea5d720aa99f6ac64f827197))
