@@ -7,7 +7,7 @@ export function Form(
     strategy: 'none'
   } as any
 ) {
-  return function(clazz: Object, name: string | number | symbol) {
+  return function (clazz: Object, name: string | number | symbol) {
     if (!options.name) {
       throw new Error('Missing form name');
     }
@@ -16,7 +16,7 @@ export function Form(
     const UpdateFirst = clazz.constructor.prototype.firstUpdated || noop;
     const Connect = clazz.constructor.prototype.connectedCallback || noop;
 
-    clazz.constructor.prototype.connectedCallback = function() {
+    clazz.constructor.prototype.connectedCallback = function () {
       if (!(this[name] instanceof FormGroup)) {
         throw new Error('Value provided is not an instance of FormGroup!');
       }
@@ -27,12 +27,12 @@ export function Form(
       return Connect.call(this);
     };
 
-    clazz.constructor.prototype.firstUpdated = function() {
-      (this[name] as FormGroup).init();
+    clazz.constructor.prototype.firstUpdated = function () {
+      setTimeout(() => this[name].init(), 0);
       return UpdateFirst.call(this);
     };
 
-    clazz.constructor.prototype.disconnectedCallback = function() {
+    clazz.constructor.prototype.disconnectedCallback = function () {
       (this[name] as FormGroup).unsubscribe();
       return Destroy.call(this);
     };
