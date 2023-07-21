@@ -1327,7 +1327,7 @@
     "@babel/types" "^7.4.4"
     esutils "^2.0.2"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.17.8":
+"@babel/runtime@^7.0.0":
   version "7.19.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.19.0.tgz#22b11c037b094d27a8a2504ea4dcff00f50e2259"
   integrity sha512-eR8Lo9hnDS7tqkO7NsV+mKvCmv5boaXFSZ70DnfhcgiEne8hv9oCEd36Klw74EtizEqLsy4YnW8UWwpBVolHZA==
@@ -1934,7 +1934,7 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@neo4j/graphql-ogm@^3.9.0":
+"@neo4j/graphql-ogm@3.9.0":
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/@neo4j/graphql-ogm/-/graphql-ogm-3.9.0.tgz#bcecfa1d2e8adaea50a8e1a71b5d6cf1d9acd3b0"
   integrity sha512-kTc9lA+LiHpogs3vMnqrUXMXUQuUK5BLgFrCE/zz/4Go+k+ciKDqe3TNzUKnlyQ2ZGX8Z1ELRg9MZG4Z1wFOww==
@@ -1946,7 +1946,7 @@
     "@neo4j/graphql" "^3.9.0"
     prettier "^2.7.1"
 
-"@neo4j/graphql@^3.9.0":
+"@neo4j/graphql@3.9.0", "@neo4j/graphql@^3.9.0":
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/@neo4j/graphql/-/graphql-3.9.0.tgz#16148f06f370d26d7a67257ce764c24670b2ba5b"
   integrity sha512-28CbcmsNMXz+CcU/lfAbuPu00yFOBjKF86gRoyeaRwYWZ29pZw2qpm8QGFHvG66MGM53fb8YAOb/45yaQq5cLQ==
@@ -8508,29 +8508,28 @@ negotiator@0.6.2:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
   integrity sha512-hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==
 
-neo4j-driver-bolt-connection@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/neo4j-driver-bolt-connection/-/neo4j-driver-bolt-connection-5.0.1.tgz#bcf0b7415f376fdf5ae88d34b93c510e471cadc6"
-  integrity sha512-je++gqcAAlsJ0IoiEh4yMdYPt9a71KtJpdm0OaukvxvnFWoJ0IfSHYRz+n15oJ9mP2Ikr8A/ZRU5KET59N0prg==
+neo4j-driver-bolt-connection@5.10.0:
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/neo4j-driver-bolt-connection/-/neo4j-driver-bolt-connection-5.10.0.tgz#4a369d13f0da0a2ef12a977bd6c3a811292dd84c"
+  integrity sha512-TgxaQ1kRtd4hP2iromtun3twx+tLP9I0F7CIhDpYaUix8Z1nHcI6z9y+uJ1+YU/doyzgS+R/ZP8h2C4S75iClw==
   dependencies:
     buffer "^6.0.3"
-    neo4j-driver-core "^5.0.1"
+    neo4j-driver-core "5.10.0"
     string_decoder "^1.3.0"
 
-neo4j-driver-core@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/neo4j-driver-core/-/neo4j-driver-core-5.0.1.tgz#a0d26cddeb75e6bb0f53b69183aefe6d85055da4"
-  integrity sha512-ZwwINcTAHB1pgtamHKAkazfxHOZgv1dCvGCNSYh4ap+8AOoExKIU3jh4N++fdHvaN/TV0zYB6EshNCizs4WkCw==
+neo4j-driver-core@5.10.0:
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/neo4j-driver-core/-/neo4j-driver-core-5.10.0.tgz#f1003cf65f14bc85379b7480ad391ee78e7239b2"
+  integrity sha512-Wf50GRvEqG2R0PWMJg3tF7YxILJb4QjYgpoC7g/2OCjmQQUuSy+wj65aUlV66XB4I9J07FElGWy6Xrm/rDyA5A==
 
-neo4j-driver@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/neo4j-driver/-/neo4j-driver-5.0.1.tgz#6d4c2a9e34d39d7271dad02ba4a978503f8f3813"
-  integrity sha512-JtZfM+Ba3oA6C93FeH+Oh8zPcVzDW8wGqncpYG5XTzawEwzUpqIKecpccuQ/AV77cYZuee+qG/G3PNKvHwGtnQ==
+neo4j-driver@5.10.0:
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/neo4j-driver/-/neo4j-driver-5.10.0.tgz#cdc237292d35cbb6c6551e499abf026cd117dfe3"
+  integrity sha512-xvexTGrMxS3Nj/vU/OO5FA0wMcmdOJOOqHgztydw8iSFnKBgxxAo3giiH1UKGwP4k12BnOSXSQeZGXT3faVHJQ==
   dependencies:
-    "@babel/runtime" "^7.17.8"
-    neo4j-driver-bolt-connection "^5.0.1"
-    neo4j-driver-core "^5.0.1"
-    rxjs "^7.5.5"
+    neo4j-driver-bolt-connection "5.10.0"
+    neo4j-driver-core "5.10.0"
+    rxjs "^7.8.1"
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -10385,17 +10384,17 @@ rxjs@^6.1.0, rxjs@^6.5.3:
   dependencies:
     tslib "^1.9.0"
 
-rxjs@^7.5.5:
-  version "7.5.7"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.5.7.tgz#2ec0d57fdc89ece220d2e702730ae8f1e49def39"
-  integrity sha512-z9MzKh/UcOqB3i20H6rtrlaE/CgjLOvheWK/9ILrbhROGTweAi1BaFsTT9FbwZi5Trr1qNRs+MXkhmR06awzQA==
-  dependencies:
-    tslib "^2.1.0"
-
 rxjs@^7.8.0:
   version "7.8.0"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.0.tgz#90a938862a82888ff4c7359811a595e14e1e09a4"
   integrity sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==
+  dependencies:
+    tslib "^2.1.0"
+
+rxjs@^7.8.1:
+  version "7.8.1"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.1.tgz#6f6f3d99ea8044291efd92e7c7fcf562c4057543"
+  integrity sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==
   dependencies:
     tslib "^2.1.0"
 
