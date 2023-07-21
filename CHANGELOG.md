@@ -1,4 +1,4 @@
-## [0.7.169](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.169) (2023-05-27)
+## [0.7.170](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.170) (2023-07-21)
 
 
 ### Bug Fixes
@@ -56,6 +56,7 @@
 * **lit-html:** renamed directives to modifiers ([a011444](https://github.com/rxdi/mono/commit/a0114449339fa49ef466e8cbb0bac6ebf1fe18f2))
 * **lit-html:** trusted html type removed since it is not recommended to be used at the moment ([227ec08](https://github.com/rxdi/mono/commit/227ec0883cfff11d1cbe363ce534e81b306cefc6))
 * **main:** main js file was not correct ([32aa94a](https://github.com/rxdi/mono/commit/32aa94a4cae09daadb4287ced9b331ea9ce67b2e))
+* **neo4j:** added fixed dependencies for @neo4j/graphql ([e6a20d3](https://github.com/rxdi/mono/commit/e6a20d3c112e82eff4d62212be11cc4c4ba5feaa))
 * **neo4j:** added typed schema as an option ([218ef55](https://github.com/rxdi/mono/commit/218ef552f8bea655b9c59f60a6d7c6b5ecee1fc9))
 * **neo4j:** module fixed ([d4842e8](https://github.com/rxdi/mono/commit/d4842e8e86b851a69c46d18ccca6f31fd11f76e8))
 * **pubsub:** added optional types server and path ([9f1e18f](https://github.com/rxdi/mono/commit/9f1e18f3eab8e5172ea7a7e3e2a97a1914d95c09))
