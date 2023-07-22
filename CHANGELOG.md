@@ -1,4 +1,4 @@
-## [0.7.170](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.170) (2023-07-21)
+## [0.7.171](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.171) (2023-07-22)
 
 
 ### Bug Fixes
@@ -59,6 +59,7 @@
 * **neo4j:** added fixed dependencies for @neo4j/graphql ([e6a20d3](https://github.com/rxdi/mono/commit/e6a20d3c112e82eff4d62212be11cc4c4ba5feaa))
 * **neo4j:** added typed schema as an option ([218ef55](https://github.com/rxdi/mono/commit/218ef552f8bea655b9c59f60a6d7c6b5ecee1fc9))
 * **neo4j:** module fixed ([d4842e8](https://github.com/rxdi/mono/commit/d4842e8e86b851a69c46d18ccca6f31fd11f76e8))
+* **published:** patch was published instead of next ([6590a18](https://github.com/rxdi/mono/commit/6590a183541f35188a45bc9759780436cb50ffc9))
 * **pubsub:** added optional types server and path ([9f1e18f](https://github.com/rxdi/mono/commit/9f1e18f3eab8e5172ea7a7e3e2a97a1914d95c09))
 * **pubsub:** added que strict name to subscriber in order to have the same queue shared between multiple workers ([cb2de4b](https://github.com/rxdi/mono/commit/cb2de4b96f27ca8f95fae2d02f359e4fd349365a))
 * **rabbitmq-pubsub:** added correct dependency ([5ea4b7a](https://github.com/rxdi/mono/commit/5ea4b7af70fc7ed754195b508e48352f60f7310c))
