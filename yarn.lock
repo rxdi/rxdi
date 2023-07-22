@@ -1497,10 +1497,10 @@
     jsonwebtoken "^8.3.0"
     moment "^2.22.2"
 
-"@gapi/playground@1.8.79":
-  version "1.8.79"
-  resolved "https://registry.yarnpkg.com/@gapi/playground/-/playground-1.8.79.tgz#674250c647a05eddc6739b36c17a857c79a222ea"
-  integrity sha512-WKuJAzQKX4OYcO1/fQZstyLLRjuV5Dq7mR7cpGFfvVUxnPcbz4OUuRtZgAYHcfwmka3MMDF3v02AzjR8CO1l9w==
+"@gapi/playground@^1.8.146":
+  version "1.8.146"
+  resolved "https://registry.yarnpkg.com/@gapi/playground/-/playground-1.8.146.tgz#a2aa92ff993200592b9fa630371bc25a9b126b8a"
+  integrity sha512-po5YQNZ7iw0ufJIkCwJI29m5ZKd2dI09+Ndq5VEq/fMFIX+u8hhZqNbvVLOB+fzOQUQmgSPhkPUkbHWq+GrzKw==
   dependencies:
     graphql-playground-html "1.6.13"
 

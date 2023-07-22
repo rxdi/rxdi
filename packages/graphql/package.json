@@ -30,7 +30,7 @@
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "dependencies": {
-    "@gapi/playground": "1.8.79",
+    "@gapi/playground": "^1.8.146",
     "apollo-errors": "1.9.0",
     "apollo-server-core": "2.12.0",
     "apollo-server-module-graphiql": "1.4.0",

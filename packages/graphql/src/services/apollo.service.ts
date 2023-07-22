@@ -1,5 +1,5 @@
 import { Service, Inject, PluginInterface, Container } from '@rxdi/core';
-import * as Boom from 'boom';
+import * as Boom from '@hapi/boom';
 import { Server, Request, ResponseToolkit } from '@hapi/hapi';
 import {
   runHttpQuery,
