@@ -2,15 +2,12 @@ import { GRAPHQL_PLUGIN_CONFIG } from '../../config.tokens';
 import { HapiConfigModel, HapiModule, HAPI_SERVER } from '@rxdi/hapi';
 import { GraphQLModule } from '../..';
 import {
-  Module,
-  BootstrapFramework,
-  ModuleArguments,
   ConfigModel,
   Container,
   createTestBed
 } from '@rxdi/core';
 import { PluginInit, SendRequestQueryType } from '../../plugin-init';
-import { Server } from 'hapi';
+import { Server } from '@hapi/hapi';
 import { of } from 'rxjs';
 
 export interface CoreModuleConfig {
@@ -37,13 +34,11 @@ export const DEFAULT_CONFIG = {
     watcherPort: '',
     graphiqlOptions: {
       endpointURL: '/graphql',
-      subscriptionsEndpoint: `${
-        process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'
-      }://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${
-        process.env.DEPLOY_PLATFORM === 'heroku'
+      subscriptionsEndpoint: `${process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'
+        }://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${process.env.DEPLOY_PLATFORM === 'heroku'
           ? ''
           : `:${process.env.API_PORT || process.env.PORT || 9000}`
-      }/subscriptions`,
+        }/subscriptions`,
       websocketConnectionParams: {
         token: process.env.GRAPHIQL_TOKEN
       }
@@ -79,8 +74,8 @@ export const startServer = (
 };
 
 export const stopServer = () => {
-  process.exit();
   Container.get<Server>(HAPI_SERVER).stop();
+  process.exit();
 };
 export const getServer = () => of(Container.get<Server>(HAPI_SERVER));
 

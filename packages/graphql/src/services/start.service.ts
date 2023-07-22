@@ -1,6 +1,6 @@
 import { Service, BootstrapLogger, Inject } from '@rxdi/core';
 import { HAPI_SERVER, OpenService } from '@rxdi/hapi';
-import { Server } from 'hapi';
+import { Server } from '@hapi/hapi';
 import { GRAPHQL_PLUGIN_CONFIG } from '../config.tokens';
 
 @Service()
@@ -10,7 +10,7 @@ export class StartService {
     @Inject(GRAPHQL_PLUGIN_CONFIG) private config: GRAPHQL_PLUGIN_CONFIG,
     private logger: BootstrapLogger,
     private openService: OpenService
-  ) {}
+  ) { }
 
   startBrowser() {
     this.openService.openPage(

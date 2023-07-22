@@ -6,7 +6,7 @@ import {
 } from '@rxdi/core';
 import { tester } from 'graphql-tester';
 import { HAPI_SERVER } from '@rxdi/hapi';
-import { Server } from 'hapi';
+import { Server } from '@hapi/hapi';
 import { take, switchMap, tap } from 'rxjs/operators';
 import { GRAPHQL_PLUGIN_CONFIG } from './config.tokens';
 
@@ -42,7 +42,7 @@ export class PluginInit implements PluginInterface {
     @Inject(HAPI_SERVER) private server: Server,
     @Inject(GRAPHQL_PLUGIN_CONFIG) private config: GRAPHQL_PLUGIN_CONFIG,
     private afterStarter: AfterStarterService
-  ) {}
+  ) { }
 
   private tester;
 

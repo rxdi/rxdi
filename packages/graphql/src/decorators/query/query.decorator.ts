@@ -32,11 +32,11 @@ interface TargetConstructor {
 }
 
 export function Query<T>(options?: any) {
-  return (t, propKey: string, descriptor: TypedPropertyDescriptor<any>) => {
+  return (t, propKey, descriptor: TypedPropertyDescriptor<any>) => {
     const originalMethod = descriptor.value;
     const target: TargetConstructor = t;
     const propertyKey = propKey;
-    descriptor.value = function(...args: any[]) {
+    descriptor.value = function (...args: any[]) {
       const returnValue = Object.create({});
       returnValue.resolve = originalMethod;
       returnValue.args = options ? options : null;

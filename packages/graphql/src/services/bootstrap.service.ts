@@ -46,7 +46,7 @@ export class BootstrapService {
   constructor(
     private moduleService: ModuleService,
     @Inject(GRAPHQL_PLUGIN_CONFIG) private config: GRAPHQL_PLUGIN_CONFIG
-  ) {}
+  ) { }
 
   getResolverByName(resolverName: string) {
     return (
@@ -59,8 +59,7 @@ export class BootstrapService {
   validateResolver(desc: GenericGapiResolversType, self: Function) {
     if (!desc.type) {
       throw new Error(
-        `Missing type for resolver ${desc.method_name} inside @Controller ${
-          self.constructor['originalName']
+        `Missing type for resolver ${desc.method_name} inside @Controller ${self.constructor['originalName']
         }`
       );
     }
@@ -75,7 +74,7 @@ export class BootstrapService {
       method_name: 'status',
       public: true,
       method_type: 'query',
-      target: () => {},
+      target: () => { },
       resolve: function initQuery() {
         return { status: 200 };
       }
@@ -162,7 +161,7 @@ export class BootstrapService {
 
   private getDirectives() {
     return [...(this.config.directives || [])].map(d =>
-      d.metadata ? new GraphQLCustomDirective(Container.get(d)) : d
+      d.metadata ? new GraphQLCustomDirective(Container.get(d) as any) : d
     );
   }
 
@@ -182,7 +181,7 @@ export class BootstrapService {
       .filter(
         key =>
           this.moduleService.watcherService.getConstructor(key)['type'][
-            'metadata'
+          'metadata'
           ]['type'] === 'controller'
       )
       .map(key => {
@@ -228,7 +227,7 @@ export class BootstrapService {
       .filter(
         key =>
           this.moduleService.watcherService.getConstructor(key)['type'][
-            'metadata'
+          'metadata'
           ]['type'] === 'controller'
       )
       .map(

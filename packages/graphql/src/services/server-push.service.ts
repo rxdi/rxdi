@@ -7,7 +7,7 @@ import {
 } from '@rxdi/core';
 import { GRAPHQL_PLUGIN_CONFIG } from '../config.tokens';
 import { createServer, Server, IncomingMessage, ServerResponse } from 'http';
-import { Server as HapiServer } from 'hapi';
+import { Server as HapiServer } from '@hapi/hapi';
 import { HAPI_SERVER } from '@rxdi/hapi';
 import { Subject, Observable, timer } from 'rxjs';
 import { tap, filter, take, switchMapTo } from 'rxjs/operators';
@@ -110,20 +110,20 @@ export class ServerPushPlugin implements PluginInterface {
       this.sendTime.subscribe(() =>
         res.write(
           'data: ' +
-            JSON.stringify({ time: new Date().toLocaleTimeString() }) +
-            '\n\n'
+          JSON.stringify({ time: new Date().toLocaleTimeString() }) +
+          '\n\n'
         )
       );
       this.sendTime.subscribe(() =>
         res.write(
           'data: ' +
-            JSON.stringify({
-              config: {
-                graphql: { ...this.config, graphqlOptions: null },
-                hapi: this.server.info
-              }
-            }) +
-            '\n\n'
+          JSON.stringify({
+            config: {
+              graphql: { ...this.config, graphqlOptions: null },
+              hapi: this.server.info
+            }
+          }) +
+          '\n\n'
         )
       );
       req.on('end', () => {

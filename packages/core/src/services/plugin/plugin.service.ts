@@ -1,5 +1,4 @@
 import { BehaviorSubject } from 'rxjs';
-// import { PluginBase, PluginNameVersion, PluginPackage } from 'hapi';
 import { Service } from '../../decorators/service/Service';
 import { ServiceArgumentsInternal } from '../../decorators/module/module.interfaces';
 

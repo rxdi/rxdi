@@ -2,7 +2,7 @@ import 'jest';
 import { Container, Injectable, Controller, createTestBed } from '@rxdi/core';
 import { startServer, sendRequest } from '../../test/helpers/core-module';
 import { HAPI_SERVER } from '@rxdi/hapi';
-import { Server } from 'hapi';
+import { Server } from '@hapi/hapi';
 import {
   GraphQLNonNull,
   DirectiveLocation,

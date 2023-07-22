@@ -1,5 +1,5 @@
 import * as formatError from 'apollo-errors';
-import * as boom from 'boom';
+import * as boom from '@hapi/boom';
 export interface ServerErrors {
   name;
   data: { bg: { message: string }; en: { message: string } };
@@ -36,6 +36,6 @@ export function createError(name, message: string, data?: any): void {
   return new error();
 }
 
-export const errorUnauthorized = function() {
+export const errorUnauthorized = function () {
   throw new createError('unauthorized', 'You are unable to fetch data');
 };

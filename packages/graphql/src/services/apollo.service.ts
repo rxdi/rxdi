@@ -1,6 +1,6 @@
 import { Service, Inject, PluginInterface, Container } from '@rxdi/core';
 import * as Boom from 'boom';
-import { Server, Request, ResponseToolkit } from 'hapi';
+import { Server, Request, ResponseToolkit } from '@hapi/hapi';
 import {
   runHttpQuery,
   convertNodeHttpToRequest,
@@ -27,7 +27,7 @@ export class ApolloService implements PluginInterface {
     @Inject(GRAPHQL_PLUGIN_CONFIG) private config: GRAPHQL_PLUGIN_CONFIG,
     private bootstrapService: BootstrapService,
     private hookService: HookService
-  ) {}
+  ) { }
 
   OnInit() {
     this.init();
@@ -38,7 +38,7 @@ export class ApolloService implements PluginInterface {
     let schemaOverride: (schema: GraphQLSchema) => GraphQLSchema;
     try {
       schemaOverride = Container.get(SCHEMA_OVERRIDE);
-    } catch (e) {}
+    } catch (e) { }
 
     if (schemaOverride) {
       this.config.graphqlOptions.schema = schemaOverride(
@@ -48,7 +48,7 @@ export class ApolloService implements PluginInterface {
       let customSchemaDefinition: GraphQLSchema;
       try {
         customSchemaDefinition = Container.get(CUSTOM_SCHEMA_DEFINITION);
-      } catch (e) {}
+      } catch (e) { }
       this.config.graphqlOptions.schema =
         customSchemaDefinition ||
         this.config.graphqlOptions.schema ||
@@ -89,7 +89,7 @@ export class ApolloService implements PluginInterface {
     ) => Promise<any>;
     try {
       onRequest = <any>Container.get(ON_REQUEST_HANDLER);
-    } catch (e) {}
+    } catch (e) { }
     if (onRequest) {
       return await onRequest(
         context => this.makeGQLRequest(request, response, error, context),
@@ -109,14 +109,14 @@ export class ApolloService implements PluginInterface {
         const serviceUtilsService: any = Container.get(<any>(
           this.config.authentication
         ));
-        this.config.graphqlOptions.context.user = await serviceUtilsService.validateToken(
+        this.config.graphqlOptions.context['user'] = await serviceUtilsService.validateToken(
           request.headers.authorization
         );
       } catch (e) {
         return Boom.unauthorized();
       }
     } else {
-      this.config.graphqlOptions.context.user = null;
+      this.config.graphqlOptions.context['user'] = null;
     }
     return this.makeGQLRequest(
       request,
@@ -147,7 +147,7 @@ export class ApolloService implements PluginInterface {
       query:
         request.method === 'post'
           ? // TODO type payload as string or Record
-            (request.payload as any)
+          (request.payload as any)
           : request.query,
       request: convertNodeHttpToRequest(request.raw.req)
     });

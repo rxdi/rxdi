@@ -15,6 +15,7 @@ import {
 } from 'graphql';
 import { switchMapTo } from 'rxjs/operators';
 import { Type, Query } from '../decorators';
+import { lastValueFrom } from 'rxjs';
 
 const UserType = new GraphQLObjectType({
   name: 'UserType',
@@ -50,7 +51,7 @@ describe('Global Server Tests', () => {
       .pipe(switchMapTo(startServer()))
       .toPromise();
     pluginInit = Container.get(PluginInit);
-    schema = await getGraphqlSchema().toPromise();
+    schema = await lastValueFrom(getGraphqlSchema());
   });
 
   afterEach(async () => await stopServer());

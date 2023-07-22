@@ -1,7 +1,7 @@
 import { PluginInterface, Inject, Service } from '@rxdi/core';
 import { HAPI_SERVER } from '@rxdi/hapi';
 import { GRAPHQL_PLUGIN_CONFIG } from '../config.tokens';
-import {Request, Server, ResponseToolkit } from 'hapi';
+import { Request, Server, ResponseToolkit } from '@hapi/hapi';
 import * as GraphiQL from 'apollo-server-module-graphiql';
 
 @Service()
@@ -9,7 +9,7 @@ export class GraphiQLService implements PluginInterface {
   constructor(
     @Inject(HAPI_SERVER) private server: Server,
     @Inject(GRAPHQL_PLUGIN_CONFIG) private config: GRAPHQL_PLUGIN_CONFIG
-  ) {}
+  ) { }
 
   OnInit() {
     if (!this.config || !this.config.graphiqlOptions) {

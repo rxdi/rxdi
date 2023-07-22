@@ -1,8 +1,8 @@
 import { InjectionToken } from '@rxdi/core';
 import * as GraphiQL from 'apollo-server-module-graphiql';
-import { GraphQLOptions, PlaygroundConfig } from 'apollo-server-core';
+import { GraphQLOptions } from 'apollo-server-core';
 import { GraphQLSchema, GraphQLField, GraphQLDirective } from 'graphql';
-import { Server, ResponseToolkit } from 'hapi';
+import { Server, ResponseToolkit } from '@hapi/hapi';
 import { RenderPageOptions } from 'graphql-playground-html';
 
 export interface HapiOptionsFunction {
