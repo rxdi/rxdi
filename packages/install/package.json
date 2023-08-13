@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/install",
-  "version": "0.7.173",
+  "version": "0.7.174",
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "author": "Kristiyan Tachev",
   "license": "MIT",
   "dependencies": {
-    "@rxdi/core": "^0.7.173"
+    "@rxdi/core": "^0.7.174"
   },
   "devDependencies": {
     "@types/node": "^12.0.10"
