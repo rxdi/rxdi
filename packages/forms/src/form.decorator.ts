@@ -28,7 +28,11 @@ export function Form(
     };
 
     clazz.constructor.prototype.firstUpdated = function () {
-      setTimeout(() => this[name].init(), 0);
+      try {
+        this[name].init()
+      } catch (e) {
+        setTimeout(() => this[name].init(), 0);
+      }
       return UpdateFirst.call(this);
     };
 
