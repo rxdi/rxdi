@@ -1,4 +1,5 @@
-import { LitElement, html, render, TemplateResult, CSSResult } from 'lit';
+import { CSSResult, LitElement } from 'lit-element';
+import { html, render, TemplateResult } from 'lit-html';
 
 export interface CustomAttributeRegistry {
   define(name: string, modifier: Function | Modifier): void;
