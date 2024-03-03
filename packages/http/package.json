@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/http",
-  "version": "0.7.175",
+  "version": "0.7.176",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/rxdi/mono/blob/master/README.md",
   "dependencies": {
-    "@rxdi/core": "^0.7.174",
+    "@rxdi/core": "^0.7.176",
     "rxjs": "^7.8.0"
   },
   "devDependencies": {
