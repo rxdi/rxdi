@@ -1,4 +1,4 @@
-## [0.7.176](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.176) (2024-03-03)
+## [0.7.177](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.177) (2024-03-03)
 
 
 ### Bug Fixes
@@ -35,6 +35,7 @@
 * **Hotkeys:** reverted back logic for binding ([5d83018](https://github.com/rxdi/mono/commit/5d830181d6a5ed611e5ff06f861a9501cb45e6bf))
 * **Hotkeys:** unbinding leads to not subscribing again to observable. we will leave it like so ([4720e9f](https://github.com/rxdi/mono/commit/4720e9f608f15fbb63404c162017607b6020d715))
 * **http:** added export and documentation ([58f7ebb](https://github.com/rxdi/mono/commit/58f7ebbfcbb43939d9eeb6c48e6ac037a5d7b547))
+* **lit-html:** added correct dependencies ([c3b5d9f](https://github.com/rxdi/mono/commit/c3b5d9f001eca7a06e3af7714cee1b271fbb5e2e))
 * **lit-html:** added correct re-exports ([9722efd](https://github.com/rxdi/mono/commit/9722efd025721e1b14fdd94d16b29f22537dcacb))
 * **lit-html:** added type never to not interfeer with return type of decorator ([5f3f96d](https://github.com/rxdi/mono/commit/5f3f96d365547634b916ca267d743bb2bd7c63d9))
 * **lit-html:** async directive fix for unsubscribe ([e28b52f](https://github.com/rxdi/mono/commit/e28b52f57c2e56c85c00380a0e64735fccf33685))
