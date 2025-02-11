@@ -72,7 +72,7 @@ export class ExitHandlerService {
     }
 
     if (err) {
-      console.log(err.stack);
+      console.log(err)
       return process.exit(1)
     }
 
