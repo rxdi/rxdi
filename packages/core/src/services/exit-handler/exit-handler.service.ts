@@ -66,11 +66,17 @@ export class ExitHandlerService {
     if (options.cleanup) {
       this.logger.logExitHandler('AppStopped');
     }
-    if (err) console.log(err.stack);
+
     if (options.exit) {
       this.logger.logExitHandler('Unhandled error rejection');
     }
-    process.exit(0);
+
+    if (err) {
+      console.log(err.stack);
+      return process.exit(1)
+    }
+
+    return process.exit(0);
   }
 
   onExitApp(events: Array<Signals>) {
