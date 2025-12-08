@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLNonNull } from 'graphql';
+import { GraphQLObjectType, GraphQLNonNull, GraphQLInputFieldConfigMap } from 'graphql';
 import { GraphQLControllerOptions } from '../../decorators/guard/guard.interface';
 
 export class GenericGapiResolversType implements GraphQLControllerOptions {
@@ -10,6 +10,7 @@ export class GenericGapiResolversType implements GraphQLControllerOptions {
   interceptor?: Function;
   interceptors?: any[];
   method_name?: string;
+  description?: string;
   subscribe?: (root: any, params: any, context: any, info: any, ...args) => {};
   method_type?: 'query' | 'subscription' | 'mutation' | 'event';
   type: GraphQLObjectType;
@@ -31,7 +32,7 @@ interface TargetConstructor {
   };
 }
 
-export function Query<T>(options?: any) {
+export function Query<T>(options?: GraphQLInputFieldConfigMap, meta?: Pick<GraphQLInputFieldConfigMap, 'description'>) {
   return (t, propKey, descriptor: TypedPropertyDescriptor<any>) => {
     const originalMethod = descriptor.value;
     const target: TargetConstructor = t;
@@ -42,6 +43,7 @@ export function Query<T>(options?: any) {
       returnValue.args = options ? options : null;
       returnValue.method_type = 'query';
       returnValue.method_name = propertyKey;
+      returnValue.description = meta ? meta.description : null;
       returnValue.target = target;
       return returnValue;
     };

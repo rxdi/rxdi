@@ -1,4 +1,6 @@
-export function Mutation(options?: any) {
+import { GraphQLInputFieldConfigMap } from "graphql";
+
+export function Mutation(input?: GraphQLInputFieldConfigMap, meta?: Pick<GraphQLInputFieldConfigMap, 'description'>) {
   return (
     t: any,
     propKey: string,
@@ -10,9 +12,10 @@ export function Mutation(options?: any) {
     descriptor.value = function(...args: any[]) {
       const returnValue = Object.create({});
       returnValue.resolve = originalMethod;
-      returnValue.args = options ? options : null;
+      returnValue.args = input ? input : null;
       returnValue.method_type = 'mutation';
       returnValue.method_name = propertyKey;
+      returnValue.description = meta ? meta.description : null;
       returnValue.target = target;
       return returnValue;
     };
