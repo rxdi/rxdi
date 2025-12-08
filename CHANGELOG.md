@@ -1,4 +1,4 @@
-## [0.7.180](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.180) (2025-02-11)
+## [0.7.181](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.181) (2025-12-08)
 
 
 ### Bug Fixes
@@ -82,6 +82,7 @@
 
 ### Features
 
+* **ai:** long time no change in core graphql package added description field inside meta fields in order to define what this graph node is doing and expose it to the schema introspection ([c42a702](https://github.com/rxdi/mono/commit/c42a70233a3a17728d2f5c88538b3d6ef47e273a))
 * **apollo-client:** updated to latest version ([2d56542](https://github.com/rxdi/mono/commit/2d5654232648a7347c8b5b5612f2bce991f4ea09))
 * **attribute-registry:** added generic way of defining dynamic attributes using @rhtml/custom-attributes ([630a200](https://github.com/rxdi/mono/commit/630a20083648412b79dfd63f6f7728728b408efa))
 * **bump:** bumped to latest [@hapi](https://github.com/hapi) version ([0789a41](https://github.com/rxdi/mono/commit/0789a4162c8a210b229a1829fb1301c0cfa3d7a5))
