@@ -1,4 +1,4 @@
-## [0.7.182](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.182) (2025-12-08)
+## [0.7.183](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.183) (2025-12-11)
 
 
 ### Bug Fixes
@@ -26,6 +26,7 @@
 * **graphql-pubsub:** added connection with credentials for amqp protocol ([3c8b320](https://github.com/rxdi/mono/commit/3c8b320f199503fed3e9e4cfd28660c5a3ad2de1))
 * **graphql-pubsub:** barell export moved to client core ([0e0099c](https://github.com/rxdi/mono/commit/0e0099caf6653e61693c519eae2c22de35fcd14e))
 * **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
+* **graphql:** Boom imported from the correct place ([0eff5ba](https://github.com/rxdi/mono/commit/0eff5ba1b85402936eb67236648b860cb69bf196))
 * **graphql:** filtered unknown arguments ([6a0be24](https://github.com/rxdi/mono/commit/6a0be241a119d2a417994477354ff8450c977526))
 * **graphql:** removed custom directive from export ([800eded](https://github.com/rxdi/mono/commit/800eded6dbec7493a24845f3ed93f6b4d4a18594))
 * **graphql:** removed docs folder since it is unused [ci-skip] ([2f3537d](https://github.com/rxdi/mono/commit/2f3537d5198b042e6b57594ab43f016fca5e01f0))
