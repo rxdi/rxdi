@@ -57,7 +57,7 @@ export const setConfigGraphql = (config: GRAPHQL_PLUGIN_CONFIG = {}) => {
   return { ...DEFAULT_CONFIG.graphql, ...config };
 };
 
-export const startServer = (
+export const startServer: any = (
   config: CoreModuleConfig = {},
   bootstrapOptions?: ConfigModel
 ) => {
