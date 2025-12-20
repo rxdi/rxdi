@@ -98,7 +98,7 @@ export class AmqpPubSub {
   let newRefs: number[];
   if (refs.length === 1) {
    newRefs = [];
-   this.unsubscribeChannelMap[subId]()
+   this.unsubscribeChannelMap[subId]?.()
     .then(() => {
      this.logger.trace("cancelled channel from subscribing to queue '%s'", triggerName);
     })
