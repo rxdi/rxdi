@@ -1,4 +1,4 @@
-## [0.7.187](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.187) (2025-12-21)
+## [0.7.188](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.188) (2025-12-21)
 
 
 ### Bug Fixes
@@ -26,6 +26,7 @@
 * **graphql-client:** unauthenticated property can be added which will reload the page if websocket tries to connect with expired token or wrong one ([38ec592](https://github.com/rxdi/mono/commit/38ec592fb15f52c916506ccfad99b64cfa0fa585))
 * **graphql-pubsub:** added connection with credentials for amqp protocol ([3c8b320](https://github.com/rxdi/mono/commit/3c8b320f199503fed3e9e4cfd28660c5a3ad2de1))
 * **graphql-pubsub:** barell export moved to client core ([0e0099c](https://github.com/rxdi/mono/commit/0e0099caf6653e61693c519eae2c22de35fcd14e))
+* **graphql:** added check for when payload is missing ([96b4355](https://github.com/rxdi/mono/commit/96b4355e4ea2d2e4f825f8dbbaf319397ce3208a))
 * **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
 * **graphql:** Boom imported from the correct place ([0eff5ba](https://github.com/rxdi/mono/commit/0eff5ba1b85402936eb67236648b860cb69bf196))
 * **graphql:** filtered unknown arguments ([6a0be24](https://github.com/rxdi/mono/commit/6a0be241a119d2a417994477354ff8450c977526))
