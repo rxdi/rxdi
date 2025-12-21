@@ -1,9 +1,10 @@
-## [0.7.184](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.184) (2025-12-20)
+## [0.7.185](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.185) (2025-12-21)
 
 
 ### Bug Fixes
 
 * **AMQP:** added new version of the class ([21aeacc](https://github.com/rxdi/mono/commit/21aeaccfb12f278a00aec4747c98503473bec17d))
+* **apollo:** reverted back apollo server to appropriate version which is working ([165c0fb](https://github.com/rxdi/mono/commit/165c0fb0d6f772ebf771cc3e64f8695c48bbc98f))
 * **boom:** package was used wrongly ([f85a316](https://github.com/rxdi/mono/commit/f85a316630d2f9f21c6400a5da732bade5e993d4))
 * **compressor:** added class with static methods and re-exported inside index ([b3e5429](https://github.com/rxdi/mono/commit/b3e54297dd78749bac964e56c64cbf16a22bcbef))
 * **compressor:** added correct types to compress and decompress ([e7df20a](https://github.com/rxdi/mono/commit/e7df20a5d768d11939f192a66139b306b2deaf16))
