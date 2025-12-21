@@ -1810,7 +1810,7 @@
   resolved "https://registry.yarnpkg.com/@hapi/file/-/file-3.0.0.tgz#f1fd824493ac89a6fceaf89c824afc5ae2121c09"
   integrity sha512-w+lKW+yRrLhJu620jT3y+5g2mHqnKfepreykvdOcl9/6up8GrQQn+l3FRTsjHTKbkbfQFkuksHpdv2EcpKcJ4Q==
 
-"@hapi/hapi@^21.4.4":
+"@hapi/hapi@^21.3.2":
   version "21.4.4"
   resolved "https://registry.yarnpkg.com/@hapi/hapi/-/hapi-21.4.4.tgz#89c239135be1ff2adeb586df157dee7a49593291"
   integrity sha512-vI6JPLR99WZDKI1nriD0qXDPp8sKFkZfNVGrDDZafDQ8jU+3ERMwS0vPac5aGae6yyyoGZGOBiYExw4N8ScSTQ==
