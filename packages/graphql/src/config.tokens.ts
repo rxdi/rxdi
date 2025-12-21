@@ -1,12 +1,11 @@
 import { InjectionToken } from '@rxdi/core';
 import * as GraphiQL from 'apollo-server-module-graphiql';
-import { GraphQLOptions } from 'apollo-server-core';
 import { GraphQLSchema, GraphQLField, GraphQLDirective } from 'graphql';
 import { Server, ResponseToolkit } from '@hapi/hapi';
 import { RenderPageOptions } from 'graphql-playground-html';
 
 export interface HapiOptionsFunction {
-  (req?: Request): GraphQLOptions | Promise<GraphQLOptions>;
+  (req?: Request): any | Promise<any>;
 }
 
 export interface HapiGraphiQLOptionsFunction {
@@ -36,7 +35,7 @@ export interface GRAPHQL_PLUGIN_CONFIG {
   route?: {
     cors?: boolean;
   };
-  graphqlOptions?: GraphQLOptions;
+  graphqlOptions?: any;
   graphiqlOptions?: GraphiQL.GraphiQLData;
   graphiqlPlaygroundConfig?: RenderPageOptions;
 }

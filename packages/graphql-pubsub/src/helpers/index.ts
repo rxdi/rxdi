@@ -1,6 +1,5 @@
 import { execute, DocumentNode } from '@apollo/client/core';
 import { WebSocketLink } from '@apollo/client/link/ws';
-// import { gql } from 'apollo-server-core';
 import { ClientOptions } from 'subscriptions-transport-ws';
 import { Server } from '@hapi/hapi';
 import { Container } from '@rxdi/core';

@@ -1,7 +1,6 @@
 import { Service, Inject, PluginInterface, Container } from '@rxdi/core';
 import { unauthorized, Boom, boomify } from '@hapi/boom';
 import { Server, Request, ResponseToolkit } from '@hapi/hapi';
-import { runHttpQuery, convertNodeHttpToRequest } from 'apollo-server-core';
 import { HAPI_SERVER } from '@rxdi/hapi';
 import {
  GRAPHQL_PLUGIN_CONFIG,
@@ -12,6 +11,7 @@ import {
 import { BootstrapService } from '../services/bootstrap.service';
 import { GraphQLSchema } from 'graphql';
 import { HookService } from './hooks.service';
+import { graphql } from 'graphql';
 
 @Service()
 export class ApolloService implements PluginInterface {
@@ -122,15 +122,12 @@ export class ApolloService implements PluginInterface {
    ...this.config.graphqlOptions.context,
    ...context,
   };
-  const { graphqlResponse, responseInit } = await runHttpQuery([request, h], {
-   method: request.method.toUpperCase(),
-   options: this.config.graphqlOptions,
-   query:
-    request.method === 'post'
-     ? // TODO type payload as string or Record
-       (request.payload as any)
-     : request.query,
-   request: convertNodeHttpToRequest(request.raw.req),
+
+  const graphqlResponse = await graphql({
+   schema: this.config.graphqlOptions.schema,
+   source: request.method === 'post' ? request.payload['query'] : request.query,
+   variableValues: request.payload['variables'],
+   contextValue: this.config.graphqlOptions.context,
   });
 
   const response = h.response(graphqlResponse);

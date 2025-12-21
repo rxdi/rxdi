@@ -13,7 +13,7 @@ import { EffectService } from './effect.service';
 import { CanActivateResolver } from '../decorators/guard/guard.interface';
 import { Observable, of, from } from 'rxjs';
 import { InterceptResolver } from '../decorators/intercept/intercept.interface';
-import { ensureDirSync, writeFileSync } from 'fs-extra';
+import { writeFileSync, mkdirSync } from 'fs'
 
 @Service()
 export class HookService {
@@ -61,7 +61,7 @@ export type EffectTypes = keyof typeof EffectTypes;
     try {
       const folder =
         process.env.INTROSPECTION_FOLDER || `./src/app/core/api-introspection/`;
-      ensureDirSync(folder);
+      mkdirSync(folder, { recursive: true });
       writeFileSync(folder + 'EffectTypes.ts', types, 'utf8');
     } catch (e) {
       console.error(e, 'Effects are not saved to directory');
