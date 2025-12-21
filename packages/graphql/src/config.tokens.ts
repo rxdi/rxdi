@@ -36,7 +36,7 @@ export interface GRAPHQL_PLUGIN_CONFIG {
   route?: {
     cors?: boolean;
   };
-  graphqlOptions?: Omit<GraphQLOptions, 'schemaHash'>;
+  graphqlOptions?: GraphQLOptions;
   graphiqlOptions?: GraphiQL.GraphiQLData;
   graphiqlPlaygroundConfig?: RenderPageOptions;
 }
