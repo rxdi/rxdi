@@ -1,4 +1,4 @@
-## [0.7.188](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.188) (2025-12-21)
+## [0.7.189](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.189) (2025-12-21)
 
 
 ### Bug Fixes
@@ -28,6 +28,7 @@
 * **graphql-pubsub:** barell export moved to client core ([0e0099c](https://github.com/rxdi/mono/commit/0e0099caf6653e61693c519eae2c22de35fcd14e))
 * **graphql:** added check for when payload is missing ([96b4355](https://github.com/rxdi/mono/commit/96b4355e4ea2d2e4f825f8dbbaf319397ce3208a))
 * **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
+* **graphql:** added parsing for graphql query variables json when using GET ([8f27eaa](https://github.com/rxdi/mono/commit/8f27eaaa536d8cc63c9554b136f28061a2017c79))
 * **graphql:** Boom imported from the correct place ([0eff5ba](https://github.com/rxdi/mono/commit/0eff5ba1b85402936eb67236648b860cb69bf196))
 * **graphql:** filtered unknown arguments ([6a0be24](https://github.com/rxdi/mono/commit/6a0be241a119d2a417994477354ff8450c977526))
 * **graphql:** removed custom directive from export ([800eded](https://github.com/rxdi/mono/commit/800eded6dbec7493a24845f3ed93f6b4d4a18594))
