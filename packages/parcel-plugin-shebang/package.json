@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/parcel-plugin-shebang",
-  "version": "0.7.185",
+  "version": "0.7.186",
   "description": "Shebang for ParcelJS",
   "main": "./dist/index.js",
   "scripts": {

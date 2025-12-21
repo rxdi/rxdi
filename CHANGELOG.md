@@ -1,4 +1,4 @@
-## [0.7.185](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.185) (2025-12-21)
+## [0.7.186](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.186) (2025-12-21)
 
 
 ### Bug Fixes
@@ -31,6 +31,7 @@
 * **graphql:** filtered unknown arguments ([6a0be24](https://github.com/rxdi/mono/commit/6a0be241a119d2a417994477354ff8450c977526))
 * **graphql:** removed custom directive from export ([800eded](https://github.com/rxdi/mono/commit/800eded6dbec7493a24845f3ed93f6b4d4a18594))
 * **graphql:** removed docs folder since it is unused [ci-skip] ([2f3537d](https://github.com/rxdi/mono/commit/2f3537d5198b042e6b57594ab43f016fca5e01f0))
+* **hapi:** reverted back hapi and subscription logic ([1005a53](https://github.com/rxdi/mono/commit/1005a539da1fe53dcd3507270ff51aa127722190))
 * **hapi:** typings for hapi removed from core dependency ([7aebe9c](https://github.com/rxdi/mono/commit/7aebe9c68b559fb2bd4b1f8b6407eb251adc08f9))
 * **Hotkeys:** added complete method to when binding ([6130ebe](https://github.com/rxdi/mono/commit/6130ebe68919a91eadc0acacc1c0306abf2ce781))
 * **Hotkeys:** added observable approach using subject instead of new Observable ([0fc2c89](https://github.com/rxdi/mono/commit/0fc2c89c8bc7bdf848a100ddbbf41d13d4bdfc41))
