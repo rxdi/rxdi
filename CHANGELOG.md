@@ -1,4 +1,4 @@
-## [0.7.186](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.186) (2025-12-21)
+## [0.7.187](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.187) (2025-12-21)
 
 
 ### Bug Fixes
@@ -102,6 +102,7 @@
 * **graphql-client:** added importQueryAsync method in order to load async documents when we use compression for example ([c44b651](https://github.com/rxdi/mono/commit/c44b651fe2f859c378e918d9c0286cfa3dcb4d6b))
 * **graphql-client:** deep copy method introduced ([4e88198](https://github.com/rxdi/mono/commit/4e881984308d3ad51b5cae434a8c0203ddd051ab))
 * **graphql-client:** little modification to remove extra dependency react not using barrel export from apollo ([f38f011](https://github.com/rxdi/mono/commit/f38f011f3393c0f4a8a0da345df5f84a9698c01b))
+* **graphql:** removed the usage of apollo-server from the stack replaced with pure graphql ([fd174b9](https://github.com/rxdi/mono/commit/fd174b94769f59ee094a0746ee6867aeee97fb62))
 * **hapi, core:** added decorator Route to define post and get requests ([92caf6c](https://github.com/rxdi/mono/commit/92caf6c720d97752cc23286dc97dbb3d503f921f))
 * **lit-html:** added components property for initializing components needed for a specific component ([ebfc279](https://github.com/rxdi/mono/commit/ebfc279b10d4ebbe3e0399b1974008c87acaf586))
 * **lit-html:** added decorators to be part of the bundle since Deno is complaining about decorators.js from cdn ([f0214aa](https://github.com/rxdi/mono/commit/f0214aa2860b2e1b7bb2227ca8992cba4eca2948))
