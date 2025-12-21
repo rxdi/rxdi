@@ -122,11 +122,12 @@ export class ApolloService implements PluginInterface {
    ...this.config.graphqlOptions.context,
    ...context,
   };
+  const payload = request.payload
 
   const graphqlResponse = await graphql({
    schema: this.config.graphqlOptions.schema,
-   source: request.method === 'post' ? request.payload['query'] : request.query,
-   variableValues: request.payload['variables'],
+   source: request.method === 'post' ? payload['query'] : request.query,
+   variableValues: payload ? payload['variables'] : undefined,
    contextValue: this.config.graphqlOptions.context,
   });
 
