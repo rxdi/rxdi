@@ -1,4 +1,4 @@
-## [0.7.191](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.191) (2025-12-22)
+## [0.7.192](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.192) (2025-12-22)
 
 
 ### Bug Fixes
