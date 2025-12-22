@@ -14,7 +14,6 @@ import {
   Tree,
   url,
 } from '@angular-devkit/schematics';
-import { isNullOrUndefined } from 'util';
 import {
   DeclarationOptions,
   ModuleDeclarator,
@@ -42,7 +41,7 @@ function transform(source: ServiceOptions): ServiceOptions {
   target.metadata = 'providers';
   target.type = 'service';
 
-  if (isNullOrUndefined(target.name)) {
+  if (target.name === null || target.name === undefined) {
     throw new SchematicsException('Option (name) is required.');
   }
   const location: Location = new NameParser().parse(target);

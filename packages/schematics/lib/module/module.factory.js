@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.main = void 0;
+exports.main = main;
 const core_1 = require("@angular-devkit/core");
 const schematics_1 = require("@angular-devkit/schematics");
 const module_declarator_1 = require("../../utils/module.declarator");
@@ -17,7 +17,6 @@ function main(options) {
         ]))(tree, context);
     };
 }
-exports.main = main;
 function transform(source) {
     const target = Object.assign({}, source);
     target.metadata = 'imports';
