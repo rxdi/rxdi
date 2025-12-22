@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/graphql-pubsub",
-  "version": "0.7.191-nightly.0",
+  "version": "0.7.191-nightly.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/rxdi/graphql-pubsub"
@@ -30,16 +30,16 @@
   },
   "homepage": "https://github.com/rxdi/graphql-pubsub#readme",
   "dependencies": {
-    "@rxdi/graphql-rabbitmq-subscriptions": "^0.7.191-nightly.0",
+    "@rxdi/graphql-rabbitmq-subscriptions": "^0.7.191-nightly.1",
     "@apollo/client": "^3.7.3",
     "graphql-request": "^1.8.2",
     "subscriptions-transport-ws": "^0.9.19",
     "ws": "6.2.1"
   },
   "devDependencies": {
-    "@rxdi/core": "^0.7.191-nightly.0",
-    "@rxdi/graphql": "^0.7.191-nightly.0",
-    "@rxdi/hapi": "^0.7.191-nightly.0",
+    "@rxdi/core": "^0.7.191-nightly.1",
+    "@rxdi/graphql": "^0.7.191-nightly.1",
+    "@rxdi/hapi": "^0.7.191-nightly.1",
     "@types/graphql": "^14.5.0",
     "@types/hapi": "^18.0.4",
     "@types/jest": "^24.0.22",
