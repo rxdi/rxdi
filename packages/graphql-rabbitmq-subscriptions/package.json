@@ -24,7 +24,7 @@
     "lint": "tslint ./src/**/*.ts"
   },
   "dependencies": {
-    "@rxdi/rabbitmq-pubsub": "^0.7.190",
+    "@rxdi/rabbitmq-pubsub": "^0.7.191-nightly.0",
     "graphql-subscriptions": "^3.0.0"
   },
   "devDependencies": {

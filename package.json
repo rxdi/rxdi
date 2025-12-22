@@ -76,7 +76,6 @@
     "@hapi/hapi": "^21.3.2",
     "@hapi/inert": "^7.1.0",
     "coveralls": "3.0.5",
-    "open": "^11.0.0",
     "neo4j-driver": "5.10.0",
     "browser-server": "^1.0.3",
     "readable-stream": "^2.2.9",

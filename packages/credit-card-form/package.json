@@ -31,8 +31,8 @@
   "homepage": "https://github.com/rxdi/rxdi-monorepo#readme",
   "dependencies": {
     "@rxdi/ui-kit": "^0.7",
-    "@rxdi/forms": "^0.7.190",
-    "@rxdi/lit-html": "^0.7.190",
+    "@rxdi/forms": "^0.7.191-nightly.0",
+    "@rxdi/lit-html": "^0.7.191-nightly.0",
     "credit-card-type": "^9.1.0"
   },
   "devDependencies": {

@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/rxdi/mono/blob/master/README.md",
   "dependencies": {
-    "@rxdi/core": "^0.7.190",
+    "@rxdi/core": "^0.7.191-nightly.0",
     "rxjs": "^7.8.0",
     "mousetrap": "^1.6.5"
   },

@@ -15,8 +15,8 @@
     "router-slot": "^1.5.4"
   },
   "devDependencies": {
-    "@rxdi/core": "^0.7.190",
-    "@rxdi/lit-html": "^0.7.190"
+    "@rxdi/core": "^0.7.191-nightly.0",
+    "@rxdi/lit-html": "^0.7.191-nightly.0"
   },
   "types": "./dist/index.d.ts",
   "module": "./dist/index.js",
