@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/http",
-  "version": "0.7.190",
+  "version": "0.7.191-nightly.0",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
