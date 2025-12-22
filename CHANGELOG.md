@@ -1,4 +1,4 @@
-## [0.7.190](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.190) (2025-12-21)
+## [0.7.191](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.191) (2025-12-22)
 
 
 ### Bug Fixes
@@ -69,6 +69,7 @@
 * **lit-html:** renamed directives to modifiers ([a011444](https://github.com/rxdi/mono/commit/a0114449339fa49ef466e8cbb0bac6ebf1fe18f2))
 * **lit-html:** trusted html type removed since it is not recommended to be used at the moment ([227ec08](https://github.com/rxdi/mono/commit/227ec0883cfff11d1cbe363ce534e81b306cefc6))
 * **main:** main js file was not correct ([32aa94a](https://github.com/rxdi/mono/commit/32aa94a4cae09daadb4287ced9b331ea9ce67b2e))
+* missing scripts in package.json ([5e20b17](https://github.com/rxdi/mono/commit/5e20b17a0113f41821967efbfa697cbc38435f77))
 * **neo4j:** added fixed dependencies for @neo4j/graphql ([e6a20d3](https://github.com/rxdi/mono/commit/e6a20d3c112e82eff4d62212be11cc4c4ba5feaa))
 * **neo4j:** added typed schema as an option ([218ef55](https://github.com/rxdi/mono/commit/218ef552f8bea655b9c59f60a6d7c6b5ecee1fc9))
 * **neo4j:** module fixed ([d4842e8](https://github.com/rxdi/mono/commit/d4842e8e86b851a69c46d18ccca6f31fd11f76e8))
@@ -76,9 +77,11 @@
 * **published:** patch was published instead of next ([6590a18](https://github.com/rxdi/mono/commit/6590a183541f35188a45bc9759780436cb50ffc9))
 * **pubsub:** added optional types server and path ([9f1e18f](https://github.com/rxdi/mono/commit/9f1e18f3eab8e5172ea7a7e3e2a97a1914d95c09))
 * **pubsub:** added que strict name to subscriber in order to have the same queue shared between multiple workers ([cb2de4b](https://github.com/rxdi/mono/commit/cb2de4b96f27ca8f95fae2d02f359e4fd349365a))
+* **pubsub:** fixed non existent function ([d5f9e60](https://github.com/rxdi/mono/commit/d5f9e602607c2da8e7c2e50effdc6a4e60acd8bf))
 * **rabbitmq-pubsub:** added correct dependency ([5ea4b7a](https://github.com/rxdi/mono/commit/5ea4b7af70fc7ed754195b508e48352f60f7310c))
 * **rabbitmq-pubsub:** fixed bug with prefetch of undefined ([e2ddd57](https://github.com/rxdi/mono/commit/e2ddd5702d2dad24ce2bc576e7bdcea2aaa3c3a6))
 * **rabbitmq-pubsub:** version fix ([576665d](https://github.com/rxdi/mono/commit/576665dc9a04cabe13690072d2683cb272b918dd))
+* removed many many unused things ([7d24954](https://github.com/rxdi/mono/commit/7d249549e9cbd3924d0f8866edfe94715f55c283))
 * **Router:** added allowJS ([b15d51f](https://github.com/rxdi/mono/commit/b15d51faf1f7d0bc1709411e44a6e3cdc346d411))
 * **Router:** removed unused things and only router component left ([b474240](https://github.com/rxdi/mono/commit/b4742405f4af74eff341261d3f95429a64da9216))
 * **Router:** static methods ([a2ae8ea](https://github.com/rxdi/mono/commit/a2ae8ea589880f91694609dd49ebcb6fed45b584))
@@ -92,6 +95,7 @@
 * **apollo-client:** updated to latest version ([2d56542](https://github.com/rxdi/mono/commit/2d5654232648a7347c8b5b5612f2bce991f4ea09))
 * **attribute-registry:** added generic way of defining dynamic attributes using @rhtml/custom-attributes ([630a200](https://github.com/rxdi/mono/commit/630a20083648412b79dfd63f6f7728728b408efa))
 * **bump:** bumped to latest [@hapi](https://github.com/hapi) version ([0789a41](https://github.com/rxdi/mono/commit/0789a4162c8a210b229a1829fb1301c0cfa3d7a5))
+* **bump:** many version and dependencies bump ([4c865e1](https://github.com/rxdi/mono/commit/4c865e1cb4c631c3cd313f6d2c3bcdb058871d8b))
 * **bump:** versions of hapi and apollo-server-core bumped ([5c51524](https://github.com/rxdi/mono/commit/5c515241e19cb6376654a90902dd3dd0f9adf98d))
 * **Changelog:** added conventional changelog automatically generated ([a23a855](https://github.com/rxdi/mono/commit/a23a855e2ac67aa5bc375e3147fed1a7fc5751a6))
 * **Channels:** closing channels after operation is done since it was overloading rabbitmq cluster with channels, queues and memory leak appears ([e711c8f](https://github.com/rxdi/mono/commit/e711c8f87aad4644ee720ccac048a8ede90392bb))
