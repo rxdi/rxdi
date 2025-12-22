@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/compressor",
-  "version": "0.7.191-nightly.2",
+  "version": "0.7.190",
   "repository": {
     "type": "git",
     "url": "https://github.com/rxdi/rxdi-monorepo"
