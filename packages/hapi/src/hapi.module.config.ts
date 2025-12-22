@@ -1,5 +1,5 @@
 import { Container, InjectionToken } from "@rxdi/core";
-import { PluginNameVersion, PluginBase, PluginPackage, ServerOptions, ServerRoute, Server } from '@hapi/hapi';
+import { PluginNameVersion, PluginBase, PluginPackage, ServerOptions, ServerRoute, Server, RouteDefMethods } from '@hapi/hapi';
 
 export class HapiConfigModel {
   randomPort?: boolean;
@@ -22,7 +22,7 @@ export const HAPI_CONFIG = new InjectionToken<HapiConfigModel>('hapi-config-inje
 export const HAPI_SERVER = new InjectionToken<any>('hapi-server-injection-token');
 export const HAPI_PLUGINS = new InjectionToken<Array<PluginBase<any, any> & (PluginNameVersion | PluginPackage)>>('hapi-plugins-injection-token');
 
-export const Route = ({ method, path }: { path: string; method: string }) => (
+export const Route = ({ method, path }: { path: string; method: RouteDefMethods }) => (
   target: unknown,
   key: string,
   descriptor: PropertyDescriptor,

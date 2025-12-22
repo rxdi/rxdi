@@ -1,4 +1,4 @@
-import * as amqp from "amqplib";
+import { Channel, Message, Options } from "amqplib";
 import { IRabbitMqConnectionFactory } from "./connectionFactory";
 import { IQueueNameConfig, asQueueNameConfig } from "./common";
 import { createChildLogger, Logger } from "./childLogger";
@@ -29,7 +29,7 @@ export class RabbitMqConsumer {
   }
 
   private setupChannel<T>(
-    channel: amqp.Channel,
+    channel: Channel,
     queueConfig: IQueueNameConfig
   ) {
     this.logger.trace("setup '%j'", queueConfig);
@@ -37,7 +37,7 @@ export class RabbitMqConsumer {
   }
 
   private async subscribeToChannel<T>(
-    channel: amqp.Channel,
+    channel: Channel,
     queueConfig: IQueueNameConfig,
     action: (message: T) => Promise<any> | void
   ) {
@@ -85,12 +85,12 @@ export class RabbitMqConsumer {
     }) as IRabbitMqConsumerDisposer;
   }
 
-  protected getMessageObject<T>(message: amqp.Message) {
+  protected getMessageObject<T>(message: Message) {
     return JSON.parse(message.content.toString("utf8")) as T;
   }
 
   protected getChannelSetup(
-    channel: amqp.Channel,
+    channel: Channel,
     queueConfig: IQueueNameConfig
   ) {
     return [
@@ -106,7 +106,7 @@ export class RabbitMqConsumer {
 
   protected getQueueSettings(
     deadletterExchangeName: string
-  ): amqp.Options.AssertQueue {
+  ): Options.AssertQueue {
     var settings = this.getDLSettings();
     settings.arguments = {
       "x-dead-letter-exchange": deadletterExchangeName,
@@ -114,7 +114,7 @@ export class RabbitMqConsumer {
     return settings;
   }
 
-  protected getDLSettings(): amqp.Options.AssertQueue {
+  protected getDLSettings(): Options.AssertQueue {
     return {
       durable: true,
       autoDelete: true,

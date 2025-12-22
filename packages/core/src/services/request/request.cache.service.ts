@@ -1,13 +1,11 @@
 import { CacheService, CacheLayer, CacheLayerItem } from '../cache/index';
-import { Container } from '../../container';
-import { BootstrapLogger } from '../bootstrap-logger';
 import { Service } from '../../decorators/service/Service';
 
 @Service()
 export class RequestCacheService extends CacheService {
   cacheLayer: CacheLayer<CacheLayerItem<any>>;
   constructor() {
-    super(Container.get(BootstrapLogger));
+    super();
     this.cacheLayer = this.createLayer({ name: 'request-cache-layer' });
   }
 

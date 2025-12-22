@@ -1,5 +1,5 @@
 import { Service, Inject } from "@rxdi/core";
-import open = require('opn');
+import open from 'open';
 import { HAPI_SERVER } from "../../hapi.module.config";
 import { Server } from "@hapi/hapi";
 

@@ -1,4 +1,4 @@
-import * as amqp from "amqplib";
+import { Channel, Message, Options } from "amqplib";
 import { IRabbitMqConnectionFactory } from "./connectionFactory";
 import { IQueueNameConfig, asPubSubQueueNameConfig } from "./common";
 import { createChildLogger, Logger } from "./childLogger";
@@ -42,7 +42,7 @@ export class RabbitMqSubscriber {
   }
 
   private setupChannel<T>(
-    channel: amqp.Channel,
+    channel: Channel,
     queueConfig: IQueueNameConfig
   ) {
     this.logger.trace("setup '%j'", queueConfig);
@@ -50,7 +50,7 @@ export class RabbitMqSubscriber {
   }
 
   private async subscribeToChannel<T>(
-    channel: amqp.Channel,
+    channel: Channel,
     queueConfig: IQueueNameConfig,
     action: (message: T) => Promise<IRabbitMqSubscriberDisposer>
   ) {
@@ -99,12 +99,12 @@ export class RabbitMqSubscriber {
     }) as IRabbitMqSubscriberDisposer;
   }
 
-  protected getMessageObject<T>(message: amqp.Message) {
+  protected getMessageObject<T>(message: Message) {
     return JSON.parse(message.content.toString("utf8")) as T;
   }
 
   protected async getChannelSetup(
-    channel: amqp.Channel,
+    channel: Channel,
     queueConfig: IQueueNameConfig
   ) {
     await channel.assertExchange(
@@ -120,14 +120,14 @@ export class RabbitMqSubscriber {
     return result.queue;
   }
 
-  protected getQueueSettings(): amqp.Options.AssertQueue {
+  protected getQueueSettings(): Options.AssertQueue {
     return {
       exclusive: false,
       autoDelete: true,
     };
   }
 
-  protected getDLSettings(): amqp.Options.AssertQueue {
+  protected getDLSettings(): Options.AssertQueue {
     return {
       durable: true,
       autoDelete: true,

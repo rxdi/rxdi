@@ -28,7 +28,7 @@ export class ResolverService {
         }
         return currentModule.items.asObservable();
       }),
-      filter(res => res && res.length),
+      filter(res => !!res?.length),
       map(this.resolveContainerDependencies(target, moduleName))
     );
   }

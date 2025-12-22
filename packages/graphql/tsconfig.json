@@ -19,9 +19,7 @@
       "esnext.asynciterable"
     ],
     "skipLibCheck": true,
-    "types": [
-      "node"
-    ],
+    "types": [],
     "typeRoots": [
       "node_modules/@types"
     ]

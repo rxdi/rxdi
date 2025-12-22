@@ -20,6 +20,6 @@
     "@rxdi/core": "^0.7.190"
   },
   "devDependencies": {
-    "@types/node": "^12.0.10"
+    "@types/node": "^25.0.3"
   }
 }
