@@ -1,4 +1,4 @@
-import { Injectable } from '@gapi/core';
+import { Injectable } from '@rxdi/core';
 import { OGM } from '@neo4j/graphql-ogm';
 
 @Injectable()

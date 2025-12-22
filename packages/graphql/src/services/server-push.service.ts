@@ -10,7 +10,7 @@ import { createServer, Server, IncomingMessage, ServerResponse } from 'http';
 import { Server as HapiServer } from '@hapi/hapi';
 import { HAPI_SERVER } from '@rxdi/hapi';
 import { Subject, Observable, timer } from 'rxjs';
-import { tap, filter, take, switchMapTo } from 'rxjs/operators';
+import { tap, filter, take, timeout } from 'rxjs/operators';
 import { StartService } from './start.service';
 
 @Plugin()
@@ -45,7 +45,7 @@ export class ServerPushPlugin implements PluginInterface {
 
     this.afterStarterService.appStarted
       .pipe(
-        switchMapTo(this.waitXSeconds(5)),
+        timeout(5000),
         take(1),
         filter(() => !this.connected),
         filter(() => this.config.openBrowser),

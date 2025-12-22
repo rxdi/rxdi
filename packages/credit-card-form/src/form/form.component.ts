@@ -38,8 +38,9 @@ import { CardModel } from './model';
     class="form"
     novalidate
     name="credit-card-details"
-    @submit=${() => {
-     if (!this.form.updateValueAndValidity().length) {
+    @submit=${async () => {
+     const validity = await this.form.updateValueAndValidity();
+     if (!validity.length) {
       this.dispatchEvent(
        new CustomEvent('submit', { detail: convertModel(this.form.value) }),
       );

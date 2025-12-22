@@ -24,13 +24,13 @@
     "lint": "tslint ./src/**/*.ts"
   },
   "dependencies": {
-    "amqplib": "^0.6.0"
+    "amqplib": "^0.10.9"
   },
   "devDependencies": {
-    "@types/amqplib": "^0.5.17",
-    "@types/node": "^12.0.10",
+    "@types/amqplib": "^0.10.8",
+    "@types/node": "^25.0.3",
     "tslint": "^5.20.1",
-    "typescript": "^4.3.5"
+    "typescript": "^5.9.3"
   },
   "typings": "dist/index.d.ts",
   "typescript": {

@@ -4,7 +4,6 @@ import { ServerService } from './services/server/server.service';
 import { ModuleWithServices, Module } from '@rxdi/core';
 import { HAPI_CONFIG, HapiConfigModel, HAPI_SERVER, HAPI_PLUGINS } from './hapi.module.config';
 import { InertPlugin } from './plugins/inert/inert.plugin';
-import { OpenService } from './services/open/open.service';
 
 @Module({
   services: [],
@@ -34,7 +33,6 @@ export class HapiModule {
           useValue: config.plugins || []
         },
         ServerService,
-        OpenService
       ],
       plugins: [HapiPlugin, InertPlugin]
     };

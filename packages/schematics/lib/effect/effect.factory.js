@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.main = void 0;
+exports.main = main;
 const core_1 = require("@angular-devkit/core");
 const schematics_1 = require("@angular-devkit/schematics");
-const util_1 = require("util");
 const module_declarator_1 = require("../../utils/module.declarator");
 const module_finder_1 = require("../../utils/module.finder");
 const name_parser_1 = require("../../utils/name.parser");
@@ -18,12 +17,11 @@ function main(options) {
         ]))(tree, context);
     };
 }
-exports.main = main;
 function transform(source) {
     const target = Object.assign({}, source);
     target.metadata = 'effects';
     target.type = 'effect';
-    if ((0, util_1.isNullOrUndefined)(target.name)) {
+    if (target.name === null || target.name === undefined) {
         throw new schematics_1.SchematicsException('Option (name) is required.');
     }
     const location = new name_parser_1.NameParser().parse(target);

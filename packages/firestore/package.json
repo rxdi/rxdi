@@ -20,7 +20,7 @@
     "firebase-functions": "^3.0.0"
   },
   "devDependencies": {
-    "typescript": "^4.3.5",
-    "@rxdi/core": "^0.7.190"
+    "@rxdi/core": "^0.7.190",
+    "typescript": "^5.9.3"
   }
 }

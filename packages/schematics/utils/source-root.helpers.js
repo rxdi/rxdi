@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mergeSourceRoot = exports.isInRootDirectory = void 0;
+exports.isInRootDirectory = isInRootDirectory;
+exports.mergeSourceRoot = mergeSourceRoot;
 const core_1 = require("@angular-devkit/core");
 const defaults_1 = require("../lib/defaults");
 function isInRootDirectory(host, extraFiles = []) {
     const files = ['nest-cli.json', 'nest.json'].concat(extraFiles || []);
     return files.map(file => host.exists(file)).some(isPresent => isPresent);
 }
-exports.isInRootDirectory = isInRootDirectory;
 function mergeSourceRoot(options) {
     return (host) => {
         const isInRoot = isInRootDirectory(host, ['tsconfig.json', 'package.json']);
@@ -22,4 +22,3 @@ function mergeSourceRoot(options) {
         return host;
     };
 }
-exports.mergeSourceRoot = mergeSourceRoot;

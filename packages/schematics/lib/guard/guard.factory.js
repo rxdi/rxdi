@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.main = void 0;
+exports.main = main;
 const core_1 = require("@angular-devkit/core");
 const schematics_1 = require("@angular-devkit/schematics");
 const name_parser_1 = require("../../utils/name.parser");
@@ -9,7 +9,6 @@ function main(options) {
     options = transform(options);
     return (0, schematics_1.chain)([(0, source_root_helpers_1.mergeSourceRoot)(options), (0, schematics_1.mergeWith)(generate(options))]);
 }
-exports.main = main;
 function transform(options) {
     const target = Object.assign({}, options);
     if (!target.name) {

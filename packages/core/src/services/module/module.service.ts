@@ -3,10 +3,7 @@ import { Container } from '../../container';
 import { Service } from '../../decorators/service/Service';
 import { LazyFactory } from '../lazy-factory/lazy-factory.service';
 import { PluginService } from '../plugin/plugin.service';
-import {
- ServiceArgumentsInternal,
- Metadata,
-} from '../../decorators/module/module.interfaces';
+import { ServiceArgumentsInternal } from '../../decorators/module/module.interfaces';
 import { Injector } from '../../decorators/injector/injector.decorator';
 import { ModuleValidators } from './helpers/validators';
 import {
@@ -31,7 +28,6 @@ export class ModuleService {
  @Injector(ControllersService) private controllersService: ControllersService;
  @Injector(EffectsService) private effectsService: EffectsService;
  @Injector(BootstrapsServices) private bootstraps: BootstrapsServices;
- // @Injector(ExternalImporter) private externalImporter: ExternalImporter;
  @Injector(ModuleValidators) private validators: ModuleValidators;
  @Injector(ServicesService) private servicesService: ServicesService;
 
