@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/graphql",
-  "version": "0.7.197",
+  "version": "0.7.198",
   "repository": {
     "type": "git",
     "url": "https://github.com/rxdi/graphql"
@@ -31,15 +31,15 @@
   "typings": "./dist/index.d.ts",
   "dependencies": {
     "@gapi/playground": "^1.8.172",
-    "@rxdi/altair": "^0.7.196",
+    "@rxdi/altair": "^0.7.198",
     "apollo-errors": "1.9.0",
     "apollo-server-module-graphiql": "1.4.0",
     "@hapi/boom": "^10.0.1",
     "graphql-tester": "0.0.5"
   },
   "devDependencies": {
-    "@rxdi/core": "^0.7.197",
-    "@rxdi/hapi": "^0.7.197",
+    "@rxdi/core": "^0.7.198",
+    "@rxdi/hapi": "^0.7.198",
     "graphql": "^16.12.0",
     "@types/graphql": "^14.5.0",
     "@types/jest": "^24.0.22",
