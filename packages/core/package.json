@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/core",
-  "version": "0.7.195",
+  "version": "0.7.196",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
