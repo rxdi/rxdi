@@ -31,7 +31,7 @@
   "typings": "./dist/index.d.ts",
   "dependencies": {
     "@gapi/playground": "^1.8.172",
-    "@rxdi/altair": "^0.7.197",
+    "@rxdi/altair": "^0.7.196",
     "apollo-errors": "1.9.0",
     "apollo-server-module-graphiql": "1.4.0",
     "@hapi/boom": "^10.0.1",

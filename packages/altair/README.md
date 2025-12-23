@@ -18,13 +18,9 @@ $ npm install @rxdi/altair
 
 ```typescript
 import { Module } from '@rxdi/core';
-import { HapiModule } from '@rxdi/hapi';
-import { GraphQLModule } from '@rxdi/graphql';
 
 @Module({
  imports: [
-  HapiModule.forRoot(),
-  GraphQLModule.forRoot(),
   AltairModule.forRoot({
    baseURL: 'http://localhost:9000/altair/',
    endpointURL: 'http://localhost:9000/graphql',

@@ -41,7 +41,7 @@ export interface GRAPHQL_PLUGIN_CONFIG {
   graphiqlPlaygroundConfig?: RenderPageOptions;
   altair?: {
     enabled: boolean;
-    options: AltairConfig
+    options?: AltairConfig
   };
 }
 export interface GRAPHQL_AUTHENTICATION_FAKE {
