@@ -1,188 +1,222 @@
 import { PubSubAsyncIterator } from './pubsub-async-iterator';
 import {
- RabbitMqSingletonConnectionFactory,
- RabbitMqPublisher,
- RabbitMqSubscriber,
- IRabbitMqConnectionConfig,
- IRabbitMqConsumerDisposer,
- IRabbitMqSubscriberDisposer,
- IQueueNameConfig,
+  RabbitMqSingletonConnectionFactory,
+  RabbitMqPublisher,
+  RabbitMqSubscriber,
+  IRabbitMqConnectionConfig,
+  IRabbitMqConsumerDisposer,
+  IRabbitMqSubscriberDisposer,
+  IQueueNameConfig,
 } from '@rxdi/rabbitmq-pubsub';
 import { createChildLogger, Logger } from './child-logger';
 
 export interface PubSubRabbitMQBusOptions {
- config?: IRabbitMqConnectionConfig;
- connectionListener?: (err: Error) => void;
- triggerTransform?: TriggerTransform;
- logger?: Logger;
+  config?: IRabbitMqConnectionConfig;
+  connectionListener?: (err: Error) => void;
+  triggerTransform?: TriggerTransform;
+  logger?: Logger;
 }
 
 export class AmqpPubSub {
- private consumer: RabbitMqSubscriber;
- private producer: RabbitMqPublisher;
- private subscriptionMap: {
-  [subId: number]: [string, (m: unknown) => Promise<void>];
- } = {};
- private subsRefsMap: { [trigger: string]: Array<number> } = {};
- private currentSubscriptionId: number = 0;
- private triggerTransform: TriggerTransform;
- private unsubscribeChannelMap: Record<string, IRabbitMqConsumerDisposer> = {};
- private logger: Logger;
- // Track in-progress subscriptions to prevent race conditions
- private pendingSubscriptions: Record<string, Promise<IRabbitMqConsumerDisposer>> = {};
+  private consumer: RabbitMqSubscriber;
+  private producer: RabbitMqPublisher;
 
- constructor(options: PubSubRabbitMQBusOptions = {}) {
-  this.triggerTransform = options.triggerTransform || ((trigger) => trigger as string);
-  const config = options.config || { host: '127.0.0.1', port: 5672 };
-  const { logger } = options;
+  private subscriptionMap = new Map<
+    number,
+    [string, (m: unknown) => Promise<void>]
+  >();
 
-  this.logger = createChildLogger(logger, 'AmqpPubSub');
+  private subsRefsMap = new Map<string, number[]>();
 
-  const factory = new RabbitMqSingletonConnectionFactory(logger, config);
+  private currentSubscriptionId = 0;
 
-  this.consumer = new RabbitMqSubscriber(logger, factory);
-  this.producer = new RabbitMqPublisher(logger, factory);
- }
+  private triggerTransform: TriggerTransform;
 
- public async publish(
-  trigger: string,
-  payload: any,
-  config?: IQueueNameConfig,
- ): Promise<void> {
-  this.logger.trace("publishing for queue '%s' (%j)", trigger, payload);
-  this.producer.publish(trigger, payload, config);
- }
+  private unsubscribeChannelMap = new Map<
+    string,
+    IRabbitMqConsumerDisposer
+  >();
 
- public async subscribe<T>(
-  trigger: string,
-  onMessage: (m: T) => Promise<void>,
-  options?: Partial<IQueueNameConfig>,
- ): Promise<number> {
-  const triggerName: string = this.triggerTransform(trigger, options);
-  const id = this.currentSubscriptionId++;
-  this.subscriptionMap[id] = [triggerName, onMessage];
-  let refs = this.subsRefsMap[triggerName];
+  // Track in-progress subscriptions to prevent race conditions
+  private pendingSubscriptions = new Map<
+    string,
+    Promise<IRabbitMqConsumerDisposer>
+  >();
 
-  if (refs && refs.length > 0) {
-   const newRefs = [...refs, id];
-   this.subsRefsMap[triggerName] = newRefs;
-   this.logger.trace(
-    "subscriber exist, adding triggerName '%s' to saved list.",
-    triggerName,
-   );
-   return id;
+  private logger: Logger;
+
+  constructor(options: PubSubRabbitMQBusOptions = {}) {
+    this.triggerTransform = options.triggerTransform || ((trigger) => trigger as string);
+    const config = options.config || { host: '127.0.0.1', port: 5672 };
+
+    this.logger = createChildLogger(options.logger, 'AmqpPubSub');
+
+    const factory = new RabbitMqSingletonConnectionFactory(options.logger, config);
+
+    this.consumer = new RabbitMqSubscriber(options.logger, factory);
+    this.producer = new RabbitMqPublisher(options.logger, factory);
   }
 
-  // Check if there's already a pending subscription for this trigger
-  if (this.pendingSubscriptions[triggerName]) {
-   this.logger.trace(
-    "subscription in progress for '%s', waiting for it to complete",
-    triggerName,
-   );
-
-   try {
-    const disposer = await this.pendingSubscriptions[triggerName];
-    this.subsRefsMap[triggerName] = [...(this.subsRefsMap[triggerName] || []), id];
-    this.unsubscribeChannelMap[triggerName] = disposer;
-    return id;
-   } catch (err) {
-    this.logger.error(err, "failed to receive message from queue '%s'", triggerName);
-    return id;
-   }
+  public async publish(
+    trigger: string,
+    payload: any,
+    config?: IQueueNameConfig,
+  ): Promise<void> {
+    this.logger.trace("publishing for queue '%s' (%j)", trigger, payload);
+    this.producer.publish(trigger, payload, config);
   }
 
-  this.logger.trace("trying to subscribe to queue '%s'", triggerName);
-  // Create the subscription promise and store it immediately
-  const subscriptionPromise = this.consumer.subscribe<string>(
-   triggerName,
-   (msg) => this.onMessage(triggerName, msg),
-   options,
-  );
+  public async subscribe<T>(
+    trigger: string,
+    onMessage: (m: T) => Promise<void>,
+    options?: Partial<IQueueNameConfig>,
+  ): Promise<number> {
+    const triggerName = this.triggerTransform(trigger, options);
+    const id = this.currentSubscriptionId++;
 
-  this.pendingSubscriptions[triggerName] = subscriptionPromise;
+    this.subscriptionMap.set(id, [triggerName, onMessage]);
 
-  try {
-   const disposer = await subscriptionPromise;
-   this.subsRefsMap[triggerName] = [...(this.subsRefsMap[triggerName] || []), id];
-   this.unsubscribeChannelMap[triggerName] = disposer;
+    const refs = this.subsRefsMap.get(triggerName);
 
-   // Clean up pending subscription
-   delete this.pendingSubscriptions[triggerName];
+    if (refs?.length) {
+      this.subsRefsMap.set(triggerName, [...refs, id]);
+      this.logger.trace(
+        "subscriber exists, adding triggerName '%s' to saved list.",
+        triggerName,
+      );
+      return id;
+    }
 
-   return id;
-  } catch (err) {
-   this.logger.error(err, "failed to receive message from queue '%s'", triggerName);
-   return id;
-  }
- }
+    // Subscription already in progress
+    const pending = this.pendingSubscriptions.get(triggerName);
+    if (pending) {
+      this.logger.trace(
+        "subscription in progress for '%s', waiting for it to complete",
+        triggerName,
+      );
 
- public unsubscribe(subId: number) {
-  const [triggerName = null] = this.subscriptionMap[subId] || [];
-  const refs = this.subsRefsMap[triggerName];
+      try {
+        const disposer = await pending;
+        const nextRefs = [...(this.subsRefsMap.get(triggerName) || []), id];
+        this.subsRefsMap.set(triggerName, nextRefs);
+        this.unsubscribeChannelMap.set(triggerName, disposer);
+        return id;
+      } catch (err) {
+        this.logger.error(err, "failed to receive message from queue '%s'", triggerName);
+        return id;
+      }
+    }
 
-  if (!refs) {
-   this.logger.error("There is no subscription of id '%s'", subId);
-   throw new Error(`There is no subscription of id "${subId}"`);
-  }
+    this.logger.trace("trying to subscribe to queue '%s'", triggerName);
 
-  let newRefs: number[];
-  if (refs.length === 1) {
-   newRefs = [];
-   if (typeof this.unsubscribeChannelMap[triggerName] === 'function') {
-    this.unsubscribeChannelMap[triggerName]()
-     .then(() => {
-      this.logger.trace("cancelled channel from subscribing to queue '%s'", triggerName);
-      delete this.unsubscribeChannelMap[triggerName];
-     })
-     .catch((err) => {
-      this.logger.error(err, "channel cancellation failed from queue '%j'", triggerName);
-      delete this.unsubscribeChannelMap[triggerName];
-     });
-   }
-  } else {
-   const index = refs.indexOf(subId);
-   if (index !== -1) {
-    newRefs = [...refs.slice(0, index), ...refs.slice(index + 1)];
-   } else {
-    newRefs = refs;
-   }
-   this.logger.trace("removing triggerName from listening '%s' ", triggerName);
-  }
+    const subscriptionPromise = this.consumer.subscribe<string>(
+      triggerName,
+      (msg) => this.onMessage(triggerName, msg),
+      options,
+    );
 
-  this.subsRefsMap[triggerName] = newRefs;
-  delete this.subscriptionMap[subId];
-  this.logger.trace("list of subscriptions still available '(%j)'", this.subscriptionMap);
- }
+    this.pendingSubscriptions.set(triggerName, subscriptionPromise);
 
- public asyncIterator<T>(
-  triggers: string | string[],
-  options?: IQueueNameConfig,
- ): AsyncIterator<T> {
-  return new PubSubAsyncIterator<T>(this, triggers, options);
- }
+    try {
+      const disposer = await subscriptionPromise;
+      this.subsRefsMap.set(triggerName, [...(this.subsRefsMap.get(triggerName) || []), id]);
+      this.unsubscribeChannelMap.set(triggerName, disposer);
+      this.pendingSubscriptions.delete(triggerName);
 
- private async onMessage(
-  channel: string,
-  message: string,
- ): Promise<IRabbitMqSubscriberDisposer> {
-  const subscribers = this.subsRefsMap[channel];
-
-  // Don't work for nothing..
-  if (!subscribers || !subscribers.length) {
-   return;
+      return id;
+    } catch (err) {
+      this.logger.error(err, "failed to receive message from queue '%s'", triggerName);
+      this.pendingSubscriptions.delete(triggerName);
+      return id;
+    }
   }
 
-  this.logger.trace("sending message to subscriber callback function '(%j)'", message);
-  for (const subId of subscribers) {
-   const [triggerName, listener] = this.subscriptionMap[subId];
-   await listener(message);
+  public unsubscribe(subId: number) {
+    const entry = this.subscriptionMap.get(subId);
+    const triggerName = entry?.[0];
+
+    if (!triggerName) {
+      this.logger.error("There is no subscription of id '%s'", subId);
+      throw new Error(`There is no subscription of id "${subId}"`);
+    }
+
+    const refs = this.subsRefsMap.get(triggerName);
+    if (!refs) return;
+
+    if (refs.length === 1) {
+      const disposer = this.unsubscribeChannelMap.get(triggerName);
+      if (typeof disposer === 'function') {
+        disposer()
+          .then(() => {
+            this.logger.trace(
+              "cancelled channel from subscribing to queue '%s'",
+              triggerName,
+            );
+          })
+          .catch((err) => {
+            this.logger.error(
+              err,
+              "channel cancellation failed from queue '%s'",
+              triggerName,
+            );
+          })
+          .finally(() => {
+            this.unsubscribeChannelMap.delete(triggerName);
+          });
+      }
+
+      this.subsRefsMap.delete(triggerName);
+    } else {
+      this.subsRefsMap.set(
+        triggerName,
+        refs.filter((id) => id !== subId),
+      );
+      this.logger.trace(
+        "removing triggerName from listening '%s'",
+        triggerName,
+      );
+    }
+
+    this.subscriptionMap.delete(subId);
+    this.logger.trace(
+      "list of subscriptions still available '(%j)'",
+      Array.from(this.subscriptionMap.entries()),
+    );
   }
- }
+
+  public asyncIterator<T>(
+    triggers: string | string[],
+    options?: IQueueNameConfig,
+  ): AsyncIterator<T> {
+    return new PubSubAsyncIterator<T>(this, triggers, options);
+  }
+
+  private async onMessage(
+    channel: string,
+    message: string,
+  ): Promise<IRabbitMqSubscriberDisposer> {
+    const subscribers = this.subsRefsMap.get(channel);
+
+    if (!subscribers?.length) return;
+
+    this.logger.trace(
+      "sending message to subscriber callback function '(%j)'",
+      message,
+    );
+
+    for (const subId of subscribers) {
+      const entry = this.subscriptionMap.get(subId);
+      if (!entry) continue;
+
+      const [, listener] = entry;
+      await listener(message);
+    }
+  }
 }
 
 export type Path = Array<string | number>;
 export type Trigger = string | Path;
 export type TriggerTransform = (
- trigger: Trigger,
- channelOptions?: Partial<IQueueNameConfig>,
+  trigger: Trigger,
+  channelOptions?: Partial<IQueueNameConfig>,
 ) => string;
