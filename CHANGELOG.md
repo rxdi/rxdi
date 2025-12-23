@@ -1,4 +1,4 @@
-## [0.7.193](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.193) (2025-12-23)
+## [0.7.194](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.194) (2025-12-23)
 
 
 ### Bug Fixes
@@ -127,6 +127,7 @@
 * **neo4j:** updated library to use latest neo4j graphql official package ([2a853f8](https://github.com/rxdi/mono/commit/2a853f8832facc7a0f28e258eeb2b83a78d8f97f))
 * **pubsub:** global prefetch added on channel config ([3a32a33](https://github.com/rxdi/mono/commit/3a32a33af44a49099f0156c519b1155877fcbad6))
 * **pubsub:** prefetch property added in order one worker to acknowladge single message then process another ([b16491b](https://github.com/rxdi/mono/commit/b16491b1586a9a5ae6c5e32407d57f7c8347b4f6))
+* **pubsub:** refactored Record with Map for better maintainability next is rxjs ([21e1825](https://github.com/rxdi/mono/commit/21e18257d4c576ff6ba4dd7fb6da0f7c3fc027b1))
 * **rabbitmq-pubsub:** added new library for handling subscriptions using rabbitmq removed banyan from dependencies ([5225543](https://github.com/rxdi/mono/commit/522554302c5f61f81278392b4f0688aae1738794))
 * **rabbitmq-pubsub:** global prefetch set ([55cedf1](https://github.com/rxdi/mono/commit/55cedf1f72d394229019aa54fd96c950c86a1dbc))
 * **Websocket:** added perMessageDeflate gzip on subscriptions options ([157f29b](https://github.com/rxdi/mono/commit/157f29bddf0e5aeb997d6bed642206076e679439))
