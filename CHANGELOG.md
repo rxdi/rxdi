@@ -1,4 +1,4 @@
-## [0.7.192](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.192) (2025-12-22)
+## [0.7.193](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.193) (2025-12-23)
 
 
 ### Bug Fixes
@@ -86,6 +86,7 @@
 * **Router:** removed unused things and only router component left ([b474240](https://github.com/rxdi/mono/commit/b4742405f4af74eff341261d3f95429a64da9216))
 * **Router:** static methods ([a2ae8ea](https://github.com/rxdi/mono/commit/a2ae8ea589880f91694609dd49ebcb6fed45b584))
 * **router:** typings when defining component inside forRoot ([5f296e7](https://github.com/rxdi/mono/commit/5f296e7bd618d07e08efd444e4a125b4ed17a630))
+* **subscriptions:** memory leak prevented by canceling channels and tracking pending subscriptions ([dbc8f65](https://github.com/rxdi/mono/commit/dbc8f652b8f01361d0fd734ae6a4a3300922d476))
 * **Subscriptions:** removed logic from external dependencies refactored many parts of the pubsub protocol using regular Promise and not bluebird promise ([e3a70df](https://github.com/rxdi/mono/commit/e3a70dfd68885fc5f9742a289be5af3f748f2d99))
 
 
