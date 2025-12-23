@@ -70,8 +70,8 @@
     "glob": "^7.1.2",
     "mkdirp": "^0.5.1",
     "@apollo/client": "^3.7.3",
-    "ws": "6.2.1",
-    "subscriptions-transport-ws": "^0.9.19",
+    "ws": "^8.18.3",
+    "graphql-ws": "^6.0.6",
     "@hapi/hapi": "^21.3.2",
     "@hapi/inert": "^7.1.0",
     "coveralls": "3.0.5",
@@ -93,6 +93,7 @@
     "lit-html": "2.5.0"
   },
   "devDependencies": {
+    "@types/ws": "^8.18.1",
     "@types/bunyan": "^1.8.0",
     "@types/mongodb": "3.1.30",
     "@types/mongoose": "^5.5.30",

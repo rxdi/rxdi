@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.3",
-    "subscriptions-transport-ws": "^0.9.19"
+    "graphql-ws": "^6.0.6"
   },
   "devDependencies": {
     "@rxdi/core": "^0.7.193",

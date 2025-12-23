@@ -33,10 +33,11 @@
     "@rxdi/graphql-rabbitmq-subscriptions": "^0.7.193",
     "@apollo/client": "^3.7.3",
     "graphql-request": "^1.8.2",
-    "subscriptions-transport-ws": "^0.9.19",
-    "ws": "6.2.1"
+    "graphql-ws": "^6.0.6",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
+    "@types/ws": "^8.18.1",
     "@rxdi/core": "^0.7.193",
     "@rxdi/graphql": "^0.7.193",
     "@rxdi/hapi": "^0.7.193",
