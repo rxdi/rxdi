@@ -102,14 +102,14 @@ export class PubSubAsyncIterator<T> implements AsyncIterator<T> {
   private subscribeAll(options: Partial<IQueueNameConfig>) {
     return Promise.all(
       this.eventsArray.map(eventName =>
-        this.pubsub.subscribe(eventName, this.pushValue.bind(this), options),
+        this.pubsub.subscribe(eventName, options),
       ),
     );
   }
 
   private unsubscribeAll(subscriptionIds: number[]) {
     for (const subscriptionId of subscriptionIds) {
-      this.pubsub.unsubscribe(subscriptionId);
+      // this.pubsub.unsubscribe(subscriptionId);
     }
   }
 }
