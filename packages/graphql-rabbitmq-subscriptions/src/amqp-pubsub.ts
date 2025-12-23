@@ -1,12 +1,22 @@
-import { PubSubAsyncIterator } from './pubsub-async-iterator';
+import { Observable, Subject, defer, from, merge, EMPTY, throwError, using } from 'rxjs';
 import {
- RabbitMqSingletonConnectionFactory,
+ share,
+ mergeMap,
+ tap,
+ catchError,
+ finalize,
+ retry,
+ takeUntil,
+ filter,
+ map,
+} from 'rxjs/operators';
+import {
+ RxJsRabbitMqConnectionFactory,
  RabbitMqPublisher,
  RabbitMqSubscriber,
  IRabbitMqConnectionConfig,
- IRabbitMqConsumerDisposer,
- IRabbitMqSubscriberDisposer,
  IQueueNameConfig,
+ IRabbitMqSubscriberDisposer,
 } from '@rxdi/rabbitmq-pubsub';
 import { createChildLogger, Logger } from './child-logger';
 
@@ -15,168 +25,256 @@ export interface PubSubRabbitMQBusOptions {
  connectionListener?: (err: Error) => void;
  triggerTransform?: TriggerTransform;
  logger?: Logger;
+ retryAttempts?: number;
+}
+
+interface ChannelSubscription<T> {
+ trigger: string;
+ observable: Observable<T>;
+ refCount: number;
 }
 
 export class AmqpPubSub {
- private consumer: RabbitMqSubscriber;
  private producer: RabbitMqPublisher;
- private subscriptionMap: {
-  [subId: number]: [string, (m: unknown) => Promise<void>];
- } = {};
- private subsRefsMap: { [trigger: string]: Array<number> } = {};
- private currentSubscriptionId: number = 0;
- private triggerTransform: TriggerTransform;
- private unsubscribeChannelMap: Record<string, IRabbitMqConsumerDisposer> = {};
+ private consumer: RabbitMqSubscriber;
  private logger: Logger;
- // Track in-progress subscriptions to prevent race conditions
- private pendingSubscriptions: Record<string, Promise<IRabbitMqConsumerDisposer>> = {};
+ private triggerTransform: TriggerTransform;
+ private destroy$ = new Subject<void>();
+
+ // RxJS-based subscription management
+ private channelStreams = new Map<string, Observable<any>>();
+ private retryAttempts: number;
 
  constructor(options: PubSubRabbitMQBusOptions = {}) {
   this.triggerTransform = options.triggerTransform || ((trigger) => trigger as string);
+  this.retryAttempts = options.retryAttempts ?? 3;
   const config = options.config || { host: '127.0.0.1', port: 5672 };
   const { logger } = options;
 
   this.logger = createChildLogger(logger, 'AmqpPubSub');
 
-  const factory = new RabbitMqSingletonConnectionFactory(logger, config);
+  const factory = new RxJsRabbitMqConnectionFactory(logger, config);
 
   this.consumer = new RabbitMqSubscriber(logger, factory);
   this.producer = new RabbitMqPublisher(logger, factory);
  }
 
- public async publish(
+ /**
+  * Publish a message - returns Observable for better error handling
+  */
+ public publish<T>(
   trigger: string,
-  payload: any,
+  payload: T,
   config?: IQueueNameConfig,
- ): Promise<void> {
-  this.logger.trace("publishing for queue '%s' (%j)", trigger, payload);
-  this.producer.publish(trigger, payload, config);
+ ): Observable<void> {
+  return defer(() => {
+   this.logger.trace("publishing for queue '%s' (%j)", trigger, payload);
+   return from(this.producer.publish(trigger, payload, config));
+  }).pipe(
+   retry(this.retryAttempts),
+   catchError((err) => {
+    this.logger.error(err, "failed to publish to queue '%s'", trigger);
+    return throwError(() => err);
+   }),
+   takeUntil(this.destroy$),
+  );
  }
 
- public async subscribe<T>(
+ /**
+  * Subscribe to a channel - returns Observable that auto-manages lifecycle
+  */
+ public subscribe<T>(
   trigger: string,
-  onMessage: (m: T) => Promise<void>,
   options?: Partial<IQueueNameConfig>,
- ): Promise<number> {
-  const triggerName: string = this.triggerTransform(trigger, options);
-  const id = this.currentSubscriptionId++;
-  this.subscriptionMap[id] = [triggerName, onMessage];
-  let refs = this.subsRefsMap[triggerName];
+ ): Observable<T> {
+  const triggerName = this.triggerTransform(trigger, options);
 
-  if (refs && refs.length > 0) {
-   const newRefs = [...refs, id];
-   this.subsRefsMap[triggerName] = newRefs;
-   this.logger.trace(
-    "subscriber exist, adding triggerName '%s' to saved list.",
-    triggerName,
-   );
-   return id;
+  // Return cached stream if it exists (multicast behavior)
+  if (this.channelStreams.has(triggerName)) {
+   this.logger.trace("reusing existing stream for '%s'", triggerName);
+   return this.channelStreams.get(triggerName)!;
   }
 
-  // Check if there's already a pending subscription for this trigger
-  if (this.pendingSubscriptions[triggerName]) {
-   this.logger.trace(
-    "subscription in progress for '%s', waiting for it to complete",
-    triggerName,
-   );
+  this.logger.trace("creating new stream for queue '%s'", triggerName);
 
-   try {
-    const disposer = await this.pendingSubscriptions[triggerName];
-    this.subsRefsMap[triggerName] = [...(this.subsRefsMap[triggerName] || []), id];
-    this.unsubscribeChannelMap[triggerName] = disposer;
-    return id;
-   } catch (err) {
-    this.logger.error(err, "failed to receive message from queue '%s'", triggerName);
-    return id;
-   }
-  }
-
-  this.logger.trace("trying to subscribe to queue '%s'", triggerName);
-  // Create the subscription promise and store it immediately
-  const subscriptionPromise = this.consumer.subscribe<string>(
-   triggerName,
-   (msg) => this.onMessage(triggerName, msg),
-   options,
+  // Create a hot observable using share() for multicast behavior
+  const stream$ = this.createChannelStream<T>(triggerName, options).pipe(
+   share({
+    connector: () => new Subject<T>(),
+    resetOnError: false,
+    resetOnComplete: false,
+    resetOnRefCountZero: true,
+   }),
   );
 
-  this.pendingSubscriptions[triggerName] = subscriptionPromise;
+  this.channelStreams.set(triggerName, stream$);
 
-  try {
-   const disposer = await subscriptionPromise;
-   this.subsRefsMap[triggerName] = [...(this.subsRefsMap[triggerName] || []), id];
-   this.unsubscribeChannelMap[triggerName] = disposer;
-
-   // Clean up pending subscription
-   delete this.pendingSubscriptions[triggerName];
-
-   return id;
-  } catch (err) {
-   this.logger.error(err, "failed to receive message from queue '%s'", triggerName);
-   return id;
-  }
+  return stream$;
  }
 
- public unsubscribe(subId: number) {
-  const [triggerName = null] = this.subscriptionMap[subId] || [];
-  const refs = this.subsRefsMap[triggerName];
-
-  if (!refs) {
-   this.logger.error("There is no subscription of id '%s'", subId);
-   throw new Error(`There is no subscription of id "${subId}"`);
-  }
-
-  let newRefs: number[];
-  if (refs.length === 1) {
-   newRefs = [];
-   if (typeof this.unsubscribeChannelMap[triggerName] === 'function') {
-    this.unsubscribeChannelMap[triggerName]()
-     .then(() => {
-      this.logger.trace("cancelled channel from subscribing to queue '%s'", triggerName);
-      delete this.unsubscribeChannelMap[triggerName];
-     })
-     .catch((err) => {
-      this.logger.error(err, "channel cancellation failed from queue '%j'", triggerName);
-      delete this.unsubscribeChannelMap[triggerName];
-     });
-   }
-  } else {
-   const index = refs.indexOf(subId);
-   if (index !== -1) {
-    newRefs = [...refs.slice(0, index), ...refs.slice(index + 1)];
-   } else {
-    newRefs = refs;
-   }
-   this.logger.trace("removing triggerName from listening '%s' ", triggerName);
-  }
-
-  this.subsRefsMap[triggerName] = newRefs;
-  delete this.subscriptionMap[subId];
-  this.logger.trace("list of subscriptions still available '(%j)'", this.subscriptionMap);
+ /**
+  * Creates an observable stream from a RabbitMQ channel
+  */
+ private createChannelStream<T>(
+  triggerName: string,
+  options?: Partial<IQueueNameConfig>,
+ ): Observable<T> {
+  return using(
+   // Resource factory: subscribe to RabbitMQ
+   () => this.createRabbitMqSubscription<T>(triggerName, options) as never,
+   // Observable factory: create stream from messages
+   ({ observable, disposer }: any) =>
+    observable.pipe(
+     tap((msg) => {
+      this.logger.trace("message received from queue '%s' (%j)", triggerName, msg);
+     }),
+     catchError((err) => {
+      this.logger.error(err, "error processing message from queue '%s'", triggerName);
+      return EMPTY;
+     }),
+     finalize(() => {
+      this.logger.trace("stream finalized for queue '%s'", triggerName);
+      this.channelStreams.delete(triggerName);
+      // Dispose RabbitMQ subscription
+      disposer().catch((err) =>
+       this.logger.error(err, "error disposing channel '%s'", triggerName),
+      );
+     }),
+    ),
+  ).pipe(takeUntil(this.destroy$)) as never;
  }
 
+ /**
+  * Create RabbitMQ subscription and wrap it in an Observable
+  */
+ private createRabbitMqSubscription<T>(
+  triggerName: string,
+  options?: Partial<IQueueNameConfig>,
+ ): {
+  observable: Observable<T>;
+  disposer: IRabbitMqSubscriberDisposer;
+ } {
+  const subject = new Subject<T>();
+  let disposer: (() => Promise<void>) | null = null;
+
+  // Subscribe to RabbitMQ
+  this.consumer
+   .subscribe<T>(
+    triggerName,
+    async (message) => {
+     subject.next(message);
+     return async () => {
+      subject.unsubscribe();
+     };
+    },
+    options,
+   )
+   .then((dispose) => {
+    disposer = dispose;
+    this.logger.trace("subscribed to queue '%s'", triggerName);
+   })
+   .catch((err) => {
+    this.logger.error(err, "failed to subscribe to queue '%s'", triggerName);
+    subject.error(err);
+   });
+
+  return {
+   observable: subject.asObservable(),
+   disposer: () => {
+    subject.complete();
+    return disposer ? disposer() : Promise.resolve();
+   },
+  };
+ }
+
+ /**
+  * Create async iterator for GraphQL subscriptions compatibility
+  */
  public asyncIterator<T>(
   triggers: string | string[],
   options?: IQueueNameConfig,
  ): AsyncIterator<T> {
-  return new PubSubAsyncIterator<T>(this, triggers, options);
+  const triggerArray = Array.isArray(triggers) ? triggers : [triggers];
+
+  // Merge multiple trigger observables
+  const merged$ = merge(
+   ...triggerArray.map((trigger) => this.subscribe<T>(trigger, options)),
+  );
+
+  return this.observableToAsyncIterator(merged$);
  }
 
- private async onMessage(
-  channel: string,
-  message: string,
- ): Promise<IRabbitMqSubscriberDisposer> {
-  const subscribers = this.subsRefsMap[channel];
+ /**
+  * Convert Observable to AsyncIterator for GraphQL compatibility
+  */
+ private observableToAsyncIterator<T>(observable: Observable<T>): AsyncIterator<T> {
+  const pullQueue: Array<(result: IteratorResult<T>) => void> = [];
+  const pushQueue: T[] = [];
+  let listening = true;
+  let subscription: any = null;
 
-  // Don't work for nothing..
-  if (!subscribers || !subscribers.length) {
-   return;
-  }
+  // Subscribe to observable
+  subscription = observable.subscribe({
+   next: (value) => {
+    if (pullQueue.length) {
+     pullQueue.shift()!({ value, done: false });
+    } else {
+     pushQueue.push(value);
+    }
+   },
+   error: (err) => {
+    if (pullQueue.length) {
+     pullQueue.shift()!({ value: undefined as any, done: true });
+    }
+    listening = false;
+   },
+   complete: () => {
+    if (pullQueue.length) {
+     pullQueue.shift()!({ value: undefined as any, done: true });
+    }
+    listening = false;
+   },
+  });
 
-  this.logger.trace("sending message to subscriber callback function '(%j)'", message);
-  for (const subId of subscribers) {
-   const [triggerName, listener] = this.subscriptionMap[subId];
-   await listener(message);
-  }
+  return {
+   next(): Promise<IteratorResult<T>> {
+    if (!listening) {
+     return Promise.resolve({ value: undefined as any, done: true });
+    }
+
+    if (pushQueue.length) {
+     return Promise.resolve({ value: pushQueue.shift()!, done: false });
+    }
+
+    return new Promise((resolve) => pullQueue.push(resolve));
+   },
+   return(): Promise<IteratorResult<T>> {
+    listening = false;
+    if (subscription) {
+     subscription.unsubscribe();
+    }
+    pullQueue.length = 0;
+    pushQueue.length = 0;
+    return Promise.resolve({ value: undefined as any, done: true });
+   },
+   throw(error: any): Promise<IteratorResult<T>> {
+    listening = false;
+    if (subscription) {
+     subscription.unsubscribe();
+    }
+    return Promise.reject(error);
+   },
+  };
+ }
+
+ /**
+  * Graceful shutdown - completes all streams
+  */
+ public async shutdown(): Promise<void> {
+  this.logger.trace('shutting down AmqpPubSub');
+  this.destroy$.next();
+  this.destroy$.complete();
+  this.channelStreams.clear();
  }
 }
 
@@ -186,3 +284,74 @@ export type TriggerTransform = (
  trigger: Trigger,
  channelOptions?: Partial<IQueueNameConfig>,
 ) => string;
+
+/**
+ * RxJS Operators for common PubSub patterns
+ */
+export class PubSubOperators {
+ /**
+  * Operator to filter messages by type
+  */
+ static filterByType<T extends { type: string }>(type: string) {
+  return filter<T>((msg) => msg.type === type);
+ }
+
+ /**
+  * Operator to extract message payload
+  */
+ static extractPayload<T extends { message: any }>() {
+  return map<T, T['message']>((msg) => msg.message);
+ }
+
+ /**
+  * Operator to add metadata to messages
+  */
+ static withMetadata<T>(metadata: Record<string, any>) {
+  return map<T, T & { metadata: Record<string, any> }>((msg) => ({
+   ...msg,
+   metadata: { ...metadata, receivedAt: new Date() },
+  }));
+ }
+
+ /**
+  * Operator to batch messages by time window
+  */
+ static batch<T>(windowTime: number) {
+  return (source: Observable<T>) =>
+   source.pipe(
+    // Implementation would use bufferTime
+    // This is a placeholder for the pattern
+    tap((msg) => console.log('Batching:', msg)),
+   );
+ }
+}
+
+/**
+ * Example usage patterns:
+ *
+ * // Simple subscription
+ * const messages$ = pubsub.subscribe<MyMessage>('my-channel');
+ * messages$.subscribe(msg => console.log(msg));
+ *
+ * // With operators
+ * pubsub.subscribe<MyMessage>('my-channel').pipe(
+ *   PubSubOperators.filterByType('updated'),
+ *   PubSubOperators.extractPayload(),
+ *   tap(payload => console.log(payload))
+ * ).subscribe();
+ *
+ * // Publishing
+ * pubsub.publish('my-channel', { data: 'test' }).subscribe({
+ *   next: () => console.log('Published'),
+ *   error: (err) => console.error('Failed', err)
+ * });
+ *
+ * // Multiple channels
+ * const multi$ = merge(
+ *   pubsub.subscribe('channel1'),
+ *   pubsub.subscribe('channel2')
+ * );
+ *
+ * // Graceful shutdown
+ * await pubsub.shutdown();
+ */

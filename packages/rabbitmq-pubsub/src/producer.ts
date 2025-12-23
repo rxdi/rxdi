@@ -1,12 +1,12 @@
 import { Options } from 'amqplib';
-import { IRabbitMqConnectionFactory } from './connectionFactory';
+import { RxJsRabbitMqConnectionFactory } from './connectionFactory';
 import { IQueueNameConfig, asQueueNameConfig } from './common';
 import { createChildLogger, Logger } from './childLogger';
 
 export class RabbitMqProducer {
  constructor(
   private logger: Logger,
-  private connectionFactory: IRabbitMqConnectionFactory,
+  private connectionFactory: RxJsRabbitMqConnectionFactory,
  ) {
   this.logger = createChildLogger(logger, 'RabbitMqProducer');
  }

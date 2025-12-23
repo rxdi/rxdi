@@ -1,137 +1,184 @@
-import { Channel, Message, Options } from "amqplib";
-import { IRabbitMqConnectionFactory } from "./connectionFactory";
-import { IQueueNameConfig, asPubSubQueueNameConfig } from "./common";
+import { from, Observable, switchMap } from "rxjs";
+import { retry, share } from "rxjs/operators";
 import { createChildLogger, Logger } from "./childLogger";
+import { asPubSubQueueNameConfig, IQueueNameConfig } from "./common";
+import { RxJsRabbitMqConnectionFactory } from "./connectionFactory";
+import { Channel } from "amqplib";
 
-export interface IRabbitMqSubscriberDisposer {
-  (): Promise<void>;
-}
+/**
+ * RxJS-based Subscriber with automatic reconnection
+ */
+export class RxJsRabbitMqSubscriber {
+  private logger: Logger;
 
-export class RabbitMqSubscriber {
   constructor(
-    private logger: Logger,
-    private connectionFactory: IRabbitMqConnectionFactory
+    logger: Logger,
+    private connectionFactory: RxJsRabbitMqConnectionFactory,
   ) {
-    this.logger = createChildLogger(logger, "RabbitMqConsumer");
+    this.logger = createChildLogger(logger, 'RxJsRabbitMqSubscriber');
   }
 
-  async subscribe<T>(
+  /**
+   * Subscribe to a queue and return an Observable stream
+   */
+  public subscribe$<T>(
     queue: string | IQueueNameConfig,
-    action: (message: T) => Promise<IRabbitMqSubscriberDisposer>,
-    options?: Partial<IQueueNameConfig>
-  ): Promise<IRabbitMqSubscriberDisposer> {
+    options?: Partial<IQueueNameConfig>,
+  ): Observable<T> {
     const queueConfig = asPubSubQueueNameConfig(queue);
-    const connection = await this.connectionFactory.create();
-    const channel = await connection.createChannel();
-    if (options?.prefetch) {
-      await channel.prefetch(options.prefetch, options.globalPrefetch);
-    }
-    this.logger.trace("got channel for queue '%s'", queueConfig.name);
-    const queueName = await this.setupChannel<T>(channel, {
-      ...queueConfig,
-      ...options
-    });
 
-    this.logger.debug(
-      "queue name generated for subscription queue '(%s)' is '(%s)'",
-      queueConfig.name,
-      queueName
+    return this.connectionFactory.getConnection$().pipe(
+      switchMap((connection) => from(connection.createChannel())),
+      switchMap(async (channel) => {
+        if (options?.prefetch) {
+          await channel.prefetch(options.prefetch, options.globalPrefetch);
+        }
+        this.logger.trace("got channel for queue '%s'", queueConfig.name);
+        
+        const queueName = await this.setupChannel(channel, {
+          ...queueConfig,
+          ...options,
+        });
+
+        this.logger.debug(
+          "queue name generated for subscription queue '(%s)' is '(%s)'",
+          queueConfig.name,
+          queueName,
+        );
+
+        return { channel, queueName };
+      }),
+      switchMap(({ channel, queueName }) =>
+        this.createMessageStream<T>(channel, queueName, queueConfig.name),
+      ),
+      share(), // Multicast to multiple subscribers
     );
-    const queConfig = { ...queueConfig, dlq: queueName };
-    return this.subscribeToChannel<T>(channel, queConfig, action);
   }
 
-  private setupChannel<T>(
+  /**
+   * Create an observable stream from channel messages
+   */
+  private createMessageStream<T>(
     channel: Channel,
-    queueConfig: IQueueNameConfig
-  ) {
-    this.logger.trace("setup '%j'", queueConfig);
-    return this.getChannelSetup(channel, queueConfig);
+    queueName: string,
+    originalQueueName: string,
+  ): Observable<T> {
+    return new Observable<T>((subscriber) => {
+      let consumerTag: string;
+
+      channel
+        .consume(queueName, async (message) => {
+          if (!message) return;
+
+          try {
+            const msg = JSON.parse(message.content.toString('utf8')) as T;
+            
+            this.logger.trace(
+              "message arrived from queue '%s' (%j)",
+              originalQueueName,
+              msg,
+            );
+
+            subscriber.next(msg);
+            channel.ack(message);
+
+            this.logger.trace(
+              "message processed from queue '%s' (%j)",
+              originalQueueName,
+              msg,
+            );
+          } catch (err) {
+            this.logger.error(
+              err,
+              "message processing failed from queue '%s'",
+              originalQueueName,
+            );
+            channel.nack(message, false, false);
+            subscriber.error(err);
+          }
+        })
+        .then((opts) => {
+          consumerTag = opts.consumerTag;
+          this.logger.trace(
+            "subscribed to queue '%s' (%s)",
+            originalQueueName,
+            consumerTag,
+          );
+        })
+        .catch((err) => {
+          this.logger.error(err, "failed to subscribe to queue '%s'", originalQueueName);
+          subscriber.error(err);
+        });
+
+      // Cleanup function
+      return () => {
+        this.logger.trace(
+          "disposing subscriber to queue '%s' (%s)",
+          originalQueueName,
+          consumerTag,
+        );
+
+        if (consumerTag) {
+          channel
+            .cancel(consumerTag)
+            .then(() => channel.close())
+            .catch((err) => {
+              this.logger.error(err, 'failed to cancel consumer');
+            });
+        }
+      };
+    }).pipe(
+      retry({
+        count: 3,
+        delay: 1000,
+      }),
+    );
   }
 
-  private async subscribeToChannel<T>(
+  private async setupChannel(
     channel: Channel,
     queueConfig: IQueueNameConfig,
-    action: (message: T) => Promise<IRabbitMqSubscriberDisposer>
-  ) {
-    this.logger.trace("subscribing to queue '%s'", queueConfig.name);
-    const opts = await channel.consume(queueConfig.dlq, async (message) => {
-      let msg: T = this.getMessageObject<T>(message);
-      this.logger.trace(
-        "message arrived from queue '%s' (%j)",
-        queueConfig.name,
-        msg
-      );
-      try {
-        const disposer = await action(msg);
-        this.logger.trace(
-          "message processed from queue '%s' (%j)",
-          queueConfig.name,
-          msg
-        );
-        channel.ack(message);
-        return disposer;
-      } catch (err) {
-        this.logger.error(
-          err,
-          "message processing failed from queue '%j' (%j)",
-          queueConfig,
-          msg
-        );
-        channel.nack(message, false, false);
-        throw err;
-      }
-    });
-
-    this.logger.trace(
-      "subscribed to queue '%s' (%s)",
-      queueConfig.name,
-      opts.consumerTag
-    );
-
-    return (async () => {
-      this.logger.trace(
-        "disposing subscriber to queue '%s' (%s)",
-        queueConfig.name,
-        opts.consumerTag
-      );
-      await channel.cancel(opts.consumerTag); // Cancel consumer first
-      await channel.close();
-    }) as IRabbitMqSubscriberDisposer;
-  }
-
-  protected getMessageObject<T>(message: Message) {
-    return JSON.parse(message.content.toString("utf8")) as T;
-  }
-
-  protected async getChannelSetup(
-    channel: Channel,
-    queueConfig: IQueueNameConfig
-  ) {
-    await channel.assertExchange(
-      queueConfig.dlx,
-      "fanout",
-      this.getDLSettings()
-    );
-    let result = await channel.assertQueue(
-      queueConfig.strictName ? queueConfig.name : queueConfig.dlq,
-      this.getQueueSettings()
-    );
-    await channel.bindQueue(result.queue, queueConfig.dlx, "");
-    return result.queue;
-  }
-
-  protected getQueueSettings(): Options.AssertQueue {
-    return {
-      exclusive: false,
-      autoDelete: true,
-    };
-  }
-
-  protected getDLSettings(): Options.AssertQueue {
-    return {
+  ): Promise<string> {
+    await channel.assertExchange(queueConfig.dlx, 'fanout', {
       durable: true,
       autoDelete: true,
-    };
+    });
+
+    const result = await channel.assertQueue(
+      queueConfig.strictName ? queueConfig.name : queueConfig.dlq,
+      {
+        exclusive: false,
+        autoDelete: true,
+      },
+    );
+
+    await channel.bindQueue(result.queue, queueConfig.dlx, '');
+    return result.queue;
   }
 }
+
+/**
+ * Usage examples:
+ * 
+ * // Publisher
+ * const publisher = new RxJsRabbitMqPublisher(logger, factory);
+ * 
+ * publisher.publish('my-queue', { data: 'test' }).subscribe({
+ *   next: () => console.log('Published'),
+ *   error: (err) => console.error(err)
+ * });
+ * 
+ * // High-throughput publishing with backpressure
+ * for (let i = 0; i < 1000; i++) {
+ *   publisher.queuePublish('my-queue', { id: i });
+ * }
+ * 
+ * // Subscriber
+ * const subscriber = new RxJsRabbitMqSubscriber(logger, factory);
+ * 
+ * subscriber.subscribe$<MyMessage>('my-queue').pipe(
+ *   tap(msg => console.log('Received:', msg)),
+ *   filter(msg => msg.type === 'important'),
+ *   // Auto-reconnects on error
+ * ).subscribe();
+ */

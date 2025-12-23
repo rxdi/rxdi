@@ -1,11 +1,9 @@
 export {
-  IRabbitMqConnectionFactory,
   IRabbitMqConnectionConfig,
-  RabbitMqConnectionFactory,
-  RabbitMqSingletonConnectionFactory,
+  RxJsRabbitMqConnectionFactory,
 } from "./connectionFactory";
 export { RabbitMqConsumer, IRabbitMqConsumerDisposer } from "./consumer";
 export { RabbitMqProducer } from "./producer";
-export { RabbitMqPublisher } from "./publisher";
-export { RabbitMqSubscriber, IRabbitMqSubscriberDisposer } from "./subscriber";
+export { RxJsRabbitMqPublisher } from "./publisher";
+export { RxJsRabbitMqSubscriber } from "./subscriber";
 export { IQueueNameConfig } from "./common";
