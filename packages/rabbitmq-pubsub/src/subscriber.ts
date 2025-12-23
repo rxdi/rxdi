@@ -95,6 +95,7 @@ export class RabbitMqSubscriber {
         queueConfig.name,
         opts.consumerTag
       );
+      await channel.cancel(opts.consumerTag); // Cancel consumer first
       await channel.close();
     }) as IRabbitMqSubscriberDisposer;
   }

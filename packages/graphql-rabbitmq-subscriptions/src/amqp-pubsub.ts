@@ -28,6 +28,8 @@ export class AmqpPubSub {
  private triggerTransform: TriggerTransform;
  private unsubscribeChannelMap: Record<string, IRabbitMqConsumerDisposer> = {};
  private logger: Logger;
+ // Track in-progress subscriptions to prevent race conditions
+ private pendingSubscriptions: Record<string, Promise<IRabbitMqConsumerDisposer>> = {};
 
  constructor(options: PubSubRabbitMQBusOptions = {}) {
   this.triggerTransform = options.triggerTransform || ((trigger) => trigger as string);
@@ -60,6 +62,7 @@ export class AmqpPubSub {
   const id = this.currentSubscriptionId++;
   this.subscriptionMap[id] = [triggerName, onMessage];
   let refs = this.subsRefsMap[triggerName];
+
   if (refs && refs.length > 0) {
    const newRefs = [...refs, id];
    this.subsRefsMap[triggerName] = newRefs;
@@ -69,19 +72,46 @@ export class AmqpPubSub {
    );
    return id;
   }
-  this.logger.trace("trying to subscribe to queue '%s'", triggerName);
-  try {
-   const disposer = await this.consumer.subscribe<string>(
+
+  // Check if there's already a pending subscription for this trigger
+  if (this.pendingSubscriptions[triggerName]) {
+   this.logger.trace(
+    "subscription in progress for '%s', waiting for it to complete",
     triggerName,
-    (msg) => this.onMessage(triggerName, msg),
-    options,
    );
+
+   try {
+    const disposer = await this.pendingSubscriptions[triggerName];
+    this.subsRefsMap[triggerName] = [...(this.subsRefsMap[triggerName] || []), id];
+    this.unsubscribeChannelMap[triggerName] = disposer;
+    return id;
+   } catch (err) {
+    this.logger.error(err, "failed to receive message from queue '%s'", triggerName);
+    return id;
+   }
+  }
+
+  this.logger.trace("trying to subscribe to queue '%s'", triggerName);
+  // Create the subscription promise and store it immediately
+  const subscriptionPromise = this.consumer.subscribe<string>(
+   triggerName,
+   (msg) => this.onMessage(triggerName, msg),
+   options,
+  );
+
+  this.pendingSubscriptions[triggerName] = subscriptionPromise;
+
+  try {
+   const disposer = await subscriptionPromise;
    this.subsRefsMap[triggerName] = [...(this.subsRefsMap[triggerName] || []), id];
-   this.unsubscribeChannelMap[id] = disposer;
+   this.unsubscribeChannelMap[triggerName] = disposer;
+
+   // Clean up pending subscription
+   delete this.pendingSubscriptions[triggerName];
 
    return id;
   } catch (err) {
-   this.logger.error(err, "failed to recieve message from queue '%s'", triggerName);
+   this.logger.error(err, "failed to receive message from queue '%s'", triggerName);
    return id;
   }
  }
@@ -98,22 +128,27 @@ export class AmqpPubSub {
   let newRefs: number[];
   if (refs.length === 1) {
    newRefs = [];
-   if (typeof this.unsubscribeChannelMap[subId] === 'function') {
-    this.unsubscribeChannelMap[subId]()
+   if (typeof this.unsubscribeChannelMap[triggerName] === 'function') {
+    this.unsubscribeChannelMap[triggerName]()
      .then(() => {
       this.logger.trace("cancelled channel from subscribing to queue '%s'", triggerName);
+      delete this.unsubscribeChannelMap[triggerName];
      })
      .catch((err) => {
       this.logger.error(err, "channel cancellation failed from queue '%j'", triggerName);
+      delete this.unsubscribeChannelMap[triggerName];
      });
    }
   } else {
    const index = refs.indexOf(subId);
    if (index !== -1) {
     newRefs = [...refs.slice(0, index), ...refs.slice(index + 1)];
+   } else {
+    newRefs = refs;
    }
    this.logger.trace("removing triggerName from listening '%s' ", triggerName);
   }
+
   this.subsRefsMap[triggerName] = newRefs;
   delete this.subscriptionMap[subId];
   this.logger.trace("list of subscriptions still available '(%j)'", this.subscriptionMap);
