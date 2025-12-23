@@ -32,5 +32,7 @@ import { Module } from '@rxdi/core';
 export class AppModule {}
 ```
 
+<img width="1920" height="860" alt="Screenshot from 2025-12-24 01-38-03" src="https://github.com/user-attachments/assets/30fb08d7-5c47-43e2-93f6-fec8e73219f6" />
+
 
 Now open http://localhost:9000/altair and Njoy! :) 
