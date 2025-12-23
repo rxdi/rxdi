@@ -1461,10 +1461,10 @@
     jsonwebtoken "^8.3.0"
     moment "^2.22.2"
 
-"@gapi/playground@^1.8.146":
-  version "1.8.146"
-  resolved "https://registry.yarnpkg.com/@gapi/playground/-/playground-1.8.146.tgz#a2aa92ff993200592b9fa630371bc25a9b126b8a"
-  integrity sha512-po5YQNZ7iw0ufJIkCwJI29m5ZKd2dI09+Ndq5VEq/fMFIX+u8hhZqNbvVLOB+fzOQUQmgSPhkPUkbHWq+GrzKw==
+"@gapi/playground@^1.8.172":
+  version "1.8.172"
+  resolved "https://registry.yarnpkg.com/@gapi/playground/-/playground-1.8.172.tgz#53cb56e767a87f0679d16746131a32fcc14cee81"
+  integrity sha512-iHXnSlNGcx22AP1N2R/KXIWapJ+SLhCMieEbRfX0NywaXHcmRpu7jCtiCnkifw6o5aTDVOaZHPq5o4gCaqzq/w==
   dependencies:
     graphql-playground-html "1.6.13"
 
@@ -3098,6 +3098,13 @@ alphanum-sort@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
+
+altair-static@^8.5.0:
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/altair-static/-/altair-static-8.5.0.tgz#b31fc68464cfb0e4f8dc94b0dd3ffe05922bd6e7"
+  integrity sha512-rvLtImBAsXpgBKExaEhwKhi+5681nsUqaQx3bdZfwWiOCyRTG8lEmSBOXJKqZW4oaG9LwlvlTOS0vVR1ot0Rxg==
+  dependencies:
+    zod "^4.1.13"
 
 amqplib@^0.10.9:
   version "0.10.9"
@@ -12087,3 +12094,8 @@ zip-stream@^2.1.2:
     archiver-utils "^2.1.0"
     compress-commons "^2.1.1"
     readable-stream "^3.4.0"
+
+zod@^4.1.13:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.2.1.tgz#07f0388c7edbfd5f5a2466181cb4adf5b5dbd57b"
+  integrity sha512-0wZ1IRqGGhMP76gLqz8EyfBXKk0J2qo2+H3fi4mcUP/KtTocoX08nmIAHl1Z2kJIZbZee8KOpBCSNPRgauucjw==

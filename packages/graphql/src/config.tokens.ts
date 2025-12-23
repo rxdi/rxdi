@@ -3,6 +3,7 @@ import * as GraphiQL from 'apollo-server-module-graphiql';
 import { GraphQLSchema, GraphQLField, GraphQLDirective } from 'graphql';
 import { Server, ResponseToolkit } from '@hapi/hapi';
 import { RenderPageOptions } from 'graphql-playground-html';
+import { AltairConfig } from '@rxdi/altair';
 
 export interface HapiOptionsFunction {
   (req?: Request): any | Promise<any>;
@@ -38,6 +39,10 @@ export interface GRAPHQL_PLUGIN_CONFIG {
   graphqlOptions?: any;
   graphiqlOptions?: GraphiQL.GraphiQLData;
   graphiqlPlaygroundConfig?: RenderPageOptions;
+  altair?: {
+    enabled: boolean;
+    options: AltairConfig
+  };
 }
 export interface GRAPHQL_AUTHENTICATION_FAKE {
   validateToken(authorization: string): any;

@@ -6,6 +6,7 @@ import { BootstrapService } from './services/bootstrap.service';
 import { GraphiQLService } from './services/graphiql.service';
 import { StartService } from './services/start.service';
 import { PlaygroundModule } from '@gapi/playground';
+import { AltairModule } from '@rxdi/altair';
 import { PluginInit } from './plugin-init';
 
 @Module()
@@ -30,6 +31,7 @@ export class GraphQLModule {
         StartService
       ],
       frameworkImports: [
+        ...(config.altair?.enabled ? [AltairModule.forRoot(config.altair?.options)] : []),
         PlaygroundModule.forRoot({
           path: config.graphiQlPath || '/graphiql',
           endpoint: config.path || '/graphql',
