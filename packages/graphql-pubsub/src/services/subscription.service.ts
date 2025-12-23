@@ -1,5 +1,5 @@
 import { Inject, Service, PluginInterface, Container } from '@rxdi/core';
-import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { ServerOptions, SubscriptionServer } from 'subscriptions-transport-ws';
 import { subscribe } from 'graphql/subscription';
 import { execute } from 'graphql/execution';
 import { HAPI_SERVER } from '@rxdi/hapi';
@@ -10,7 +10,7 @@ import {
  GRAPHQL_PUB_SUB_DI_CONFIG,
  PubSubOptions,
 } from '../config.tokens';
-import { DocumentNode, GraphQLFieldResolver, GraphQLSchema, parse } from 'graphql';
+import { DocumentNode, GraphQLFieldResolver, GraphQLSchema } from 'graphql';
 
 @Service()
 export class SubscriptionService implements PluginInterface {
@@ -21,14 +21,13 @@ export class SubscriptionService implements PluginInterface {
  ) {}
 
  OnInit() {
-  console.log('Subscription');
   this.register();
  }
 
  async register() {
-  const currentC: any = {
-   execute: this.execute,
-   subscribe: this.subscribe,
+  const config: ServerOptions = {
+   execute: this.execute.bind(this),
+   subscribe: this.subscribe.bind(this),
    schema: this.config.graphqlOptions.schema,
    onConnect(connectionParams) {
     // return connectionHookService.modifyHooks
@@ -47,21 +46,21 @@ export class SubscriptionService implements PluginInterface {
   };
   if (this.pubConfig.authentication) {
    const auth: PubSubOptions = Container.get(this.pubConfig.authentication);
-   Object.assign(currentC, auth);
+   Object.assign(config, auth);
    if (auth.onSubConnection) {
-    currentC.onConnect = auth.onSubConnection.bind(auth);
+    config.onConnect = auth.onSubConnection.bind(auth);
    }
    if (auth.onSubOperation) {
-    currentC.onOperation = auth.onSubOperation.bind(auth);
+    config.onOperation = auth.onSubOperation.bind(auth);
    }
    if (auth.onSubOperationComplete) {
-    currentC.onOperationComplete = auth.onSubOperationComplete.bind(auth);
+    config.onOperationComplete = auth.onSubOperationComplete.bind(auth);
    }
    if (auth.onSubDisconnect) {
-    currentC.onDisconnect = auth.onSubDisconnect.bind(auth);
+    config.onDisconnect = auth.onSubDisconnect.bind(auth);
    }
   }
-  new SubscriptionServer(currentC, {
+  new SubscriptionServer(config, {
    server: this.server.listener,
    path: '/subscriptions',
    ...this.pubConfig.subscriptionServerOptions,
@@ -73,7 +72,7 @@ export class SubscriptionService implements PluginInterface {
   */
  private execute(
   schema: GraphQLSchema,
-  node: DocumentNode,
+  document: DocumentNode,
   rootValue?: any,
   contextValue?: any,
   variableValues?: {
@@ -85,7 +84,7 @@ export class SubscriptionService implements PluginInterface {
  ) {
   return execute({
    schema,
-   document: typeof node === 'string' ? parse(node) : node,
+   document,
    rootValue,
    contextValue,
    variableValues,
@@ -100,7 +99,7 @@ export class SubscriptionService implements PluginInterface {
   */
  private subscribe(
   schema: GraphQLSchema,
-  node: DocumentNode,
+  document: DocumentNode,
   rootValue?: any,
   contextValue?: any,
   variableValues?: {
@@ -112,7 +111,7 @@ export class SubscriptionService implements PluginInterface {
  ) {
   return subscribe({
    schema,
-   document: typeof node === 'string' ? parse(node) : node,
+   document,
    rootValue,
    contextValue,
    variableValues,
