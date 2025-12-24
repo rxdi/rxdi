@@ -30,7 +30,6 @@
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "dependencies": {
-    "@rxdi/altair": "^0.7.201",
     "apollo-errors": "1.9.0",
     "@hapi/boom": "^10.0.1"
   },

@@ -3,7 +3,6 @@ import { HookService, EffectService} from './services';
 import { GraphqlService } from './services/apollo.service';
 import { GRAPHQL_PLUGIN_CONFIG } from './config.tokens';
 import { BootstrapService } from './services/bootstrap.service';
-import { AltairModule } from '@rxdi/altair';
 import { PluginInit } from './plugin-init';
 
 @Module()
@@ -20,9 +19,6 @@ export class GraphQLModule {
         HookService,
         BootstrapService,
         GraphqlService,
-      ],
-      frameworkImports: [
-        ...(config.altair?.enabled ? [AltairModule.forRoot(config.altair?.options)] : []),
       ],
       plugins: [ PluginInit]
     };

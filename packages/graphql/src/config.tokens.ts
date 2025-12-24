@@ -21,10 +21,6 @@ export interface GRAPHQL_PLUGIN_CONFIG {
     cors?: boolean;
   };
   graphqlOptions?: any;
-  altair?: {
-    enabled: boolean;
-    options?: AltairConfig
-  };
 }
 export interface GRAPHQL_AUTHENTICATION_FAKE {
   validateToken(authorization: string): any;
