@@ -1,4 +1,4 @@
-## [0.7.198](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.198) (2025-12-23)
+## [0.7.199](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.199) (2025-12-24)
 
 
 ### Bug Fixes
@@ -134,6 +134,7 @@
 * **pubsub:** refactored Record with Map for better maintainability next is rxjs ([21e1825](https://github.com/rxdi/mono/commit/21e18257d4c576ff6ba4dd7fb6da0f7c3fc027b1))
 * **rabbitmq-pubsub:** added new library for handling subscriptions using rabbitmq removed banyan from dependencies ([5225543](https://github.com/rxdi/mono/commit/522554302c5f61f81278392b4f0688aae1738794))
 * **rabbitmq-pubsub:** global prefetch set ([55cedf1](https://github.com/rxdi/mono/commit/55cedf1f72d394229019aa54fd96c950c86a1dbc))
+* refactor and remove unused modules and classes and package.json dependencies ([58b81f9](https://github.com/rxdi/mono/commit/58b81f9e63c1cb10b15b901010dd2c2e09a0a11f))
 * **Websocket:** added perMessageDeflate gzip on subscriptions options ([157f29b](https://github.com/rxdi/mono/commit/157f29bddf0e5aeb997d6bed642206076e679439))
 
 
