@@ -1,4 +1,4 @@
-## [0.7.202](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.202) (2025-12-24)
+## [0.7.203](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.203) (2025-12-24)
 
 
 ### Bug Fixes
@@ -101,6 +101,7 @@
 * **attribute-registry:** added generic way of defining dynamic attributes using @rhtml/custom-attributes ([630a200](https://github.com/rxdi/mono/commit/630a20083648412b79dfd63f6f7728728b408efa))
 * **bump:** bumped to latest [@hapi](https://github.com/hapi) version ([0789a41](https://github.com/rxdi/mono/commit/0789a4162c8a210b229a1829fb1301c0cfa3d7a5))
 * **bump:** many version and dependencies bump ([4c865e1](https://github.com/rxdi/mono/commit/4c865e1cb4c631c3cd313f6d2c3bcdb058871d8b))
+* **bump:** version bump of rxjs ([fc6749e](https://github.com/rxdi/mono/commit/fc6749e22f6ee10827e7bf1a7f84c0fb18782a79))
 * **bump:** versions of hapi and apollo-server-core bumped ([5c51524](https://github.com/rxdi/mono/commit/5c515241e19cb6376654a90902dd3dd0f9adf98d))
 * **Changelog:** added conventional changelog automatically generated ([a23a855](https://github.com/rxdi/mono/commit/a23a855e2ac67aa5bc375e3147fed1a7fc5751a6))
 * **Channels:** closing channels after operation is done since it was overloading rabbitmq cluster with channels, queues and memory leak appears ([e711c8f](https://github.com/rxdi/mono/commit/e711c8f87aad4644ee720ccac048a8ede90392bb))
