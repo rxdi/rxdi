@@ -55,7 +55,7 @@ export class PluginInit implements PluginInterface {
         take(1),
         switchMap(
           async () =>
-            await this.sendRequest<{ status: { status: number } }>({
+            await this.sendRequest<{ status: { status: string } }>({
               query: this.defaultQuery
             })
         ),
@@ -73,8 +73,8 @@ export class PluginInit implements PluginInterface {
     return client.request(request);
   };
 
-  async checkStatus(status: number) {
-    if (status !== 200) {
+  async checkStatus(status: string) {
+    if (status !== '200') {
       await this.server.stop();
       console.error(status);
       process.exit(1);
