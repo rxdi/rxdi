@@ -39,7 +39,6 @@
   "dependencies": {
     "reflect-metadata": "0.1.13",
     "@abraham/reflection": "^0.8.0",
-    "@gapi/playground": "^1.8.172",
     "apollo-errors": "1.9.0",
     "credit-card-type": "^9.1.0",
     "@rxdi/ui-kit": "^0.7",
@@ -54,9 +53,7 @@
     "firebase-functions": "^3.0.0",
     "graphql-tools": "^5.0.0",
     "node-fetch": "^2.1.2",
-    "apollo-server-module-graphiql": "1.4.0",
     "@hapi/boom": "^10.0.1",
-    "graphql-tester": "0.0.5",
     "rxjs": "^7.8.0",
     "chokidar": "^3.0.2",
     "@angular-devkit/core": "^19.2.0",

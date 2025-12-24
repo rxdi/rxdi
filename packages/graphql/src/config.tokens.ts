@@ -1,22 +1,10 @@
 import { InjectionToken } from '@rxdi/core';
-import * as GraphiQL from 'apollo-server-module-graphiql';
 import { GraphQLSchema, GraphQLField, GraphQLDirective } from 'graphql';
 import { Server, ResponseToolkit } from '@hapi/hapi';
-import { RenderPageOptions } from 'graphql-playground-html';
 import { AltairConfig } from '@rxdi/altair';
 
 export interface HapiOptionsFunction {
   (req?: Request): any | Promise<any>;
-}
-
-export interface HapiGraphiQLOptionsFunction {
-  (req?: Request): GraphiQL.GraphiQLData | Promise<GraphiQL.GraphiQLData>;
-}
-
-export interface HapiGraphiQLPluginOptions {
-  path: string;
-  route?: any;
-  graphiqlOptions: GraphiQL.GraphiQLData | HapiGraphiQLOptionsFunction;
 }
 
 export interface GRAPHQL_PLUGIN_CONFIG {
@@ -25,11 +13,7 @@ export interface GRAPHQL_PLUGIN_CONFIG {
   disableGlobalGuards?: boolean;
   directives?: GraphQLDirective[] | any[];
   buildAstDefinitions?: boolean;
-  graphiQlPlayground?: boolean;
-  graphiql?: boolean;
-  graphiQlPath?: string;
   writeEffects?: boolean;
-  openBrowser?: boolean;
   watcherPort?: string | number;
   authentication?: Function | InjectionToken<any>;
   vhost?: string;
@@ -37,8 +21,6 @@ export interface GRAPHQL_PLUGIN_CONFIG {
     cors?: boolean;
   };
   graphqlOptions?: any;
-  graphiqlOptions?: GraphiQL.GraphiQLData;
-  graphiqlPlaygroundConfig?: RenderPageOptions;
   altair?: {
     enabled: boolean;
     options?: AltairConfig

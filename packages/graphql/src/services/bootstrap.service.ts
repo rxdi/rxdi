@@ -15,7 +15,6 @@ import {
   applySchemaCustomDirectives,
   GraphQLCustomDirective
 } from '../helpers/directives/custom-directive';
-// import { makeExecutableSchema, addMockFunctionsToSchema, mergeSchemas, } from 'graphql-tools';
 
 export class FieldsModule {
   query: {};

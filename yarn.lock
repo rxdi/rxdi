@@ -1461,13 +1461,6 @@
     jsonwebtoken "^8.3.0"
     moment "^2.22.2"
 
-"@gapi/playground@^1.8.172":
-  version "1.8.172"
-  resolved "https://registry.yarnpkg.com/@gapi/playground/-/playground-1.8.172.tgz#53cb56e767a87f0679d16746131a32fcc14cee81"
-  integrity sha512-iHXnSlNGcx22AP1N2R/KXIWapJ+SLhCMieEbRfX0NywaXHcmRpu7jCtiCnkifw6o5aTDVOaZHPq5o4gCaqzq/w==
-  dependencies:
-    graphql-playground-html "1.6.13"
-
 "@google-cloud/common@^2.1.1":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@google-cloud/common/-/common-2.4.0.tgz#2783b7de8435024a31453510f2dab5a6a91a4c82"
@@ -3280,11 +3273,6 @@ apollo-link@^1.0.0, apollo-link@^1.2.12, apollo-link@^1.2.14:
     ts-invariant "^0.4.0"
     tslib "^1.9.3"
     zen-observable-ts "^0.8.21"
-
-apollo-server-module-graphiql@1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/apollo-server-module-graphiql/-/apollo-server-module-graphiql-1.4.0.tgz#c559efa285578820709f1769bb85d3b3eed3d8ec"
-  integrity sha512-GmkOcb5he2x5gat+TuiTvabnBf1m4jzdecal3XbXBh/Jg+kx4hcvO3TTDFQ9CuTprtzdcVyA11iqG7iOMOt7vA==
 
 apollo-upload-client@^13.0.0:
   version "13.0.0"
@@ -5915,11 +5903,6 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-freeport@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/freeport/-/freeport-1.0.5.tgz#255e8ab84170c33ba85d990e821ae5f4a1a9bc5d"
-  integrity sha1-JV6KuEFwwzuoXZkOghrl9KGpvF0=
-
 fresh@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
@@ -6189,11 +6172,6 @@ graphql-parse-resolve-info@^4.12.3:
     debug "^4.1.1"
     tslib "^2.0.1"
 
-graphql-playground-html@1.6.13:
-  version "1.6.13"
-  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.13.tgz#16d61416161d96f2725bc37b0b64d135a189f252"
-  integrity sha512-5DNtVeaWrfxrobA2Vp3ypWjAQYGPIXyZ3rdQXy4m4nDJnc4UALPSZRh9y+U4kp8GaoPp1aCgIJerDSRBOT9HnA==
-
 graphql-relay@^0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/graphql-relay/-/graphql-relay-0.10.0.tgz#3b661432edf1cb414cd4a132cf595350e524db2b"
@@ -6222,14 +6200,6 @@ graphql-tag@^2.11.0, graphql-tag@^2.12.6:
   integrity sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==
   dependencies:
     tslib "^2.1.0"
-
-graphql-tester@0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/graphql-tester/-/graphql-tester-0.0.5.tgz#570c2f114c319ac1389c4312796db39d5223af65"
-  integrity sha1-VwwvEUwxmsE4nEMSeW2znVIjr2U=
-  dependencies:
-    freeport "^1.0.5"
-    request "^2.69.0"
 
 graphql-tools@^5.0.0:
   version "5.0.0"
@@ -10112,7 +10082,7 @@ request-promise-native@^1.0.5:
     stealthy-require "^1.1.1"
     tough-cookie "^2.3.3"
 
-request@^2.69.0, request@^2.86.0, request@^2.87.0, request@^2.88.0:
+request@^2.86.0, request@^2.87.0, request@^2.88.0:
   version "2.88.2"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
   integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==

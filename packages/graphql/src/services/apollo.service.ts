@@ -14,7 +14,7 @@ import { HookService } from './hooks.service';
 import { graphql } from 'graphql';
 
 @Service()
-export class ApolloService implements PluginInterface {
+export class GraphqlService implements PluginInterface {
  isInitQuery: boolean;
  constructor(
   @Inject(HAPI_SERVER) private server: Server,

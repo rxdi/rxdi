@@ -16,7 +16,7 @@ import { HapiModule, HapiConfigModel } from '@rxdi/hapi';
 import { BootstrapService } from '../../services/bootstrap.service';
 import { GraphQLModule } from '../../index';
 import { GRAPHQL_PLUGIN_CONFIG } from '../../config.tokens';
-import { HookService, ApolloService } from '../../services';
+import { HookService, GraphqlService } from '../../services';
 import { of } from 'rxjs';
 
 @GapiObjectType()
@@ -78,25 +78,8 @@ const DEFAULT_CONFIG = {
   },
   graphql: {
     path: '/graphql',
-    openBrowser: false,
     writeEffects: false,
-    graphiql: false,
-    graphiQlPlayground: false,
-    graphiQlPath: '/graphiql',
     watcherPort: '',
-    graphiqlOptions: {
-      endpointURL: '/graphql',
-      subscriptionsEndpoint: `${
-        process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'
-      }://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${
-        process.env.DEPLOY_PLATFORM === 'heroku'
-          ? ''
-          : `:${process.env.API_PORT || process.env.PORT || 9000}`
-      }/subscriptions`,
-      websocketConnectionParams: {
-        token: process.env.GRAPHIQL_TOKEN
-      }
-    },
     graphqlOptions: {
       schema: null
     }
@@ -133,7 +116,7 @@ describe('Decorators: @Query', () => {
     done();
   });
   it('Should decorate testInjection to have this from ClassTestProvider', async done => {
-    Container.get(ApolloService);
+    Container.get(GraphqlService);
     const queryFields = Container.get(GRAPHQL_PLUGIN_CONFIG)
       .graphqlOptions.schema.getQueryType()
       .getFields();

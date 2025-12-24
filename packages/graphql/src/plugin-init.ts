@@ -4,11 +4,11 @@ import {
   Inject,
   AfterStarterService
 } from '@rxdi/core';
-import { tester } from 'graphql-tester';
 import { HAPI_SERVER } from '@rxdi/hapi';
 import { Server } from '@hapi/hapi';
 import { take, switchMap, tap } from 'rxjs/operators';
 import { GRAPHQL_PLUGIN_CONFIG } from './config.tokens';
+import { GraphQLHttpClient, GraphQLResponse } from './services'
 
 export interface Response<T> {
   raw: string;
@@ -36,6 +36,7 @@ export interface SendRequestQueryType {
 
 @Plugin()
 export class PluginInit implements PluginInterface {
+
   defaultQuery = `query { status { status } } `;
 
   constructor(
@@ -44,22 +45,21 @@ export class PluginInit implements PluginInterface {
     private afterStarter: AfterStarterService
   ) { }
 
-  private tester;
-
   async register() {
     if (!this.config.initQuery) {
       return;
     }
+
     this.afterStarter.appStarted
       .pipe(
         take(1),
         switchMap(
           async () =>
-            await this.sendRequest<{ status: { status: string } }>({
+            await this.sendRequest<{ status: { status: number } }>({
               query: this.defaultQuery
             })
         ),
-        tap(res => this.checkStatus(res))
+        tap(res => this.checkStatus(res.data.status.status))
       )
       .subscribe();
   }
@@ -67,18 +67,16 @@ export class PluginInit implements PluginInterface {
   sendRequest = <T>(
     request: SendRequestQueryType,
     url: string = `http://localhost:${this.server.info.port}/graphql`
-  ): PromiseLike<Response<T>> => {
-    this.tester = tester({
-      url,
-      contentType: 'application/json'
-    });
-    return this.tester(JSON.stringify(request));
+  ): Promise<GraphQLResponse<T>> => {
+    const client = new GraphQLHttpClient(url);
+
+    return client.request(request);
   };
 
-  async checkStatus<T = {}>(request: Response<T>) {
-    if (request.status !== 200) {
+  async checkStatus(status: number) {
+    if (status !== 200) {
       await this.server.stop();
-      console.error(request);
+      console.error(status);
       process.exit(1);
     }
   }

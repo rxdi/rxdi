@@ -1,4 +1,4 @@
-import { Service, CacheService, Container, BootstrapLogger } from '@rxdi/core';
+import { Service, CacheService } from '@rxdi/core';
 
 @Service()
 export class EffectService extends CacheService {

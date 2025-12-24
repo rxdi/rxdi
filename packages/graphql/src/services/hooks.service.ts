@@ -11,7 +11,7 @@ import {
 import { GenericGapiResolversType } from '../decorators/query/query.decorator';
 import { EffectService } from './effect.service';
 import { CanActivateResolver } from '../decorators/guard/guard.interface';
-import { Observable, of, from } from 'rxjs';
+import { Observable, of, from, lastValueFrom } from 'rxjs';
 import { InterceptResolver } from '../decorators/intercept/intercept.interface';
 import { writeFileSync, mkdirSync } from 'fs'
 
@@ -186,7 +186,7 @@ export type EffectTypes = keyof typeof EffectTypes;
         if (observable.constructor === Object) {
           result = observable;
         } else {
-          result = await observable.toPromise();
+          result = await lastValueFrom(observable);
         }
         if (
           events.map.has(resolver.method_name) ||

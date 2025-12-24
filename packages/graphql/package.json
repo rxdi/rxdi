@@ -30,12 +30,9 @@
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "dependencies": {
-    "@gapi/playground": "^1.8.172",
-    "@rxdi/altair": "^0.7.198",
+    "@rxdi/altair": "^0.7.197",
     "apollo-errors": "1.9.0",
-    "apollo-server-module-graphiql": "1.4.0",
-    "@hapi/boom": "^10.0.1",
-    "graphql-tester": "0.0.5"
+    "@hapi/boom": "^10.0.1"
   },
   "devDependencies": {
     "@rxdi/core": "^0.7.198",

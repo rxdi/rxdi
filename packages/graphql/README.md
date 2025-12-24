@@ -30,23 +30,7 @@ import { GraphQLModule } from "@rxdi/graphql";
         }),
         GraphQLModule.forRoot({
             path: '/graphql',
-            openBrowser: false,
             writeEffects: false,
-            graphiQlPath: '/graphiql',
-            graphiqlOptions: {
-                endpointURL: '/graphql',
-                subscriptionsEndpoint: `${
-                    process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'
-                    }://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${
-                    process.env.DEPLOY_PLATFORM === 'heroku'
-                        ? ''
-                        : `:${process.env.API_PORT ||
-                        process.env.PORT}`
-                    }/subscriptions`,
-                websocketConnectionParams: {
-                    token: process.env.GRAPHIQL_TOKEN
-                }
-            },
             graphqlOptions: {
                 schema: null
             }
@@ -84,23 +68,7 @@ import * as neo4jgql from 'neo4j-graphql-js';
         }),
         GraphQLModule.forRoot({
             path: '/graphql',
-            openBrowser: false,
             writeEffects: false,
-            graphiQlPath: '/graphiql',
-            graphiqlOptions: {
-                endpointURL: '/graphql',
-                subscriptionsEndpoint: `${
-                    process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'
-                    }://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${
-                    process.env.DEPLOY_PLATFORM === 'heroku'
-                        ? ''
-                        : `:${process.env.API_PORT ||
-                        process.env.PORT}`
-                    }/subscriptions`,
-                websocketConnectionParams: {
-                    token: process.env.GRAPHIQL_TOKEN
-                }
-            },
             graphqlOptions: {
                 context: {
                     driver: (neo4j.driver(
