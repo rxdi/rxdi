@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/credit-card-form",
-  "version": "0.7.199",
+  "version": "0.7.200",
   "repository": {
     "type": "git",
     "url": "https://github.com/rxdi/rxdi-monorepo"
@@ -31,8 +31,8 @@
   "homepage": "https://github.com/rxdi/rxdi-monorepo#readme",
   "dependencies": {
     "@rxdi/ui-kit": "^0.7",
-    "@rxdi/forms": "^0.7.199",
-    "@rxdi/lit-html": "^0.7.199",
+    "@rxdi/forms": "^0.7.200",
+    "@rxdi/lit-html": "^0.7.200",
     "credit-card-type": "^9.1.0"
   },
   "devDependencies": {
