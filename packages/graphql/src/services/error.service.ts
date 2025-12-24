@@ -1,13 +1,10 @@
-import * as formatError from 'apollo-errors';
 import * as boom from '@hapi/boom';
 export interface ServerErrors {
   name;
   data: { bg: { message: string }; en: { message: string } };
 }
-export const attachErrorHandlers = formatError.formatError;
-export const clientErrors = formatError;
 export const Boom = boom;
-export function createError(name, message: string, data?: any): void {
+export function createError(name, message: string, data?: any): void | Error {
   function guid() {
     function s4() {
       return Math.floor((1 + Math.random()) * 0x10000)
@@ -32,10 +29,9 @@ export function createError(name, message: string, data?: any): void {
   data = data || {};
   data.eid = guid();
   message = `(${data.eid}): ${message}`;
-  const error = clientErrors.createError(name, { message, data });
-  return new error();
+  return new Error(JSON.stringify({ name, message, data }));
 }
 
 export const errorUnauthorized = function () {
-  throw new createError('unauthorized', 'You are unable to fetch data');
+  throw createError('unauthorized', 'You are unable to fetch data');
 };

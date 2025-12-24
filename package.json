@@ -39,7 +39,6 @@
   "dependencies": {
     "reflect-metadata": "0.1.13",
     "@abraham/reflection": "^0.8.0",
-    "apollo-errors": "1.9.0",
     "credit-card-type": "^9.1.0",
     "@rxdi/ui-kit": "^0.7",
     "firebase-admin": "^8.2.0",
