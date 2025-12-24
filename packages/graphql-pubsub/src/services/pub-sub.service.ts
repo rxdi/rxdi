@@ -7,22 +7,16 @@ import {
 } from "../config.tokens";
 import { PubSubLogger } from "./logger.service";
 export let pubsub: PubSub | AmqpPubSub;
-import { RemotePubsub } from "./remote-pubsub.service";
 
 @Service()
 export class PubSubService {
-  sub: AmqpPubSub | PubSub | RemotePubsub;
+  sub: AmqpPubSub | PubSub;
   constructor(
     @Inject(GRAPHQL_PUB_SUB_CONFIG) private config: GRAPHQL_PUB_SUB_DI_CONFIG,
     private logger: PubSubLogger
   ) {
     if (this.config.pubsub) {
       this.sub = this.config.pubsub;
-    } else if (this.config.remotePubsub) {
-      this.sub = new RemotePubsub({
-        host: this.config.host,
-        port: this.config.host,
-      });
     } else if (this.config.activateRabbitMQ) {
       this.sub = new AmqpPubSub({
         config: `amqp://${

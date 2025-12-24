@@ -24,7 +24,6 @@ export interface GRAPHQL_PUBSUB_SERVER_OPTIONS {
 }
 export class GRAPHQL_PUB_SUB_DI_CONFIG {
   pubsub?: AmqpPubSub | PubSub | any;
-  remotePubsub?: boolean;
   host?: string;
   user?: string;
   pass?: string;

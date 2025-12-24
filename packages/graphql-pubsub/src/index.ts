@@ -30,4 +30,3 @@ export class GraphQLPubSubModule {
 export * from './config.tokens';
 export * from './decorators/index';
 export * from './services/index';
-export * from './helpers/index';

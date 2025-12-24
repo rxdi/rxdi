@@ -1,5 +1,5 @@
 {
-  "name": "@rxdi/graphql-pubsub",
+  "name": "@rxdi/graphql-pubsub-test",
   "version": "0.7.200",
   "repository": {
     "type": "git",
@@ -30,8 +30,9 @@
   },
   "homepage": "https://github.com/rxdi/graphql-pubsub#readme",
   "dependencies": {
-    "@rxdi/graphql-rabbitmq-subscriptions": "^0.7.200",
-    "subscriptions-transport-ws": "^0.9.19"
+    "@apollo/client": "^3.7.3",
+    "subscriptions-transport-ws": "^0.9.19",
+    "ws": "6.2.1"
   },
   "devDependencies": {
     "@rxdi/core": "^0.7.200",
