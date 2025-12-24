@@ -20,7 +20,7 @@
   "homepage": "https://github.com/rxdi/graphql-rabbitmq-subscriptions",
   "scripts": {
     "test": "echo Test rabbitmq subscriptions",
-    "build": "tsc || true",
+    "build": "tsc",
     "lint": "tslint ./src/**/*.ts"
   },
   "dependencies": {

@@ -4,7 +4,7 @@
   "description": "Shebang for ParcelJS",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc || true",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\""
   },
   "repository": {

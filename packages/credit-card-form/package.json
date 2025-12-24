@@ -11,7 +11,7 @@
   "typings": "./dist/index.d.ts",
   "scripts": {
     "test": "jest | true",
-    "build": "tsc || true",
+    "build": "tsc",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "pretest": "npm run lint"
   },

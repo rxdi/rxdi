@@ -9,12 +9,12 @@
     "url": "https://github.com/rxdi/forms"
   },
   "scripts": {
-    "build": "tsc || true"
+    "build": "tsc"
   },
   "devDependencies": {
     "@rxdi/lit-html": "^0.7.202",
     "@types/node": "^25.0.3",
-    "rxjs": "^7.8.0",
+    "rxjs": "^7.8.2",
     "typescript": "^5.9.3"
   },
   "types": "./dist/index.d.ts",

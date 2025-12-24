@@ -179,7 +179,7 @@ export class CacheService {
   }
 
   private OnExpire<T>(layerInstance: CacheLayer<CacheLayerItem<T>>) {
-    return new Observable(observer => observer.next())
+    return new Observable(observer => observer.next(true))
       .pipe(
         timeoutWith(
           layerInstance.config.cacheFlushInterval ||

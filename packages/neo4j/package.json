@@ -13,7 +13,7 @@
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
     "test": "echo Test Neo4J",
-    "build": "tsc || true"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

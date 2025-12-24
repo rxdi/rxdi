@@ -9,7 +9,7 @@
     "url": "https://github.com/rxdi/router"
   },
   "scripts": {
-    "build": "tsc || true"
+    "build": "tsc"
   },
   "dependencies": {
     "router-slot": "^1.5.4"

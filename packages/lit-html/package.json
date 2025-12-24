@@ -9,7 +9,7 @@
     "url": "https://github.com/rxdi/lit-html"
   },
   "scripts": {
-    "build": "npx tsc || true"
+    "build": "npx tsc"
   },
   "dependencies": {
     "@lit/reactive-element": "1.5.0",

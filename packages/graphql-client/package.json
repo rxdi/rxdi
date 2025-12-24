@@ -9,7 +9,7 @@
     "url": "https://github.com/rxdi/graphql-client"
   },
   "scripts": {
-    "build": "tsc || true",
+    "build": "tsc",
     "test": "echo Test Graphql client"
   },
   "dependencies": {

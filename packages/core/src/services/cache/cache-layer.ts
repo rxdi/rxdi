@@ -57,7 +57,7 @@ export class CacheLayer<T> {
   }
 
   private onExpire(key: string) {
-    return new Observable(observer => observer.next())
+    return new Observable(observer => observer.next(true))
       .pipe(
         timeoutWith(this.config.maxAge, of(1)),
         skip(1),

@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "tslint -c tslint.json 'development/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
-    "build": "tsc || true",
+    "build": "tsc",
     "test": "echo tests"
   },
   "author": {

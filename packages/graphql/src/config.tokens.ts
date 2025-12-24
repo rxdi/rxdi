@@ -1,7 +1,6 @@
 import { InjectionToken } from '@rxdi/core';
 import { GraphQLSchema, GraphQLField, GraphQLDirective } from 'graphql';
 import { Server, ResponseToolkit } from '@hapi/hapi';
-import { AltairConfig } from '@rxdi/altair';
 
 export interface HapiOptionsFunction {
   (req?: Request): any | Promise<any>;
