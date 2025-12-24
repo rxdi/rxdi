@@ -1,9 +1,10 @@
-## [0.7.201](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.201) (2025-12-24)
+## [0.7.202](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.202) (2025-12-24)
 
 
 ### Bug Fixes
 
 * **altair:** configuration changes ([4a6f856](https://github.com/rxdi/mono/commit/4a6f85698891d3ef7e7315bc9ceedfd56cf1c225))
+* **altair:** removed altair from pure graphql module no external dependency goal almost there ([5f37fac](https://github.com/rxdi/mono/commit/5f37face153bb3ce46f176c52cd1ee2109347df2))
 * **AMQP:** added new version of the class ([21aeacc](https://github.com/rxdi/mono/commit/21aeaccfb12f278a00aec4747c98503473bec17d))
 * **apollo:** reverted back apollo server to appropriate version which is working ([165c0fb](https://github.com/rxdi/mono/commit/165c0fb0d6f772ebf771cc3e64f8695c48bbc98f))
 * **boom:** package was used wrongly ([f85a316](https://github.com/rxdi/mono/commit/f85a316630d2f9f21c6400a5da732bade5e993d4))
