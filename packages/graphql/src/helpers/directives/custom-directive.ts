@@ -2,7 +2,7 @@ import {
   GraphQLDirective,
   GraphQLSchema,
   parse,
-  DirectiveLocationEnum
+  DirectiveLocation
 } from 'graphql';
 
 const DEFAULT_DIRECTIVES = ['skip', 'include'];
@@ -202,7 +202,7 @@ export const applySchemaCustomDirectives: (
 export interface GraphQLCustomDirectiveInterface<T = {}, A = {}, K = {}> {
   name: string;
   description?: string;
-  locations: DirectiveLocationEnum[];
+  locations: DirectiveLocation[];
   args?: { [key: string]: { description: string; type: any } };
   resolve: (
     resolve: () => Promise<T>,
