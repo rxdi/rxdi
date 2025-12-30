@@ -1,4 +1,4 @@
-## [0.7.206](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.206) (2025-12-25)
+## [0.7.208](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.208) (2025-12-30)
 
 
 ### Bug Fixes
@@ -9,6 +9,7 @@
 * **apollo-errors:** removed last standing apollo library in the main stack! ([d5f17e7](https://github.com/rxdi/mono/commit/d5f17e715e758885b6269f0cc3fca04cae6a4425))
 * **apollo:** reverted back apollo server to appropriate version which is working ([165c0fb](https://github.com/rxdi/mono/commit/165c0fb0d6f772ebf771cc3e64f8695c48bbc98f))
 * **boom:** package was used wrongly ([f85a316](https://github.com/rxdi/mono/commit/f85a316630d2f9f21c6400a5da732bade5e993d4))
+* **change-versions:** script needed a little bit of touching ([524d7e1](https://github.com/rxdi/mono/commit/524d7e19aee2d5b8f2def47b77ba4741b51e1f7f))
 * **compressor:** added class with static methods and re-exported inside index ([b3e5429](https://github.com/rxdi/mono/commit/b3e54297dd78749bac964e56c64cbf16a22bcbef))
 * **compressor:** added correct types to compress and decompress ([e7df20a](https://github.com/rxdi/mono/commit/e7df20a5d768d11939f192a66139b306b2deaf16))
 * **core:** added console log of error instead of error stack ([00ead24](https://github.com/rxdi/mono/commit/00ead2447ffe070893f28bc6e5ec2202d8ce8f1f))
@@ -80,6 +81,7 @@
 * **neo4j:** module fixed ([d4842e8](https://github.com/rxdi/mono/commit/d4842e8e86b851a69c46d18ccca6f31fd11f76e8))
 * **pipeline:** added correct version for changelog builder ([df9f319](https://github.com/rxdi/mono/commit/df9f3190bd4e7e96479c733d0ffc7cc5994e182d))
 * **published:** patch was published instead of next ([6590a18](https://github.com/rxdi/mono/commit/6590a183541f35188a45bc9759780436cb50ffc9))
+* **pubsub:** added asyncIterableIterator function for cross compatability with the older version of graphql-subscription and newer 3.0.0 ([ad154e8](https://github.com/rxdi/mono/commit/ad154e8c4924f0934473d450ab7bf4815bd87695))
 * **pubsub:** added optional types server and path ([9f1e18f](https://github.com/rxdi/mono/commit/9f1e18f3eab8e5172ea7a7e3e2a97a1914d95c09))
 * **pubsub:** added que strict name to subscriber in order to have the same queue shared between multiple workers ([cb2de4b](https://github.com/rxdi/mono/commit/cb2de4b96f27ca8f95fae2d02f359e4fd349365a))
 * **pubsub:** fixed non existent function ([d5f9e60](https://github.com/rxdi/mono/commit/d5f9e602607c2da8e7c2e50effdc6a4e60acd8bf))
