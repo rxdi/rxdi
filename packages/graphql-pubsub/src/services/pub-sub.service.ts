@@ -31,8 +31,14 @@ export class PubSubService {
     }
   }
 
+  /* Old version before 3.0.0 of async iterator inside graphql-subscriptions */
   asyncIterator<T>(event, options?): AsyncIterator<T> {
-    return (this as unknown)['sub'].asyncIterator<T>(event, options);
+    return this.sub.asyncIterableIterator<T>(event, options);
+  }
+
+  /* New version of graphql-subscriptions async iterator */
+  asyncIterableIterator<T>(event, options?): AsyncIterator<T> {
+    return this.sub.asyncIterableIterator<T>(event, options);
   }
 
   publish(signal: string, data: any): Promise<void> {

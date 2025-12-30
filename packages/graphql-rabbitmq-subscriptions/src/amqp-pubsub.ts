@@ -184,7 +184,16 @@ export class AmqpPubSub {
     );
   }
 
+  /* Old version before 3.0.0 of async iterator inside graphql-subscriptions */
   public asyncIterator<T>(
+    triggers: string | string[],
+    options?: IQueueNameConfig,
+  ): AsyncIterator<T> {
+    return new PubSubAsyncIterator<T>(this, triggers, options);
+  }
+
+  /* New version of graphql-subscriptions async iterator */
+  public asyncIterableIterator<T>(
     triggers: string | string[],
     options?: IQueueNameConfig,
   ): AsyncIterator<T> {
