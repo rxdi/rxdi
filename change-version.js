@@ -7,10 +7,11 @@ async function readPackageJson(dir) {
 async function main() {
   const packageJson = await readPackageJson('package.json');
   const version = `^${packageJson.version}`
-  const dirs = await promisify(readdir)('packages');
+  const dirs = await promisify(readdir)('packages', {withFileTypes: true});
+
   const packagesJsons = await Promise.all(
-    dirs.map(async directory => {
-      const path = `./packages/${directory}/package.json`;
+    dirs.filter(entry => entry.isDirectory()).map(async directory => {
+      const path = `./packages/${directory.name}/package.json`;
       const file = await readPackageJson(path);
       return {
         file,
