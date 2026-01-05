@@ -259,6 +259,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
     let errors = [];
 
     element.setCustomValidity('');
+    this.setFormValidity(true);
     if (!element.checkValidity()) {
       return {
         errors: errors.concat(
@@ -323,6 +324,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> {
   public setFormValidity(validity: boolean = true) {
     this.valid = validity;
     this.invalid = !validity;
+    this.getParentElement().requestUpdate();
   }
 
   public resetErrors() {
