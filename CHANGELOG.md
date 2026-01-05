@@ -1,4 +1,4 @@
-## [0.7.208](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.208) (2025-12-30)
+## [0.7.209](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.209) (2026-01-05)
 
 
 ### Bug Fixes
@@ -126,6 +126,7 @@
 * **lit-html:** added components property for initializing components needed for a specific component ([ebfc279](https://github.com/rxdi/mono/commit/ebfc279b10d4ebbe3e0399b1974008c87acaf586))
 * **lit-html:** added decorators to be part of the bundle since Deno is complaining about decorators.js from cdn ([f0214aa](https://github.com/rxdi/mono/commit/f0214aa2860b2e1b7bb2227ca8992cba4eca2948))
 * **lit-html:** added dependencies instead of just lit ([bed8bc8](https://github.com/rxdi/mono/commit/bed8bc8abdf2d8a090e676e2464566bbbbbd67ee))
+* **lit-html:** added exception for renderer to initialize the forms after it is loaded and emits custom event loaded and modified component decorator to handle this edge case ([59445c5](https://github.com/rxdi/mono/commit/59445c5730f669898fc797596d3e2aa85db35e15))
 * **lit-html:** added excluded components property check to not define component if it is in that list ([b79a503](https://github.com/rxdi/mono/commit/b79a5032f4fffb1ce6919a2508708013295b9117))
 * **lit-html:** added h utility function returning template result ([a5a2bd6](https://github.com/rxdi/mono/commit/a5a2bd62cf534150ac051bb901c23f16ee119cbc))
 * **lit-html:** added pipe function and multiple modifiers ([70419f5](https://github.com/rxdi/mono/commit/70419f5bd4606a46b9c46072b4bf24ddeff9fcd7))
