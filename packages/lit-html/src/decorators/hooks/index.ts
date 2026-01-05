@@ -1,4 +1,16 @@
-export * from './on-destroy';
-export * from './on-init';
-export * from './on-update';
-export * from './on-update-first';
+export interface OnUpdate {
+  OnUpdate(): void;
+}
+
+export interface OnDestroy {
+  OnDestroy(): void;
+}
+
+export interface OnUpdateFirst {
+  OnUpdateFirst(): void;
+}
+
+export interface OnInit {
+  OnInit(): void;
+}
+

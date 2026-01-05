@@ -138,7 +138,7 @@ const customElement = <T>(
     config.styles.push(config.style);
   }
 
-  const ModifiedClass = class NoName extends Base {
+  const ModifiedClass = class extends Base {
     static styles = config.styles;
 
     static is() {
