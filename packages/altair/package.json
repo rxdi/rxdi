@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/altair",
-  "version": "0.7.209",
+  "version": "0.7.210",
   "repository": {
     "type": "git",
     "url": "https://github.com/rxdi/rxdi"
@@ -33,8 +33,8 @@
     "altair-static": "^8.5.0"
   },
   "devDependencies": {
-    "@rxdi/core": "^0.7.209",
-    "@rxdi/hapi": "^0.7.209",
+    "@rxdi/core": "^0.7.210",
+    "@rxdi/hapi": "^0.7.210",
     "@types/node": "^25.0.3",
     "tslint": "^5.20.1",
     "tslint-language-service": "^0.9.9",

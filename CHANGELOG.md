@@ -1,4 +1,4 @@
-## [0.7.209](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.209) (2026-01-05)
+## [0.7.210](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.210) (2026-01-05)
 
 
 ### Bug Fixes
@@ -113,6 +113,7 @@
 * **credit-card-form:** added first version of credit card component ([9f0a8ea](https://github.com/rxdi/mono/commit/9f0a8ea4637f085f8c05df6577b48d64f3f45183))
 * **docs:** added multiple annotation docs inside the code ([937c56f](https://github.com/rxdi/mono/commit/937c56f50f63a9a8922a86c69e90e12ad6d06fc6))
 * **forms:** async validators experiment ([0667b03](https://github.com/rxdi/mono/commit/0667b03530d6e04137f2cb7aea6cf28076b2aa37))
+* **forms:** fixed validity of forms and automatic change detection ([86cf192](https://github.com/rxdi/mono/commit/86cf192f48e20716f6ea147054d85a77e3fef393))
 * **GarbageCollect:** added method to handle unsubscribe from observables ([9313eda](https://github.com/rxdi/mono/commit/9313eda88a7f6b4fce7873931b680218a10c8b7c))
 * **GlobalPrefetch:** added to pusbusb ([dfb9913](https://github.com/rxdi/mono/commit/dfb9913d82c604e95ca99ab6eb89b05203434eff))
 * **graphql-client:** added cancel request handler and options everyone to make his own options ([ea312b7](https://github.com/rxdi/mono/commit/ea312b74b0f0c9c7717c45a3a033ec76fb250aec))
