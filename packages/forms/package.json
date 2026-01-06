@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/forms",
-  "version": "0.7.210",
+  "version": "0.7.211",
   "main": "./dist/index.js",
   "author": "Kristiyan Tachev",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "build": "tsc"
   },
   "devDependencies": {
-    "@rxdi/lit-html": "^0.7.210",
+    "@rxdi/lit-html": "^0.7.211",
     "@types/node": "^25.0.3",
     "rxjs": "^7.8.2",
     "typescript": "^5.9.3"
