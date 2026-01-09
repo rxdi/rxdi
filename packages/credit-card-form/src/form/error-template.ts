@@ -3,7 +3,7 @@ import { html } from '@rxdi/lit-html';
 
 // import { translate } from '../i18n/translate';
 
-export function InputErrorTemplate(input: AbstractInput) {
+export function InputErrorTemplate(input: any) {
  if (input && input.invalid && (input.touched || input.dirty)) {
   const message = input.validationMessage;
   // const key = Object.keys(InputValidityState).filter(o => input.validity[o])[0];
