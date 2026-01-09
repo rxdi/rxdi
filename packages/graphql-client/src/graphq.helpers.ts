@@ -1,19 +1,13 @@
-import { PossibleTypesMap } from '@apollo/client/core';
+import { DocumentNode, PossibleTypesMap, TypedDocumentNode } from '@apollo/client/core';
 import { Container } from '@rxdi/core';
+import { GraphqlDocuments } from './graphql.injection';
 
-export function importQuery<T>(search: T) {
-  let result: any;
-  const DOCUMENTS = Container.get('graphql-documents');
-  Object.keys(DOCUMENTS).filter((doc) => {
-    if (doc.indexOf(<any>search) !== -1) {
-      result = DOCUMENTS[doc];
-    }
-  });
-  if (!result) {
-    console.error(`Missing query: ${search}`);
-    return search;
+export function importQuery<T extends string>(search: T): DocumentNode | TypedDocumentNode {
+  const DOCUMENTS = Container.get(GraphqlDocuments);
+  if (!DOCUMENTS[search]) {
+    throw new Error(`Missing query: ${search}`)
   }
-  return result;
+  return DOCUMENTS[search];
 }
 
 export interface IntrospectionQuery {

@@ -44,7 +44,10 @@ export class GraphqlModule {
       providers: [
         {
           provide: GraphqlDocuments,
-          useValue: documents,
+          useValue: Object.keys(documents).reduce((prev, doc) => ({
+            ...prev, 
+            [doc.split('/').pop()]: documents[doc]
+          }), {}),
         },
         {
           provide: ApolloClient,

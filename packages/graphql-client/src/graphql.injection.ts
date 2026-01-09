@@ -2,14 +2,16 @@ import { InjectionToken } from '@rxdi/core';
 import {
   ApolloClient as AC,
   ApolloClientOptions,
+  DocumentNode,
   RequestHandler,
+  TypedDocumentNode,
 } from '@apollo/client/core';
 import { NormalizedCacheObject, InMemoryCache } from '@apollo/client/cache';
 
 export const ApolloClient = new InjectionToken<AC<NormalizedCacheObject>>('apollo-link');
 export interface ApolloClient extends AC<NormalizedCacheObject> { }
 
-export const GraphqlDocuments = 'graphql-documents';
+export const GraphqlDocuments = new InjectionToken<Record<string, DocumentNode | TypedDocumentNode>>('graphql-documents');
 
 export interface GraphqlModuleConfig {
   uri: string;
