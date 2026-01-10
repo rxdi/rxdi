@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { noop } from 'rxjs';
+
 import { FormGroup } from './form.group';
 import { FormOptions } from './form.tokens';
-import { noop } from 'rxjs';
 
 export function Form(
   options: FormOptions = {
@@ -20,6 +22,9 @@ export function Form(
         throw new Error('Value provided is not an instance of FormGroup!');
       }
       (this[name] as FormGroup).setParentElement(this).setOptions(options).prepareValues();
+      if (options.model && this[options.model]) {
+        this[name].patchValue(this[options.model]);
+      }
       return Connect.call(this);
     };
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LitElement } from '@rxdi/lit-html';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -125,6 +126,7 @@ export class FormArray<T = any> implements AbstractControl<T[]> {
     return this.parentElement;
   }
 
+  // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
   public set value(values: T[]) {
     if (!Array.isArray(values)) {
       return;

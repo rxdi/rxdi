@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LitElement } from '@rxdi/lit-html';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -8,17 +9,19 @@ import {
   FormInputOptions,
   FormOptions,
   InputValidityState,
+  NestedKeyOf,
+  UnwrapValue,
   ValidatorFn,
 } from './form.tokens';
 
-export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> implements AbstractControl<T> {
+export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> implements AbstractControl<UnwrapValue<T>> {
   public validators: Map<string, ValidatorFn[]> = new Map();
   public valid = true;
   public invalid = false;
-  public errors: T = {} as T;
+  public errors: UnwrapValue<T> = {} as UnwrapValue<T>;
   private controls: Map<keyof T, AbstractControl> = new Map();
 
-  private readonly _valueChanges: BehaviorSubject<T>;
+  private readonly _valueChanges: BehaviorSubject<UnwrapValue<T>>;
   private form: HTMLFormElement;
   private errorMap = new Map();
   private inputs: Map<keyof T, AbstractInput> = new Map();
@@ -27,10 +30,15 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
   private subscriptions: Map<keyof T, Subscription> = new Map();
 
   constructor(value?: T, errors?: E) {
-    this._valueChanges = new BehaviorSubject<T>(value);
+    this._valueChanges = new BehaviorSubject<UnwrapValue<T>>(value as never);
     if (value) {
       Object.keys(value).forEach((key) => {
-        if (typeof value[key] === 'object' && value[key] !== null && (value[key]['controls'] || value[key]['push'])) {
+        if (
+          typeof value[key] === 'object' &&
+          value[key] !== null &&
+          (value[key]['controls'] || value[key]['push']) &&
+          value[key]['valueChanges']
+        ) {
           // It's likely a FormGroup or FormArray
           const control = value[key] as AbstractControl;
           if (control.name === '' || control.name === undefined) {
@@ -73,7 +81,13 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
             this.validators.set(v, [...oldValidators, val]);
           });
         }
-        if (value[0].constructor === String || value[0].constructor === Number || value[0].constructor === Boolean) {
+        if (value[0] === undefined || value[0] === null) {
+          (this.value[v] as unknown) = '';
+        } else if (
+          value[0].constructor === String ||
+          value[0].constructor === Number ||
+          value[0].constructor === Boolean
+        ) {
           (this.value[v] as unknown) = value[0];
         } else {
           throw new Error(`Input value must be of type 'string', 'boolean' or 'number'`);
@@ -85,10 +99,10 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
 
   public setParentElement(parent: LitElement) {
     this.parentElement = parent;
-    
+
     this.controls.forEach((c) => {
-      if (c.setParentElement){
-         c.setParentElement(parent);
+      if (c.setParentElement) {
+        c.setParentElement(parent);
       }
     });
     return this;
@@ -101,7 +115,12 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
   public setOptions(options: FormOptions) {
     this.options = options;
     this.controls.forEach((c) => {
-      if (c.setOptions) c.setOptions(options);
+      if (c.setOptions) {
+        c.setOptions({
+          ...options,
+          namespace: this.options.namespace ? `${this.options.namespace}.${c.name}` : c.name,
+        });
+      }
     });
     return this;
   }
@@ -359,15 +378,23 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
     return res.filter((i) => !!i);
   }
 
-  public get(name: keyof T) {
-    if (this.controls.has(name)) {
-      return this.controls.get(name);
+  public get<K extends NestedKeyOf<T>>(name: K): AbstractControl | AbstractInput {
+    if (this.controls.has(name as any)) {
+      return this.controls.get(name as any);
     }
-    return this.inputs.get(name);
+    if (String(name).includes('.')) {
+      const names = String(name).split('.');
+      const key = names.shift() as keyof T;
+      const control = this.controls.get(key);
+      if (control && (control as any).get) {
+        return (control as any).get(names.join('.'));
+      }
+    }
+    return this.inputs.get(name as any);
   }
 
   public getError(inputName: keyof T, errorKey: string) {
-    return this.errors[inputName][errorKey as never];
+    return this.errors[inputName as keyof UnwrapValue<T>][errorKey as never];
   }
 
   public hasError(inputName: keyof T, errorKey: string) {
@@ -391,19 +418,19 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
     this.errors = Object.keys(this.errors).reduce((object, key) => {
       object[key] = {};
       return object;
-    }, {}) as T;
+    }, {}) as unknown as UnwrapValue<T>;
     this.errorMap.clear();
   }
 
-  public get value() {
+  public get value(): UnwrapValue<T> {
     const values = this._valueChanges.getValue();
     this.controls.forEach((control, key) => {
-      values[key as keyof T] = control.value;
+      values[key as keyof UnwrapValue<T>] = control.value;
     });
     return values;
   }
 
-  public set value(value: T) {
+  public set value(value: UnwrapValue<T>) {
     this._valueChanges.next(value);
   }
 
@@ -416,23 +443,36 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
   }
 
   public getValue(name: keyof T): T[keyof T] {
-    return this.value[name];
+    return this.value[name as never];
+  }
+
+  public patchValue(value: Partial<UnwrapValue<T>>) {
+    if (!value) {
+      return;
+    }
+    Object.keys(value).forEach((key) => {
+      if (this.controls.has(key as keyof T) && this.controls.get(key as keyof T)['patchValue']) {
+        this.controls.get(key as keyof T)['patchValue'](value[key]);
+      } else {
+        this.setValue(key as keyof T, value[key]);
+      }
+    });
   }
 
   public setValue(name: keyof T, value: unknown) {
-    const input = this.get(name);
+    const input = this.get(name as any);
     if (!input) {
       // If no input, maybe just set the value in model?
       // User code had return; but we might want to update model even if no input?
       //  return;
     }
-    if (input && input.value !== undefined) input.value = value;
+    if (input && input.value !== undefined) input.value = value as string;
     const values = this.value;
-    values[name as string] = value;
+    values[name as keyof UnwrapValue<T>] = value as never;
     this.value = values;
   }
 
-  public setFormValue(value: T) {
+  public setFormValue(value: UnwrapValue<T>) {
     this.value = value;
   }
 

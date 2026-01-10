@@ -1,5 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LitElement } from '@rxdi/lit-html';
 import { Observable } from 'rxjs';
+
+export type UnwrapValue<T> = T extends AbstractControl<infer U>
+  ? U
+  : T extends { [key: string]: any }
+  ? { [K in keyof T]: UnwrapValue<T[K]> }
+  : T;
+
+// Helper to limit recursion depth
+type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ...0[]];
+
+export type NestedKeyOf<T, D extends number = 3> = [D] extends [0]
+  ? never
+  : T extends object
+  ? {
+      [K in keyof T & (string | number)]: T[K] extends AbstractControl<infer U>
+        ? U extends object
+          ? `${K}` | `${K}.${NestedKeyOf<U, Prev[D]>}`
+          : `${K}`
+        : T[K] extends object
+        ? `${K}` | `${K}.${NestedKeyOf<T[K], Prev[D]>}`
+        : `${K}`;
+    }[keyof T & (string | number)]
+  : never;
 
 export type FormStrategies = keyof WindowEventMap;
 export interface FormOptions {
@@ -22,6 +46,10 @@ export interface FormOptions {
    * Internal property for handling nested forms.
    */
   namespace?: string;
+  /**
+   * Property name of the model to bind to the form
+   */
+  model?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
