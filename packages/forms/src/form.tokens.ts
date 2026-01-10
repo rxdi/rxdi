@@ -68,7 +68,6 @@ export interface FormOptions {
   model?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface AbstractControl<T = any> {
   setOptions(options: FormOptions): this | void;
   getOptions(): FormOptions;
@@ -80,13 +79,12 @@ export interface AbstractControl<T = any> {
   value: T;
   valid: boolean;
   invalid: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateValueAndValidity?(): Promise<any>;
   name?: string;
   push?(control: AbstractControl): void;
   getFormElement?(): HTMLFormElement;
   patchValue?(value: T): void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  validationMessage?: string;
   get?(name: string): any;
 }
 
@@ -113,7 +111,7 @@ export interface AbstractInput<T = any> extends HTMLInputElement {
   invalid?: boolean;
   dirty?: boolean;
   touched?: boolean;
-  valueChanges?: Observable<any>;
+  valueChanges?: Observable<T>;
 }
 
 function strEnum<T extends string>(o: Array<T>): { [K in T]: K } {
