@@ -154,6 +154,8 @@ this.form.patchValue({
   }
 });
 // Only updates 'isActive', leaves other fields untouched.
+````
+
 ### Dynamic Array Inputs (FormArray)
 
 For lists of primitive values, use `FormArray` with an `itemFactory` and automatic model binding. This removes the need for manual population.
