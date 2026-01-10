@@ -1,4 +1,4 @@
-## [0.7.214](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.214) (2026-01-10)
+## [0.7.215](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.215) (2026-01-10)
 
 
 ### Bug Fixes
@@ -117,6 +117,7 @@
 * **forms:** async validators experiment ([0667b03](https://github.com/rxdi/mono/commit/0667b03530d6e04137f2cb7aea6cf28076b2aa37))
 * **forms:** fixed validity of forms and automatic change detection ([86cf192](https://github.com/rxdi/mono/commit/86cf192f48e20716f6ea147054d85a77e3fef393))
 * **forms:** removed rxjs and added form array element to manage more complex forms ([928c76b](https://github.com/rxdi/mono/commit/928c76bdc1b14e1073e97f69ffa95c633436ac08))
+* **forms:** type checking is now full ! ([cf4bc5d](https://github.com/rxdi/mono/commit/cf4bc5d0b04b8dd36c05a85d246d6ff8b036d5b4))
 * **forms:** type safety added to the forms and additional binding configuration if model present on the component to set values of the form dynamically without explicitly setting it inside hook OnUpdateFirst crucial readability feature! ([76135cd](https://github.com/rxdi/mono/commit/76135cd32edb5c5f498a2f70daf6a38f4ee75668))
 * **GarbageCollect:** added method to handle unsubscribe from observables ([9313eda](https://github.com/rxdi/mono/commit/9313eda88a7f6b4fce7873931b680218a10c8b7c))
 * **GlobalPrefetch:** added to pusbusb ([dfb9913](https://github.com/rxdi/mono/commit/dfb9913d82c604e95ca99ab6eb89b05203434eff))
