@@ -147,18 +147,24 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
       })
     );
 
+    const inputsWithErrors = inputs.filter((e) => e.errors.length);
+    const nestedErrors = [];
+
     for (const [key, control] of this.controls.entries()) {
       if (control.updateValueAndValidity) {
-        await control.updateValueAndValidity();
+        const result = (await control.updateValueAndValidity()) as any;
         if (control.invalid) {
           this.invalid = true;
           this.valid = false;
+          if (Array.isArray(result)) {
+             nestedErrors.push(...result);
+          }
         }
       }
     }
 
     this.getParentElement().requestUpdate();
-    return inputs.filter((e) => e.errors.length) || (this.invalid ? [{ message: 'Invalid Form' }] : []);
+    return [...inputsWithErrors, ...nestedErrors];
   }
 
   private updateValueAndValidityOnEvent(method: (event: { target: AbstractInput }) => void) {
@@ -391,8 +397,8 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
       const names = String(name).split('.');
       const key = names.shift() as keyof T;
       const control = this.controls.get(key);
-      if ((control as any)?.get) {
-        return (control as any).get(names.join('.')) as any;
+      if (control?.get) {
+        return control.get(names.join('.')) as any;
       }
     }
     const input = this.inputs.get(name as any) as any;
@@ -487,8 +493,8 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
     }
     Object.keys(value).forEach((key) => {
       const control = this.controls.get(key as keyof T);
-      if ((control as any)?.['patchValue']) {
-        (control as any)['patchValue'](value[key]);
+      if (control?.patchValue) {
+        control.patchValue(value[key]);
       } else {
         this.setValue(key as keyof T, value[key]);
       }

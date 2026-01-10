@@ -85,6 +85,9 @@ export interface AbstractControl<T = any> {
   name?: string;
   push?(control: AbstractControl): void;
   getFormElement?(): HTMLFormElement;
+  patchValue?(value: T): void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get?(name: string): any;
 }
 
 export type ValidatorFn = (

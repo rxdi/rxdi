@@ -156,11 +156,31 @@ export class FormArray<T = any> implements AbstractControl<T[]> {
     values.forEach((v, i) => {
       const control = this.controls[i];
       if (control) {
-        (control as any).patchValue ? (control as any).patchValue(v) : (control.value = v);
+        control.patchValue ? control.patchValue(v) : (control.value = v);
       } else if (this.options.itemFactory) {
         this.push(this.options.itemFactory(v));
       }
     });
     this.updateValue();
+  }
+
+  public async updateValueAndValidity() {
+    this.valid = true;
+    this.invalid = false;
+    this.errors = {};
+    const errors = [];
+
+    for (const [index, control] of this.controls.entries()) {
+      if (control.updateValueAndValidity) {
+        const result = await control.updateValueAndValidity();
+        if (control.invalid) {
+          this.valid = false;
+          this.invalid = true;
+          this.errors[index] = result;
+          errors.push(...result);
+        }
+      }
+    }
+    return errors;
   }
 }
