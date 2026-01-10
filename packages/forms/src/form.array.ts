@@ -22,12 +22,16 @@ export class FormArray<T = any> implements AbstractControl<T[]> {
   private options: FormArrayOptions<T> = {} as FormArrayOptions<T>;
   private subscriptions: Map<AbstractControl<T>, Subscription> = new Map();
 
-  constructor(controls: AbstractControl<T>[] = [], nameOrOptions: string | FormArrayOptions<T> = '') {
+  constructor(
+    controls: AbstractControl<T>[] = [],
+    nameOrOptions: string | FormArrayOptions<T> | ((value: T) => AbstractControl) = ''
+  ) {
     this.controls = controls;
     if (typeof nameOrOptions === 'string') {
       this.name = nameOrOptions;
+    } else if (typeof nameOrOptions === 'function') {
+      this.options = { itemFactory: nameOrOptions } as FormArrayOptions<T>;
     } else {
-      this.name = nameOrOptions.name || '';
       this.options = nameOrOptions;
     }
     this._valueChanges = new BehaviorSubject(this.value);
