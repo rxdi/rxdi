@@ -1,4 +1,4 @@
-## [0.7.217](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.217) (2026-01-10)
+## [0.7.218](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.218) (2026-01-10)
 
 
 ### Bug Fixes
@@ -17,6 +17,7 @@
 * **core:** removed bin from package.json ([2fb387a](https://github.com/rxdi/mono/commit/2fb387a752daa7e109f842fc0049b3e2abb6d37e))
 * **core:** unsubscribe directly error message is obsolete and should be removed ([fc70634](https://github.com/rxdi/mono/commit/fc706344c4dea016fd63dda20edd40f9bf85d7df))
 * **credit-card-form:** added correct dependencies ([a3cdac8](https://github.com/rxdi/mono/commit/a3cdac815b01abcbfddd3157868cf1eadce743bc))
+* **forms:** added better way of defining the form array without specifically add name of the object since now it relies on the parent form to get the key ([168028c](https://github.com/rxdi/mono/commit/168028c30d83e1367805e7b64d7afc247b2cf5c0))
 * **forms:** added element focus on validate ([0e0bef7](https://github.com/rxdi/mono/commit/0e0bef78a8e4248622288e7fd629d4bc1b36901d))
 * **forms:** added query select by textarea ([0cccbd7](https://github.com/rxdi/mono/commit/0cccbd7c26d869b80ffcfc42f73080130cbd4c23))
 * **forms:** added set timeout to init form in order for the first render to pass and to apply form validation and find the correct inputs (this change is due to rx-graph component initial rendering which happens on the second render ([6d96e49](https://github.com/rxdi/mono/commit/6d96e496a0a9a58dfd76b44e831dd382ff95853a))
