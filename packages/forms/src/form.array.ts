@@ -105,7 +105,7 @@ export class FormArray<T = any> implements AbstractControl<T[]> {
   public unsubscribe() {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
     this.subscriptions.clear();
-    this.controls.forEach((c) => c.unsubscribe && c.unsubscribe());
+    this.controls.forEach((c) => c.unsubscribe?.());
   }
 
   public updateValue() {
@@ -113,9 +113,7 @@ export class FormArray<T = any> implements AbstractControl<T[]> {
   }
 
   public requestUpdate() {
-    if (this.parentElement) {
-      this.parentElement.requestUpdate();
-    }
+    this.parentElement?.requestUpdate();
   }
 
   public setParentElement(parent: LitElement) {
@@ -142,9 +140,7 @@ export class FormArray<T = any> implements AbstractControl<T[]> {
       return;
     }
     values.forEach((v, i) => {
-      if (this.controls[i]) {
-        this.controls[i].value = v;
-      }
+      this.controls[i] && (this.controls[i].value = v);
     });
     this.updateValue();
   }
@@ -154,12 +150,9 @@ export class FormArray<T = any> implements AbstractControl<T[]> {
       return;
     }
     values.forEach((v, i) => {
-      if (this.controls[i]) {
-        if (this.controls[i]['patchValue']) {
-          this.controls[i]['patchValue'](v);
-        } else {
-          this.controls[i].value = v;
-        }
+      const control = this.controls[i];
+      if (control) {
+        (control as any).patchValue ? (control as any).patchValue(v) : (control.value = v);
       } else if (this.options.itemFactory) {
         this.push(this.options.itemFactory(v));
       }

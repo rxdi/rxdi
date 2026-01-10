@@ -5,6 +5,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import {
   AbstractControl,
   AbstractInput,
+  DeepPropType,
   ErrorObject,
   FormInputOptions,
   FormOptions,
@@ -12,7 +13,6 @@ import {
   NestedKeyOf,
   UnwrapValue,
   ValidatorFn,
-  DeepPropType,
 } from './form.tokens';
 
 export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> implements AbstractControl<UnwrapValue<T>> {
@@ -60,11 +60,14 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
   }
 
   public init() {
+    if (!this.parentElement) {
+      return;
+    }
     this.setFormElement(this.querySelectForm(this.parentElement.shadowRoot || this.parentElement)).setInputs(
       this.mapEventToInputs(this.querySelectorAllInputs())
     );
     this.controls.forEach((c) => {
-      if (c.init) c.init();
+      c.init?.();
     });
   }
 
@@ -102,9 +105,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
     this.parentElement = parent;
 
     this.controls.forEach((c) => {
-      if (c.setParentElement) {
-        c.setParentElement(parent);
-      }
+      c.setParentElement?.(parent);
     });
     return this;
   }
@@ -116,12 +117,10 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
   public setOptions(options: FormOptions) {
     this.options = options;
     this.controls.forEach((c) => {
-      if (c.setOptions) {
-        c.setOptions({
-          ...options,
-          namespace: this.options.namespace ? `${this.options.namespace}.${c.name}` : c.name,
-        });
-      }
+      c.setOptions?.({
+        ...options,
+        namespace: this.options.namespace ? `${this.options.namespace}.${c.name}` : c.name,
+      });
     });
     return this;
   }
@@ -239,6 +238,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
   public querySelectForm(shadowRoot: HTMLElement | ShadowRoot): HTMLFormElement {
     if (this.options['form']) {
       return this.options['form'] as HTMLFormElement;
+    }
+    if (!shadowRoot?.querySelector) {
+      return null;
     }
     const form = shadowRoot.querySelector(`form[name="${this.options.name}"]`) as HTMLFormElement;
     if (!form) {
@@ -387,7 +389,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
       const names = String(name).split('.');
       const key = names.shift() as keyof T;
       const control = this.controls.get(key);
-      if (control && (control as any).get) {
+      if ((control as any)?.get) {
         return (control as any).get(names.join('.')) as any;
       }
     }
@@ -452,8 +454,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
       return;
     }
     Object.keys(value).forEach((key) => {
-      if (this.controls.has(key as keyof T) && this.controls.get(key as keyof T)['patchValue']) {
-        this.controls.get(key as keyof T)['patchValue'](value[key]);
+      const control = this.controls.get(key as keyof T);
+      if ((control as any)?.['patchValue']) {
+        (control as any)['patchValue'](value[key]);
       } else {
         this.setValue(key as keyof T, value[key]);
       }
@@ -480,7 +483,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
   public setFormElement(form: HTMLFormElement) {
     this.form = form;
     this.controls.forEach((c) => {
-      if (c.setFormElement) c.setFormElement(form);
+      c.setFormElement?.(form);
     });
     return this;
   }
