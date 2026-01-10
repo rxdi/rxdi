@@ -200,11 +200,10 @@ export class TagsComponent extends LitElement {
     model: 'tags', // Triggers form.patchValue(this.tags) on INIT
   })
   form = new FormGroup({
-    tags: new FormArray<{ value: string }>([], {
-      name: 'tags',
-      // Factory describes how to create new controls from model data
-      itemFactory: (value) => new FormGroup({ value: value.value || value }),
-    }),
+    tags: new FormArray<{ value: string }>(
+      [],
+      (value) => new FormGroup({ value: value.value || value }) // Factory handles population automatically
+    ),
   });
 
   addTag() {
@@ -222,6 +221,75 @@ export class TagsComponent extends LitElement {
 }
 
 ````
+
+### Typed Subscriptions & Virtual Inputs
+
+You can subscribe to `valueChanges` on individual inputs, even if they aren't in the DOM yet!
+
+```typescript
+// Works even if 'email' input is inside an *ngIf or not yet rendered
+this.form.get('email').valueChanges.subscribe(value => {
+  console.log('Email changed:', value); // 'value' is strongly typed!
+});
+```
+
+This is powered by "Virtual Inputs" which mock the input interface if the model key exists but the DOM element is missing.
+
+### Working with Value Changes
+
+The `valueChanges` observable is powerful for creating interactive forms.
+
+#### 1. Debounced Search
+
+```typescript
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
+this.form.get('search').valueChanges.pipe(
+  debounceTime(300),
+  distinctUntilChanged()
+).subscribe(term => {
+  this.searchService.search(term);
+});
+```
+
+#### 2. Dependant Fields (Cascading Dropdowns)
+
+Reset or modify dependent fields when a parent field changes.
+
+```typescript
+this.form.get('country').valueChanges.subscribe(country => {
+  // Reset state when country changes
+  this.form.get('state').value = '';
+  
+  // Update state options dynamically based on country
+  this.loadStatesFor(country);
+});
+```
+
+#### 3. Dynamic Disabling
+
+Disable controls based on the value of others.
+
+```typescript
+this.form.get('subscribeNewsletter').valueChanges.subscribe(shouldSubscribe => {
+   const emailControl = this.form.get('newsletterEmail');
+   if (shouldSubscribe) {
+     emailControl.disabled = false;
+   } else {
+     emailControl.disabled = true;
+     emailControl.value = ''; // Optional: clear value
+   }
+});
+```
+
+### Generic Typed AbstractInput
+
+`AbstractInput` is now generic, propagating types through the form.
+
+```typescript
+const emailInput: AbstractInput<string> = this.form.get('email');
+// emailInput.value is string
+```
 
 ## API Reference
 
