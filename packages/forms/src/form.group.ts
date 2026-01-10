@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { LitElement } from '@rxdi/lit-html';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 import {
   AbstractControl,
@@ -57,6 +58,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
         }
       });
     }
+    this.prepareValues();
   }
 
   public init() {
@@ -393,7 +395,37 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
         return (control as any).get(names.join('.')) as any;
       }
     }
-    return this.inputs.get(name as any) as any;
+    const input = this.inputs.get(name as any) as any;
+    if (input) {
+      return input;
+    }
+
+    /* 
+      If a user tries to subscribe on a constructor level or before the inputs are inside the DOM
+      We create a fake Virtual Input so later on when elements present on stage to get the same subscription
+    */
+    const key = name as unknown as keyof T;
+    // Check if key exists in the model value even if not in inputs map
+    if (this._valueChanges.getValue() && key in (this._valueChanges.getValue() as object)) {
+      // Create a "Virtual" AbstractInput to prevent crashes and allow subscription even if no DOM element present
+      return {
+        valueChanges: this._valueChanges.pipe(
+          map((value) => value?.[key as keyof UnwrapValue<T>] as any),
+          distinctUntilChanged()
+        ),
+        value: this.getValue(key),
+        name: String(key),
+        valid: true,
+        invalid: false,
+        dirty: false,
+        touched: false,
+        // Mock HTMLInputElement properties to satisfy interface if needed
+        type: 'text',
+        checked: false,
+        disabled: false,
+      } as unknown as DeepPropType<T, K>;
+    }
+    return undefined as any;
   }
 
   public getError(inputName: keyof T, errorKey: string) {
@@ -493,6 +525,10 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
       inputs.map((e) => {
         const key = this.getModelKeyName(e.name) as keyof T;
         e.value = this.getValue(key) as never;
+        e.valueChanges = this._valueChanges.pipe(
+          map((value) => value?.[key as keyof UnwrapValue<T>] as any),
+          distinctUntilChanged()
+        );
         return [key, e];
       })
     );

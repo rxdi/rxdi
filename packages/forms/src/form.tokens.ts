@@ -13,6 +13,8 @@ type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ...0[]];
 
 export type NestedKeyOf<T, D extends number = 3> = [D] extends [0]
   ? never
+  : T extends Array<any>
+  ? never
   : T extends object
   ? {
       [K in keyof T & (string | number)]: T[K] extends AbstractControl<infer U>
@@ -26,7 +28,13 @@ export type NestedKeyOf<T, D extends number = 3> = [D] extends [0]
   : never;
 
 export type DeepPropType<T, P extends string> = P extends keyof T
-  ? T[P]
+  ? T[P] extends [infer V, ValidatorFn[]]
+    ? AbstractInput<V>
+    : T[P] extends (infer U)[]
+    ? AbstractInput<U>
+    : T[P] extends string | number | boolean
+    ? AbstractInput<T[P]>
+    : T[P]
   : P extends `${infer K}.${infer R}`
   ? K extends keyof T
     ? DeepPropType<T[K], R>
@@ -42,7 +50,7 @@ export interface FormOptions {
   /** Multiple input elements like checkboxes with the same name will be binded together */
   multi?: boolean;
   /** When set to true `.valueChanges` will emit values only
-   * if current input validation passes, default behavior is to emit every change fro */
+   * if current input validation passes, default behavior is to emit every change on the form */
   strict?: boolean;
 
   /**
@@ -97,11 +105,12 @@ export interface ErrorObject {
   errors: InputErrorMessage[];
 }
 
-export interface AbstractInput extends HTMLInputElement {
+export interface AbstractInput<T = any> extends HTMLInputElement {
   valid?: boolean;
   invalid?: boolean;
   dirty?: boolean;
   touched?: boolean;
+  valueChanges?: Observable<any>;
 }
 
 function strEnum<T extends string>(o: Array<T>): { [K in T]: K } {
