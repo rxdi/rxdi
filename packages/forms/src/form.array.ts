@@ -4,6 +4,10 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { AbstractControl, FormOptions } from './form.tokens';
 
+export interface FormArrayOptions<T = any> extends FormOptions {
+  itemFactory?: (value: T) => AbstractControl;
+}
+
 export class FormArray<T = any> implements AbstractControl<T[]> {
   public controls: AbstractControl<T>[] = [];
   public readonly valueChanges: BehaviorSubject<T[]>;
@@ -13,13 +17,19 @@ export class FormArray<T = any> implements AbstractControl<T[]> {
   public valid = true;
   public invalid = false;
   public errors = {};
+
   private form: HTMLFormElement;
-  private options: FormOptions = {} as FormOptions;
+  private options: FormArrayOptions<T> = {} as FormArrayOptions<T>;
   private subscriptions: Map<AbstractControl<T>, Subscription> = new Map();
 
-  constructor(controls: AbstractControl<T>[] = [], name = '') {
+  constructor(controls: AbstractControl<T>[] = [], nameOrOptions: string | FormArrayOptions<T> = '') {
     this.controls = controls;
-    this.name = name;
+    if (typeof nameOrOptions === 'string') {
+      this.name = nameOrOptions;
+    } else {
+      this.name = nameOrOptions.name || '';
+      this.options = nameOrOptions;
+    }
     this._valueChanges = new BehaviorSubject(this.value);
     this.valueChanges = this._valueChanges;
     this.controls.forEach((c) => this.subscribeToControl(c));
@@ -34,7 +44,7 @@ export class FormArray<T = any> implements AbstractControl<T[]> {
   }
 
   public setOptions(options: FormOptions) {
-    this.options = options;
+    this.options = { ...this.options, ...options };
     this.controls.forEach((c, index) => {
       c.setOptions({
         ...options,
@@ -134,6 +144,24 @@ export class FormArray<T = any> implements AbstractControl<T[]> {
     values.forEach((v, i) => {
       if (this.controls[i]) {
         this.controls[i].value = v;
+      }
+    });
+    this.updateValue();
+  }
+
+  public patchValue(values: T[]) {
+    if (!Array.isArray(values)) {
+      return;
+    }
+    values.forEach((v, i) => {
+      if (this.controls[i]) {
+        if (this.controls[i]['patchValue']) {
+          this.controls[i]['patchValue'](v);
+        } else {
+          this.controls[i].value = v;
+        }
+      } else if (this.options.itemFactory) {
+        this.push(this.options.itemFactory(v));
       }
     });
     this.updateValue();

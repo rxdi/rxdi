@@ -29,7 +29,7 @@ interface UserParams {
   address: {
     city: string;
     street: string;
-  }
+  };
 }
 
 @Component({
@@ -37,14 +37,13 @@ interface UserParams {
   template(this: UserProfile) {
     return html`
       <form name="user-form" @submit=${this.onSubmit}>
-        
         <!-- Deep Binding with Dot Notation -->
         <input
           name="firstName"
           .value=${this.form.value.firstName}
           @blur=${() => this.requestUpdate()}
         />
-        
+
         <!-- Nested Group Binding -->
         <input
           name="address.city"
@@ -55,33 +54,32 @@ interface UserParams {
         <button type="submit">Save</button>
       </form>
     `;
-  }
+  },
 })
 export class UserProfile extends LitElement {
-  
   // Model to bind
   @property({ type: Object })
   user: UserParams = {
     firstName: 'John',
-    address: { city: 'New York', street: '5th Ave' }
+    address: { city: 'New York', street: '5th Ave' },
   };
 
   @Form({
     name: 'user-form',
     strategy: 'change',
-    model: 'user' // Automatic Model Binding!
+    model: 'user', // Automatic Model Binding!
   })
   form = new FormGroup({
     firstName: '',
     address: new FormGroup({
       city: '',
-      street: ''
-    })
+      street: '',
+    }),
   });
 
   onSubmit(e: Event) {
     e.preventDefault();
-    console.log(this.form.value); 
+    console.log(this.form.value);
     // Output: { firstName: 'John', address: { city: 'New York', street: '5th Ave' } }
   }
 }
@@ -90,6 +88,7 @@ export class UserProfile extends LitElement {
 ## New Features
 
 ### Automatic Model Binding
+
 Use the `model` property in the `@Form` decorator to automatically populate the form from a component property.
 
 ```typescript
@@ -99,9 +98,11 @@ Use the `model` property in the `@Form` decorator to automatically populate the 
 })
 form = new FormGroup({ ... });
 ```
+
 The library reads `this.myData` during initialization and calls `form.patchValue(this.myData)`.
 
 ### Nested FormGroups & FormArray
+
 You can nest `FormGroup`s arbitrarily deep.
 
 ```typescript
@@ -110,25 +111,28 @@ form = new FormGroup({
     id: 1,
     flags: new FormGroup({
       isActive: true,
-      isAdmin: false
-    })
+      isAdmin: false,
+    }),
   }),
-  tags: new FormArray([
-    new FormGroup({ label: 'red' })
-  ])
+  tags: new FormArray([new FormGroup({ label: 'red' })]),
 });
 ```
 
 **Template Binding:**
 Use dot notation for nested controls:
+
 ```html
 <input name="meta.flags.isActive" type="checkbox" />
 ```
 
 ### Type Safety & Autosuggestion
+
 The library now extensively uses advanced TypeScript features:
+
 - **`form.value`**: Returns the unwrapped pure object type (e.g., `{ meta: { flags: { isActive: boolean } } }`).
-- **`form.get('path.to.prop')`**: Provides autocomplete for deep paths!
+- **`form.get('path.to.prop')`**: Provides autocomplete for deep paths and infers return types!
+  - `form.get('key')` returns exact control type (e.g. `FormArray`) without casting.
+
 ```typescript
 // TypeScript knows this is valid:
 this.form.get('meta.flags.isActive');
@@ -138,9 +142,10 @@ this.form.get('meta.flags.wrongProp'); // Error!
 ```
 
 ### Recursive PatchValue
+
 Update multiple fields deeply at once:
 
-```typescript
+````typescript
 this.form.patchValue({
   meta: {
     flags: {
@@ -149,11 +154,77 @@ this.form.patchValue({
   }
 });
 // Only updates 'isActive', leaves other fields untouched.
-```
+### Dynamic Array Inputs (FormArray)
+
+For lists of primitive values, use `FormArray` with an `itemFactory` and automatic model binding. This removes the need for manual population.
+
+#### Full Working Example
+
+```typescript
+import { Component, html, LitElement, property } from '@rxdi/lit-html';
+import { Form, FormGroup, FormArray } from '@rxdi/forms';
+
+
+@Component({
+  selector: 'tags-component',
+  template(this: TagsComponent) {
+    return html`
+      <form @submit=${(e) => e.preventDefault()}>
+        <h3>Tags</h3>
+
+        <!-- List Tags -->
+        ${this.form.get('tags').controls.map(
+          (control, index) => html`
+            <div class="tag-row">
+              <input name="tags[${index}].value" .value=${control.value.value} @blur=${() => this.requestUpdate()} />
+              <button type="button" @click=${() => this.removeTag(index)}>Remove</button>
+            </div>
+          `
+        )}
+
+        <button type="button" @click=${() => this.addTag()}>Add Tag</button>
+        <button type="button" @click=${() => this.onSubmit()}>Submit</button>
+      </form>
+    `;
+  },
+})
+export class TagsComponent extends LitElement {
+  // Model automatically binds to 'tags' in form
+  @property({ type: Array })
+  tags = ['news', 'tech'];
+
+  @Form({
+    name: 'tags-form',
+    model: 'tags', // Triggers form.patchValue(this.tags) on INIT
+  })
+  form = new FormGroup({
+    tags: new FormArray<{ value: string }>([], {
+      name: 'tags',
+      // Factory describes how to create new controls from model data
+      itemFactory: (value) => new FormGroup({ value: value.value || value }),
+    }),
+  });
+
+  addTag() {
+    this.form.get('tags').push(new FormGroup({ value: '' }));
+  }
+
+  removeTag(index: number) {
+    this.form.get('tags').removeAt(index);
+  }
+
+  onSubmit() {
+    const dirtyTags = this.form.value.tags;
+    console.log(dirtyTags.map((t) => t.value));
+  }
+}
+
+````
 
 ## API Reference
 
 ### Validators
+
 Validators are async functions returning `InputErrorMessage` or `void`.
 
 ```typescript
@@ -165,11 +236,12 @@ export function CustomValidator(element: AbstractInput) {
 
 // Usage
 new FormGroup({
-  field: ['', [CustomValidator]]
-})
+  field: ['', [CustomValidator]],
+});
 ```
 
 ### Error Display Information
+
 Use the `touched` and `validity.valid` properties for clean UI.
 
 ```typescript
@@ -200,15 +272,9 @@ form = new FormGroup({
 ```
 
 ```html
-<label>
-  <input name="roles" type="checkbox" value="admin" /> Admin
-</label>
-<label>
-  <input name="roles" type="checkbox" value="editor" /> Editor
-</label>
-<label>
-  <input name="roles" type="checkbox" value="viewer" /> Viewer
-</label>
+<label> <input name="roles" type="checkbox" value="admin" /> Admin </label>
+<label> <input name="roles" type="checkbox" value="editor" /> Editor </label>
+<label> <input name="roles" type="checkbox" value="viewer" /> Viewer </label>
 ```
 
 If the user checks "Admin" and "Viewer", `form.value.roles` will be `['admin', 'viewer']`.
@@ -228,13 +294,10 @@ form = new FormGroup({
 ```
 
 ```html
-<label>
-  <input name="mode" type="checkbox" value="dark" /> Dark
-</label>
-<label>
-  <input name="mode" type="checkbox" value="light" /> Light
-</label>
+<label> <input name="mode" type="checkbox" value="dark" /> Dark </label>
+<label> <input name="mode" type="checkbox" value="light" /> Light </label>
 ```
+
 Checking "Dark" unchecks "Light" automatically.
 
 ### 3. Framework-Agnostic Usage (Vanilla JS)
@@ -246,7 +309,7 @@ import { FormGroup } from '@rxdi/forms';
 
 const form = new FormGroup({
   email: '',
-  password: ''
+  password: '',
 });
 
 // manually attach to DOM
@@ -259,7 +322,7 @@ form
   .setInputs(form.mapEventToInputs(form.querySelectorAllInputs()));
 
 // Listen to changes
-form.valueChanges.subscribe(val => console.log(val));
+form.valueChanges.subscribe((val) => console.log(val));
 ```
 
 ### 4. Custom Error Handling Strategies
@@ -284,7 +347,7 @@ async validateEmail(element: HTMLInputElement) {
 }
 
 // In Template
-${this.form.hasError('email', 'emailExists') 
-  ? html`<div class="error">Email taken!</div>` 
+${this.form.hasError('email', 'emailExists')
+  ? html`<div class="error">Email taken!</div>`
   : ''}
 ```

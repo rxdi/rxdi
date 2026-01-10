@@ -25,6 +25,14 @@ export type NestedKeyOf<T, D extends number = 3> = [D] extends [0]
     }[keyof T & (string | number)]
   : never;
 
+export type DeepPropType<T, P extends string> = P extends keyof T
+  ? T[P]
+  : P extends `${infer K}.${infer R}`
+  ? K extends keyof T
+    ? DeepPropType<T[K], R>
+    : any
+  : any;
+
 export type FormStrategies = keyof WindowEventMap;
 export interface FormOptions {
   /** Name of the form element */

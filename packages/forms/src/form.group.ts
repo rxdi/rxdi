@@ -12,6 +12,7 @@ import {
   NestedKeyOf,
   UnwrapValue,
   ValidatorFn,
+  DeepPropType,
 } from './form.tokens';
 
 export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> implements AbstractControl<UnwrapValue<T>> {
@@ -378,19 +379,19 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
     return res.filter((i) => !!i);
   }
 
-  public get<K extends NestedKeyOf<T>>(name: K): AbstractControl | AbstractInput {
+  public get<K extends NestedKeyOf<T>>(name: K): DeepPropType<T, K> {
     if (this.controls.has(name as any)) {
-      return this.controls.get(name as any);
+      return this.controls.get(name as any) as any;
     }
     if (String(name).includes('.')) {
       const names = String(name).split('.');
       const key = names.shift() as keyof T;
       const control = this.controls.get(key);
       if (control && (control as any).get) {
-        return (control as any).get(names.join('.'));
+        return (control as any).get(names.join('.')) as any;
       }
     }
-    return this.inputs.get(name as any);
+    return this.inputs.get(name as any) as any;
   }
 
   public getError(inputName: keyof T, errorKey: string) {
@@ -460,7 +461,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
   }
 
   public setValue(name: keyof T, value: unknown) {
-    const input = this.get(name as any);
+    const input = this.get(name as any) as any;
     if (!input) {
       // If no input, maybe just set the value in model?
       // User code had return; but we might want to update model even if no input?
