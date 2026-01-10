@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/hapi",
-  "version": "0.7.219",
+  "version": "0.7.220",
   "repository": {
     "type": "git",
     "url": "https://github.com/rxdi/hapi"
@@ -32,7 +32,7 @@
     "@hapi/inert": "^7.1.0"
   },
   "devDependencies": {
-    "@rxdi/core": "^0.7.219",
+    "@rxdi/core": "^0.7.220",
     "@types/node": "^25.0.3",
     "typescript": "^5.9.3"
   }
