@@ -11,7 +11,6 @@ function assignChildren(route: Route) {
   if (route.children && typeof route.children === 'function') {
     const lazyModule = route.children;
     route.children = async function (context, commands) {
-      console.log('Lazy loading route:', route.path);
       const loadedModule = await lazyModule(context, commands);
       let routes = ChildRoutesObservable.getValue();
 
