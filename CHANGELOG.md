@@ -1,4 +1,4 @@
-## [0.7.221](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.221) (2026-01-11)
+## [0.7.222](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.222) (2026-01-11)
 
 
 ### Bug Fixes
@@ -96,6 +96,7 @@
 * **rabbitmq-pubsub:** version fix ([576665d](https://github.com/rxdi/mono/commit/576665dc9a04cabe13690072d2683cb272b918dd))
 * removed many many unused things ([7d24954](https://github.com/rxdi/mono/commit/7d249549e9cbd3924d0f8866edfe94715f55c283))
 * **Router:** added allowJS ([b15d51f](https://github.com/rxdi/mono/commit/b15d51faf1f7d0bc1709411e44a6e3cdc346d411))
+* **router:** removed log when lazy module is loaded ([31acf76](https://github.com/rxdi/mono/commit/31acf761c90eb0482b4711c426aea9ec13f296f9))
 * **Router:** removed unused things and only router component left ([b474240](https://github.com/rxdi/mono/commit/b4742405f4af74eff341261d3f95429a64da9216))
 * **Router:** static methods ([a2ae8ea](https://github.com/rxdi/mono/commit/a2ae8ea589880f91694609dd49ebcb6fed45b584))
 * **router:** typings when defining component inside forRoot ([5f296e7](https://github.com/rxdi/mono/commit/5f296e7bd618d07e08efd444e4a125b4ed17a630))
