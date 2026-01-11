@@ -237,3 +237,104 @@ export class AboutComponent extends LitElement implements OnBeforeEnter, OnAfter
 }
 
 ```
+
+#### Snapshot changes
+
+You can subscribe to route changes using `onSnapshotChange`. This is useful for reactive updates based on the current route state.
+
+```typescript
+import { Component, html, LitElement, OnUpdateFirst } from '@rxdi/lit-html';
+import { OnDestroy } from '@rxdi/lit-html';
+import { Router } from '@rxdi/router';
+import { Subject, takeUntil } from 'rxjs';
+
+/**
+ * @customElement app-component
+ */
+@Component({
+  selector: 'app-component',
+  template(this: AboutComponent) {
+    return html``;
+  },
+})
+export class AboutComponent extends LitElement implements OnUpdateFirst, OnDestroy {
+  @Router()
+  private router: Router;
+
+  destroy$ = new Subject();
+
+  OnUpdateFirst() {
+    this.router
+      .onSnapshotChange()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => {
+        console.log(e);
+      });
+  }
+
+  OnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
+}
+```
+
+#### Child Routing with Slots
+
+The router supports advanced child routing where the parent component acts as a layout container. By using the standard Web Component `<slot></slot>` mechanism, the parent component can wrap child routes with common UI elements (headers, sidebars, etc.).
+
+**Define the Module with Child Routes:**
+
+```typescript
+import { Module } from '@rxdi/core';
+import { RouterModule } from '@rxdi/router';
+import { ProjectContainerComponent } from './project-container.component';
+import { DetailsComponent } from './details.component';
+import { SettingsComponent } from './settings.component';
+
+@Module({
+  imports: [
+    RouterModule.forChild([
+      {
+        path: '/:projectId',
+        component: ProjectContainerComponent, // This component contains the <slot>
+        children: [
+          {
+            path: '/',
+            component: DetailsComponent, // Rendered inside ProjectContainerComponent's slot
+          },
+          {
+            path: '/settings',
+            component: SettingsComponent, // Rendered inside ProjectContainerComponent's slot
+          }
+        ],
+      },
+    ]),
+  ],
+})
+export class ProjectsModule {}
+```
+
+**Parent Component Implementation (`ProjectContainerComponent`):**
+
+The parent component simply includes a `<slot>` elements in its template. The router will automatically inject the matched child component into this slot.
+
+```typescript
+import { Component } from '@rhtml/component';
+import { html, LitElement } from '@rxdi/lit-html';
+
+@Component({
+  selector: 'project-container-component',
+  template: () => html`
+    <div style="height: 100%; display: flex; flex-direction: column;">
+      <header>Project Header (Visible on all child routes)</header>
+      
+      <!-- The active child route component will be rendered here -->
+      <slot></slot>
+      
+      <footer>Project Footer</footer>
+    </div>
+  `,
+})
+export class ProjectContainerComponent extends LitElement {}
+```

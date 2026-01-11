@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * Define getter to `this.location.params` from component `this` and assign params to decorated property
  * 
- * Info can be found at @vaadin-router https://vaadin.github.io/vaadin-router/vaadin-router/demo/#vaadin-router-route-parameters-demos
  * @param target: LitElement | HTMLElement
  * @returns this.location.params as getter (lazy evaluated)
  * Usage:
@@ -25,11 +26,11 @@ export class UserProfile extends LitElement {
 ```
    */
 export function RouteParams() {
- return function (target: Object, propertyKey: string) {
-  Object.defineProperty(target, propertyKey, {
-   get: function () {
-    return this.location.params;
-   },
-  });
- };
+  return function (target: HTMLElement, propertyKey: string) {
+    Object.defineProperty(target, propertyKey, {
+      get: function () {
+        return this.location.params;
+      },
+    });
+  };
 }
