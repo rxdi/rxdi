@@ -40,8 +40,8 @@ export class Outlet extends Router {
     this.freeze = false;
   }
 
-  getQueryParams<T>(params: string[]) {
-    return getQueryParams<T>(params);
+  getQueryParams<T>() {
+    return getQueryParams<T>();
   }
 
   /**

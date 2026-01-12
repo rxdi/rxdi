@@ -43,18 +43,12 @@ export interface RouteContext extends Route {
     path?: string | string[];
   } | null;
 }
-
+export type CanActiveResolverResponse = CanActivateRedirectResult | Promise<CanActivateRedirectResult> | boolean | Promise<boolean> | Observable<boolean>
 export interface CanActivateResolver {
   canActivate(
     context: CanActivateContext,
     commands: CanActivateCommands
-  ):
-    | CanActivateRedirectResult
-    | Promise<CanActivateRedirectResult>
-    | boolean
-    | Promise<boolean>
-    | Observable<boolean>
-    | void;
+  ): CanActiveResolverResponse
 }
 export interface CanActivateRedirectResult {
   redirect: {
@@ -79,7 +73,7 @@ export interface CanActivateContext {
 
 export interface CanActivateCommands {
   component: (component: string) => HTMLElement;
-  redirect: (path: string) => CanActivateRedirectResult;
+  redirect: (path: string | string[]) => CanActivateRedirectResult;
 }
 
 export const RouterRoutlet = 'router-outlet';

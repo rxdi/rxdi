@@ -16,7 +16,8 @@
             "es2015",
             "es6",
             "dom",
-            "esnext.asynciterable"
+            "esnext.asynciterable",
+            "DOM.Iterable"
         ],
         "skipLibCheck": true,
         "typeRoots": [
