@@ -57,7 +57,7 @@ export interface FormOptions {
    * When set form will expand capabilities by selecting another custom element made as a form element
    * Example can be found here https://gist.github.com/Stradivario/57acf0fa19900867a7f55b0f01251d6e
    * */
-  customElements?: string[];
+  customElements?: string[] | LitElement[];
   /**
    * Internal property for handling nested forms.
    */

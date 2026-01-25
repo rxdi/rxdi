@@ -16,7 +16,9 @@ import {
   ValidatorFn,
 } from './form.tokens';
 
-export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> implements AbstractControl<UnwrapValue<T>> {
+export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
+  implements AbstractControl<UnwrapValue<T>>
+{
   public validators: Map<string, ValidatorFn[]> = new Map();
   public valid = true;
   public invalid = false;
@@ -65,9 +67,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
     if (!this.parentElement) {
       return;
     }
-    this.setFormElement(this.querySelectForm(this.parentElement.shadowRoot || this.parentElement)).setInputs(
-      this.mapEventToInputs(this.querySelectorAllInputs())
-    );
+    this.setFormElement(
+      this.querySelectForm(this.parentElement.shadowRoot || this.parentElement)
+    ).setInputs(this.mapEventToInputs(this.querySelectorAllInputs()));
     this.controls.forEach((c) => {
       c.init?.();
     });
@@ -96,7 +98,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
         ) {
           (this.value[v] as unknown) = value[0];
         } else {
-          throw new Error(`Input value must be of type 'string', 'boolean' or 'number'`);
+          throw new Error(
+            `Input value must be of type 'string', 'boolean' or 'number'`
+          );
         }
       }
     });
@@ -121,7 +125,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
     this.controls.forEach((c) => {
       c.setOptions?.({
         ...options,
-        namespace: this.options.namespace ? `${this.options.namespace}.${c.name}` : c.name,
+        namespace: this.options.namespace
+          ? `${this.options.namespace}.${c.name}`
+          : c.name,
       });
     });
     return this;
@@ -136,7 +142,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public async updateValueAndValidity(): Promise<(ErrorObject | { message: string })[]> {
+  public async updateValueAndValidity(): Promise<
+    (ErrorObject | { message: string })[]
+  > {
     this.resetErrors();
     const inputs = await Promise.all(
       this.querySelectorAllInputs().map(async (i) => {
@@ -157,7 +165,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
           this.invalid = true;
           this.valid = false;
           if (Array.isArray(result)) {
-             nestedErrors.push(...result);
+            nestedErrors.push(...result);
           }
         }
       }
@@ -167,14 +175,24 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
     return [...inputsWithErrors, ...nestedErrors];
   }
 
-  private updateValueAndValidityOnEvent(method: (event: { target: AbstractInput }) => void) {
+  private updateValueAndValidityOnEvent(
+    method: (event: { target: AbstractInput }) => void
+  ) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
-    return async function (this: AbstractInput, event: { target: AbstractInput }) {
+    return async function (
+      this: AbstractInput,
+      event: { target: AbstractInput }
+    ) {
       self.setElementDirty(this);
       const selector = `input[name="${this.name}"]`;
       const hasMultipleBindings = [
-        ...(self.getFormElement().querySelectorAll(selector) as unknown as Map<string, NodeListOf<Element>>).values(),
+        ...(
+          self.getFormElement().querySelectorAll(selector) as unknown as Map<
+            string,
+            NodeListOf<Element>
+          >
+        ).values(),
       ].length;
       let value = this.value as unknown;
 
@@ -194,10 +212,11 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
 
       const inputsWithBindings = [
         ...(
-          (<never>self.getFormElement().querySelectorAll(`input[name="${this.name}"]:checked`)) as Map<
-            string,
-            AbstractInput
-          >
+          (<never>(
+            self
+              .getFormElement()
+              .querySelectorAll(`input[name="${this.name}"]:checked`)
+          )) as Map<string, AbstractInput>
         ).values(),
       ];
 
@@ -243,14 +262,18 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
     }
   }
 
-  public querySelectForm(shadowRoot: HTMLElement | ShadowRoot): HTMLFormElement {
+  public querySelectForm(
+    shadowRoot: HTMLElement | ShadowRoot
+  ): HTMLFormElement {
     if (this.options['form']) {
       return this.options['form'] as HTMLFormElement;
     }
     if (!shadowRoot?.querySelector) {
       return null;
     }
-    const form = shadowRoot.querySelector(`form[name="${this.options.name}"]`) as HTMLFormElement;
+    const form = shadowRoot.querySelector(
+      `form[name="${this.options.name}"]`
+    ) as HTMLFormElement;
     if (!form) {
       throw new Error(
         `Form element with name "${this.options.name}" not present inside ${
@@ -266,12 +289,19 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
   }
 
   private querySelectAll(name: string) {
-    return [...((<never>this.form.querySelectorAll(name)) as Map<string, AbstractInput>).values()];
+    return [
+      ...(
+        (<never>this.form.querySelectorAll(name)) as Map<string, AbstractInput>
+      ).values(),
+    ];
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public querySelectorAllInputs(): AbstractInput[] {
-    return [...(this.options.customElements ?? []), 'input', 'select', 'textarea']
+    const customElements = this.options.customElements.map((v) =>
+      typeof v === 'string' ? v : typeof v === 'function' ? v.is() : v
+    );
+    return [...(customElements ?? []), 'input', 'select', 'textarea']
       .map((item) => this.querySelectAll(item))
       .flat()
       .filter((el) => this.isInputPresentOnStage(el))
@@ -288,7 +318,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
         };
       }
       const customAttributes = Object.keys(el.attributes)
-        .map((k) => (el.attributes[k].name.startsWith('#') ? el.attributes[k] : null))
+        .map((k) =>
+          el.attributes[k].name.startsWith('#') ? el.attributes[k] : null
+        )
         .filter((i) => !!i);
       if (customAttributes.length) {
         const attr = customAttributes.find((a) => a.name.startsWith('#'));
@@ -305,7 +337,8 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
   }
 
   async setElementValidity(el: AbstractInput, validity?: boolean) {
-    const isValid = validity || this.applyValidationContext(await this.validate(el));
+    const isValid =
+      validity || this.applyValidationContext(await this.validate(el));
     el['valid'] = isValid;
     el['invalid'] = !isValid;
   }
@@ -320,7 +353,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
       return 0;
     }
     const keyIndex = this.getModelKeyName(input.name);
-    const isInputPresent = Object.keys(this.value).filter((v) => v === keyIndex);
+    const isInputPresent = Object.keys(this.value).filter(
+      (v) => v === keyIndex
+    );
     return isInputPresent.length;
   }
 
@@ -352,7 +387,11 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
       return {
         errors: errors.concat(
           Object.keys(InputValidityState)
-            .map((key) => (element.validity[key] ? { key, message: element.validationMessage } : null))
+            .map((key) =>
+              element.validity[key]
+                ? { key, message: element.validationMessage }
+                : null
+            )
             .filter((i) => !!i)
         ),
         element,
@@ -412,7 +451,10 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }> imple
     */
     const key = name as unknown as keyof T;
     // Check if key exists in the model value even if not in inputs map
-    if (this._valueChanges.getValue() && key in (this._valueChanges.getValue() as object)) {
+    if (
+      this._valueChanges.getValue() &&
+      key in (this._valueChanges.getValue() as object)
+    ) {
       // Create a "Virtual" AbstractInput to prevent crashes and allow subscription even if no DOM element present
       return {
         valueChanges: this._valueChanges.pipe(
