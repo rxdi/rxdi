@@ -1,4 +1,4 @@
-## [0.7.223](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.223) (2026-01-12)
+## [0.7.224](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.224) (2026-01-25)
 
 
 ### Bug Fixes
@@ -159,6 +159,7 @@
 * **router:** finally refactored to pure typescript ([9542299](https://github.com/rxdi/mono/commit/9542299f42653d057ffed04eeb781aeaaa4fa999))
 * **router:** query params now returns all parameters small type changes ([660849f](https://github.com/rxdi/mono/commit/660849f4eb7dc18a77f239007ecd8f673b4585f9))
 * separated modules which are not needed ([99b7538](https://github.com/rxdi/mono/commit/99b75383f0c7777bfd3253234bd59d645283300f))
+* **webcomponents:** direct insertion to the customElements via LitElement and @rxdi/lit-html components ([ef6daa9](https://github.com/rxdi/mono/commit/ef6daa9a005a6e655c2d8d248bc952ff6fd1a981))
 * **Websocket:** added perMessageDeflate gzip on subscriptions options ([157f29b](https://github.com/rxdi/mono/commit/157f29bddf0e5aeb997d6bed642206076e679439))
 
 
