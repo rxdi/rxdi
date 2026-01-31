@@ -10,7 +10,7 @@ export let pubsub: PubSub | AmqpPubSub;
 
 @Service()
 export class PubSubService {
-  sub: AmqpPubSub | PubSub;
+  sub: AmqpPubSub & PubSub;
   constructor(
     @Inject(GRAPHQL_PUB_SUB_CONFIG) private config: GRAPHQL_PUB_SUB_DI_CONFIG,
     private logger: PubSubLogger
@@ -25,9 +25,9 @@ export class PubSubService {
           this.config.host || process.env.AMQP_HOST || "localhost"
         }:${this.config.port || process.env.AMQP_PORT || "5672"}` as never,
         logger: this.config.logger || this.logger,
-      });
+      }) as never;
     } else {
-      this.sub = new PubSub();
+      this.sub = new PubSub() as never;
     }
   }
 

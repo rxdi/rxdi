@@ -31,6 +31,7 @@
   "homepage": "https://github.com/rxdi/graphql-pubsub#readme",
   "dependencies": {
     "@rxdi/graphql-rabbitmq-subscriptions": "^0.7.225",
+    "@rxdi/rabbitmq-pubsub": "^0.7.225",
     "subscriptions-transport-ws": "^0.9.19"
   },
   "devDependencies": {

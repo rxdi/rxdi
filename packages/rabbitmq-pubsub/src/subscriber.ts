@@ -79,13 +79,12 @@ export class RabbitMqSubscriber {
           msg
         );
         channel.nack(message, false, false);
-        throw err;
       }
     });
 
     this.logger.trace(
       "subscribed to queue '%s' (%s)",
-      queueConfig.name,
+      queueConfig.name, 
       opts.consumerTag
     );
 
@@ -115,16 +114,19 @@ export class RabbitMqSubscriber {
     );
     let result = await channel.assertQueue(
       queueConfig.strictName ? queueConfig.name : queueConfig.dlq,
-      this.getQueueSettings()
+      this.getQueueSettings(queueConfig.arguments)
     );
     await channel.bindQueue(result.queue, queueConfig.dlx, "");
     return result.queue;
   }
 
-  protected getQueueSettings(): Options.AssertQueue {
+  protected getQueueSettings(args?: {
+    [key: string]: any;
+  }): Options.AssertQueue {
     return {
       exclusive: false,
       autoDelete: true,
+      arguments: args,
     };
   }
 
