@@ -1,4 +1,4 @@
-## [0.7.224](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.224) (2026-01-25)
+## [0.7.225](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.225) (2026-01-31)
 
 
 ### Bug Fixes
@@ -60,6 +60,7 @@
 * **lit-html:** added type never to not interfeer with return type of decorator ([5f3f96d](https://github.com/rxdi/mono/commit/5f3f96d365547634b916ca267d743bb2bd7c63d9))
 * **lit-html:** again lit html is not using semantic versioning as needed and bumping patches as major versions which is just amazing... ([3ccf270](https://github.com/rxdi/mono/commit/3ccf270615363e122dc2d1da09fd29c9d93a5573))
 * **lit-html:** async directive fix for unsubscribe ([e28b52f](https://github.com/rxdi/mono/commit/e28b52f57c2e56c85c00380a0e64735fccf33685))
+* **lit-html:** component decorator was initializing registry on the global scope and it was becoming shared accross every component now moving it to the class so it can become scoped to the component itself like it is suppose to be ([56f90af](https://github.com/rxdi/mono/commit/56f90afe38b6d86ae57dfd6f857df0fa763512db))
 * **lit-html:** custom attribute registry unsubscribtion from events ([16de121](https://github.com/rxdi/mono/commit/16de121a6e4dc1cb265f63299e8342c94a0b4456))
 * **lit-html:** customElement configuration interface re-exported ([c1af1ff](https://github.com/rxdi/mono/commit/c1af1ffce18c52ef2ea438b63c9fa5c2d84201b5))
 * **lit-html:** customElement registry is throwing error ([065c796](https://github.com/rxdi/mono/commit/065c7962cd1f8407b9dac4fd60219663e1531634))

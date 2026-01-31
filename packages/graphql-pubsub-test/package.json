@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/graphql-pubsub-test",
-  "version": "0.7.224",
+  "version": "0.7.225",
   "repository": {
     "type": "git",
     "url": "https://github.com/rxdi/graphql-pubsub"
@@ -35,9 +35,9 @@
     "ws": "6.2.1"
   },
   "devDependencies": {
-    "@rxdi/core": "^0.7.224",
-    "@rxdi/graphql": "^0.7.224",
-    "@rxdi/hapi": "^0.7.224",
+    "@rxdi/core": "^0.7.225",
+    "@rxdi/graphql": "^0.7.225",
+    "@rxdi/hapi": "^0.7.225",
     "@types/graphql": "^14.5.0",
     "@types/hapi": "^18.0.4",
     "@types/jest": "^24.0.22",
