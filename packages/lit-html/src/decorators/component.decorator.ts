@@ -129,7 +129,6 @@ const customElement = <T>(
     Base.prototype.disconnectedCallback || function () { };
   const update = Base.prototype.update || function () { };
   const firstUpdated = Base.prototype.firstUpdated || function () { };
-  let registry: CustomAttributeRegistry;
   if (!config.template) {
     config.template = Base.prototype.render || (() => html``);
   }
@@ -140,6 +139,8 @@ const customElement = <T>(
 
   const ModifiedClass = class extends Base {
     static styles = config.styles;
+
+    _registry: CustomAttributeRegistry;
 
     static is() {
       return tag;
@@ -170,15 +171,15 @@ const customElement = <T>(
     disconnectedCallback() {
       OnDestroy.call(this);
       disconnectedCallback.call(this);
-      registry?.unsubscribe();
-      registry = null;
+      this._registry?.unsubscribe();
+      this._registry = null;
     }
 
     connectedCallback() {
       connectedCallback.call(this);
       OnInit.call(this);
       if (isFunction(config.registry)) {
-        registry = config.registry.call(this);
+        this._registry = config.registry.call(this);
       }
       if (config.modifiers?.length) {
         for (const modifier of config.modifiers) {
@@ -202,17 +203,17 @@ const customElement = <T>(
             );
           }
 
-          if (!registry && typeof modifier.options.registry === 'function') {
-            registry = modifier.options.registry.call(this);
+          if (!this._registry && typeof modifier.options.registry === 'function') {
+            this._registry = modifier.options.registry.call(this);
           }
 
-          if (!registry) {
+          if (!this._registry) {
             throw new Error(
               `Missing attribute registry for attribute "${modifier.options.selector}" and no default registry specified inside component "${config.selector}"`
             );
           }
 
-          registry.define(modifier.options.selector, modifier);
+          this._registry.define(modifier.options.selector, modifier);
 
         }
       }
