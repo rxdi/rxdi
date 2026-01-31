@@ -1,6 +1,6 @@
 import { Channel, Message, Options } from "amqplib";
 import { IRabbitMqConnectionFactory } from "./connectionFactory";
-import { IQueueNameConfig, asPubSubQueueNameConfig } from "./common";
+import { IDeadLetterMessage, IQueueNameConfig, asPubSubQueueNameConfig } from "./common";
 import { createChildLogger, Logger } from "./childLogger";
 
 export interface IRabbitMqSubscriberDisposer {
@@ -78,13 +78,26 @@ export class RabbitMqSubscriber {
           queueConfig,
           msg
         );
-        channel.nack(message, false, false);
+        // channel.nack(message, false, false);
+        channel.publish(
+          queueConfig.dlx,
+          '',
+          Buffer.from(
+            JSON.stringify({
+              data: msg,
+              error: {
+                message: err.message,
+              },
+            } as IDeadLetterMessage<T>)
+          )
+        );
+        channel.ack(message);
       }
     });
 
     this.logger.trace(
       "subscribed to queue '%s' (%s)",
-      queueConfig.name, 
+      queueConfig.name,
       opts.consumerTag
     );
 

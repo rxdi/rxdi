@@ -68,3 +68,8 @@ function isQueueNameConfig(
     return true;
   }
 }
+
+export interface IDeadLetterMessage<T> {
+  data: T;
+  error: Error;
+}
