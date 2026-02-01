@@ -92,48 +92,56 @@ GraphQLPubSubModule.forRoot({
 ##### Complex example of dead letter queue
 
 ```typescript
-import { AMQPSubscribe, PubSubService } from '@rxdi/graphql-pubsub';
+import { AMQPSubscribe, PubSubService, IDeadLetterMessage } from '@rxdi/graphql-pubsub';
 import { Injectable } from '@rxdi/core';
 
-@Injectable()
-class MyClass {
-  constructor(private pubsub: PubSubService) {}
- OnInit() {
-  setInterval(() => {
-   this.pubsub.publish('my-queue', { test: 'aaa' });
-   console.log('message-send-to-queue');
-  }, 2000);
- }
-
- @AMQPSubscribe({
-  queue: 'my-queue',
-  config: {
-   prefetch: 1,
-   globalPrefetch: true,
-   strictName: true,
-   arguments: {
-    'x-dead-letter-exchange': 'my-queue.DLQ',
-   },
-  },
- })
- first(message) {
-  console.log('Message received from queue', message);
-  throw new Error('AAA');
-  // We throw an error here so we can simulate error job which will automatically send message to dead letter queue
- }
-
- @AMQPSubscribe({
-  queue: 'my-queue-dlq',
-  config: {
-   prefetch: 1,
-   globalPrefetch: true,
-   strictName: true,
-   dlx: 'my-queue.DLQ',
-  },
- })
- second(message) {
-  console.log('Dead Letter Queue', message);
- }
+export enum ProjectQueues {
+  DELETE_PROJECT_QUEUE = 'delete-project-queue-proba',
 }
+
+@Injectable()
+export class ProjectDeleteWorker {
+  constructor(private pubsub: PubSubService) {}
+
+  OnInit() {
+    setInterval(() => {
+      this.pubsub.publish(ProjectQueues.DELETE_PROJECT_QUEUE, {
+        projectId: '69443829a33bcd8655e31b17',
+      });
+      console.log('message-send-to-queue');
+    }, 2000);
+  }
+
+  @AMQPSubscribe({
+    queue: ProjectQueues.DELETE_PROJECT_QUEUE,
+    config: {
+      prefetch: 1,
+      globalPrefetch: true,
+      strictName: true,
+      arguments: {
+        'x-dead-letter-exchange': `${ProjectQueues.DELETE_PROJECT_QUEUE}.DLQ`,
+      },
+    },
+  })
+  deleteProjectQueue(message) {
+    console.log(message);
+    throw new Error('something-went-wrong');
+  }
+
+  @AMQPSubscribe({
+    queue: `${ProjectQueues.DELETE_PROJECT_QUEUE}-dlq`,
+    config: {
+      prefetch: 20,
+      globalPrefetch: true,
+      strictName: true,
+      exchange: `${ProjectQueues.DELETE_PROJECT_QUEUE}.DLQ`,
+    },
+  })
+  deleteProjectDeadLetterQueue(message: IDeadLetterMessage<{ test: string }>) {
+    console.log('DLQ', message.data, message.error.message);
+    // Save to Database as audit log
+  }
+}
+
 ```
 

@@ -18,26 +18,26 @@ export interface IQueueNameConfig {
   globalPrefetch?: boolean;
   name: string;
   dlq: string;
-  dlx: string;
+  exchange: string;
   strictName?: boolean;
   arguments?: { [key: string]: any };
 }
 
 export class DefaultQueueNameConfig implements IQueueNameConfig {
   dlq: string;
-  dlx: string;
+  exchange: string;
   constructor(public name: string) {
     this.dlq = `${name}.DLQ`;
-    this.dlx = `${this.dlq}.Exchange`;
+    this.exchange = `${this.dlq}.Exchange`;
   }
 }
 
 export class DefaultPubSubQueueConfig implements IQueueNameConfig {
   dlq: string;
-  dlx: string;
+  exchange: string;
   constructor(public name: string) {
     this.dlq = "";
-    this.dlx = `${name}.DLQ.Exchange`;
+    this.exchange = `${name}.Exchange`;
   }
 }
 
@@ -63,7 +63,7 @@ function isQueueNameConfig(
   if (
     (config as IQueueNameConfig).name &&
     (config as IQueueNameConfig).dlq &&
-    (config as IQueueNameConfig).dlx
+    (config as IQueueNameConfig).exchange
   ) {
     return true;
   }
@@ -73,3 +73,26 @@ export interface IDeadLetterMessage<T> {
   data: T;
   error: Error;
 }
+
+export const createQueueConfig = (
+  name: string,
+  options?: Partial<IQueueNameConfig>
+): IQueueNameConfig => {
+  const defaultConfig = {
+    prefetch: 1,
+    globalPrefetch: true,
+    strictName: true,
+  };
+  const finalOptions = { ...defaultConfig, ...options };
+  return {
+    name,
+    dlq: `${name}.DLQ`,
+    exchange: `${name}.Exchange`,
+    ...finalOptions,
+    arguments: {
+      'x-dead-letter-exchange': `${name}.DLQ`,
+      'x-dead-letter-routing-key': `${name}.DLQ`,
+      ...finalOptions.arguments,
+    },
+  };
+};

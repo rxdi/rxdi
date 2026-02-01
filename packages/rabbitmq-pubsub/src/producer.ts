@@ -17,7 +17,7 @@ export class RabbitMqProducer {
   options?: IQueueNameConfig,
  ): Promise<void> {
   const queueConfig = asQueueNameConfig(queue);
-  const settings = this.getQueueSettings(queueConfig.dlx);
+  const settings = this.getQueueSettings(queueConfig.exchange);
   const connection = await this.connectionFactory.create();
   const channel = await connection.createChannel();
   if (options?.prefetch) {

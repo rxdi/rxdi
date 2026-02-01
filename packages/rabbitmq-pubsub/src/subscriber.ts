@@ -37,7 +37,7 @@ export class RabbitMqSubscriber {
       queueConfig.name,
       queueName
     );
-    const queConfig = { ...queueConfig, dlq: queueName };
+    const queConfig = { ...queueConfig, ...options, dlq: queueName };
     return this.subscribeToChannel<T>(channel, queConfig, action);
   }
 
@@ -78,10 +78,13 @@ export class RabbitMqSubscriber {
           queueConfig,
           msg
         );
-        // channel.nack(message, false, false);
+        const exchange = queueConfig?.arguments?.['x-dead-letter-exchange'];
+        if (!exchange) {
+          return channel.nack(message, false, false);
+        }
         channel.publish(
-          queueConfig.dlx,
-          '',
+          exchange || queueConfig.exchange,
+          queueConfig.arguments?.['x-dead-letter-routing-key'] || '',
           Buffer.from(
             JSON.stringify({
               data: msg,
@@ -121,7 +124,7 @@ export class RabbitMqSubscriber {
     queueConfig: IQueueNameConfig
   ) {
     await channel.assertExchange(
-      queueConfig.dlx,
+      queueConfig.exchange,
       "fanout",
       this.getDLSettings()
     );
@@ -129,7 +132,7 @@ export class RabbitMqSubscriber {
       queueConfig.strictName ? queueConfig.name : queueConfig.dlq,
       this.getQueueSettings(queueConfig.arguments)
     );
-    await channel.bindQueue(result.queue, queueConfig.dlx, "");
+    await channel.bindQueue(result.queue, queueConfig.exchange, "");
     return result.queue;
   }
 

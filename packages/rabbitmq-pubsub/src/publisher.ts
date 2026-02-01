@@ -25,13 +25,13 @@ export class RabbitMqPublisher {
     channel.prefetch(options.prefetch, options.globalPrefetch);
    }
    await this.setupChannel<T>(channel, queueConfig);
-   channel.publish(queueConfig.dlx, '', this.getMessageBuffer(message));
-   this.logger.trace("message sent to exchange '%s' (%j)", queueConfig.dlx, message);
+   channel.publish(queueConfig.exchange, '', this.getMessageBuffer(message));
+   this.logger.trace("message sent to exchange '%s' (%j)", queueConfig.exchange, message);
    return channel.close();
   } catch (e) {
    this.logger.error(
     "unable to send message to exchange '%j' {%j}",
-    queueConfig.dlx,
+    queueConfig.exchange,
     message,
    );
    throw new Error('Unable to send message');
@@ -48,7 +48,7 @@ export class RabbitMqPublisher {
  }
 
  protected getChannelSetup(channel: Channel, queueConfig: IQueueNameConfig) {
-  return [channel.assertExchange(queueConfig.dlx, 'fanout', this.getSettings())];
+  return [channel.assertExchange(queueConfig.exchange, 'fanout', this.getSettings())];
  }
 
  protected getSettings(): Options.AssertQueue {

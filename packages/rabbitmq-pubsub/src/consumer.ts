@@ -22,7 +22,7 @@ export class RabbitMqConsumer {
     const queueConfig = asQueueNameConfig(queue);
     const connection = await this.connectionFactory.create();
     const channel = await connection.createChannel();
- 
+
     this.logger.trace("got channel for queue '%s'", queueConfig.name);
     await this.setupChannel<T>(channel, queueConfig);
     return this.subscribeToChannel<T>(channel, queueConfig, action);
@@ -96,11 +96,11 @@ export class RabbitMqConsumer {
     return [
       channel.assertQueue(
         queueConfig.name,
-        this.getQueueSettings(queueConfig.dlx)
+        this.getQueueSettings(queueConfig.exchange)
       ),
       channel.assertQueue(queueConfig.dlq, this.getDLSettings()),
-      channel.assertExchange(queueConfig.dlx, "fanout", this.getDLSettings()),
-      channel.bindQueue(queueConfig.dlq, queueConfig.dlx, "*"),
+      channel.assertExchange(queueConfig.exchange, "fanout", this.getDLSettings()),
+      channel.bindQueue(queueConfig.dlq, queueConfig.exchange, "*"),
     ];
   }
 
