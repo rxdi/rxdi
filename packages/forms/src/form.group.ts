@@ -17,8 +17,7 @@ import {
 } from './form.tokens';
 
 export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
-  implements AbstractControl<UnwrapValue<T>>
-{
+  implements AbstractControl<UnwrapValue<T>> {
   public validators: Map<string, ValidatorFn[]> = new Map();
   public valid = true;
   public invalid = false;
@@ -222,11 +221,18 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
       ];
 
       if (hasMultipleBindings > 1) {
-        if (self.options.multi && this.type === 'checkbox') {
+        if (
+          (self.options.multi || this.hasAttribute('multiple')) &&
+          this.type === 'checkbox'
+        ) {
           value = inputsWithBindings.map((e) => e.value);
         }
 
-        if (!self.options.multi && this.type === 'checkbox') {
+        if (
+          !self.options.multi &&
+          !this.hasAttribute('multiple') &&
+          this.type === 'checkbox'
+        ) {
           inputsWithBindings.forEach((el) => {
             if (el !== this) el.checked = false;
           });
@@ -280,8 +286,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
     ) as HTMLFormElement;
     if (!form) {
       throw new Error(
-        `Form element with name "${this.options.name}" not present inside ${
-          this.getParentElement().outerHTML
+        `Form element with name "${this.options.name}" not present inside ${this.getParentElement().outerHTML
         } component`
       );
     }

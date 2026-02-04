@@ -327,17 +327,17 @@ function ErrorTemplate(input: AbstractInput) {
 
 ### 1. Grouping Multiple Inputs (Checkbox Groups)
 
-By default, inputs with the same `name` attribute are treated as a single value (last write wins). However, for checkboxes, you often want an array of values.
+By default (`multi: false`), inputs with the same `name` attribute behave like radio buttons (single selection). To allow multiple selections (array of values), set `multi: true` in the form options.
 
 **Scenario:** A list of permissions where multiple can be selected.
 
 ```typescript
 @Form({
   name: 'permissions-form',
-  multi: true // Enable multi-value binding for same-name inputs
+  multi: true // Enable multi-value binding for SAME-NAME inputs
 })
 form = new FormGroup({
-  roles: [] // Will be an array of values
+  roles: [] // Will be an array of values ['admin', 'viewer']
 });
 ```
 
@@ -347,19 +347,17 @@ form = new FormGroup({
 <label> <input name="roles" type="checkbox" value="viewer" /> Viewer </label>
 ```
 
-If the user checks "Admin" and "Viewer", `form.value.roles` will be `['admin', 'viewer']`.
+### 2. Single Selection Checkbox (Default Behavior)
 
-### 2. Single Selection Checkbox (Radio Behavior with Checkboxes)
-
-If you want multiple checkboxes to act like a radio button (only one valid at a time) but with uncheck capability:
+If you want multiple checkboxes to act like a radio button (only one valid at a time) but with uncheck capability, simply use the default `multi: false`.
 
 ```typescript
 @Form({
   name: 'settings-form',
-  multi: false // Default behavior
+  // multi: false // Default behavior
 })
 form = new FormGroup({
-  mode: ''
+  mode: '' // Will be a single string 'dark' or 'light'
 });
 ```
 
@@ -368,9 +366,32 @@ form = new FormGroup({
 <label> <input name="mode" type="checkbox" value="light" /> Light </label>
 ```
 
-Checking "Dark" unchecks "Light" automatically.
+### 3. Per-Field Multi-Select Override
 
-### 3. Framework-Agnostic Usage (Vanilla JS)
+You can mix single-select and multi-select groups in the same form by keeping the global `multi: false` (default) and adding the `multiple` attribute to specific inputs.
+
+```typescript
+@Form({
+  name: 'mixed-form',
+  multi: false // Default (Single Select)
+})
+form = new FormGroup({
+  mode: '',     // Single value
+  tags: []      // Array of values
+});
+```
+
+```html
+<!-- Single Select (Radio behavior) -->
+<input name="mode" type="checkbox" value="A" />
+<input name="mode" type="checkbox" value="B" />
+
+<!-- Multi Select (Array behavior) via 'multiple' attribute -->
+<input name="tags" type="checkbox" value="news" multiple />
+<input name="tags" type="checkbox" value="tech" multiple />
+```
+
+### 4. Framework-Agnostic Usage (Vanilla JS)
 
 You can use this library without Decorators or LitHtml, with any UI library or vanilla HTML.
 
