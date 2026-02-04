@@ -94,12 +94,13 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
         } else if (
           value[0].constructor === String ||
           value[0].constructor === Number ||
-          value[0].constructor === Boolean
+          value[0].constructor === Boolean ||
+          value[0].constructor === Array
         ) {
           (this.value[v] as unknown) = value[0];
         } else {
           throw new Error(
-            `Input value must be of type 'string', 'boolean' or 'number'`
+            `Input value must be of type 'string', 'boolean', 'array' or 'number'`
           );
         }
       }
@@ -221,13 +222,16 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
       ];
 
       if (hasMultipleBindings > 1) {
-        if (!self.options.multi && this.type === 'checkbox') {
+        if (self.options.multi && this.type === 'checkbox') {
           value = inputsWithBindings.map((e) => e.value);
         }
 
-        if (self.options.multi) {
-          inputsWithBindings.forEach((el) => (el.checked = false));
+        if (!self.options.multi && this.type === 'checkbox') {
+          inputsWithBindings.forEach((el) => {
+            if (el !== this) el.checked = false;
+          });
           this.checked = true;
+          value = this.value;
         }
       }
 
@@ -550,7 +554,14 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
       // User code had return; but we might want to update model even if no input?
       //  return;
     }
-    if (input && input.value !== undefined) input.value = value as string;
+    if (
+      input &&
+      input.value !== undefined &&
+      input.type !== 'checkbox' &&
+      input.type !== 'radio'
+    ) {
+      input.value = value as string;
+    }
     const values = this.value;
     values[name as keyof UnwrapValue<T>] = value as never;
     this.value = values;
@@ -572,7 +583,18 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
     this.inputs = new Map<keyof T, AbstractInput>(
       inputs.map((e) => {
         const key = this.getModelKeyName(e.name) as keyof T;
-        e.value = this.getValue(key) as never;
+        const modelValue = this.getValue(key) as any;
+
+        if (e.type === 'checkbox' || e.type === 'radio') {
+          if (Array.isArray(modelValue)) {
+            e.checked = modelValue.includes(e.value);
+          } else {
+            e.checked = modelValue === e.value;
+          }
+        } else {
+          e.value = modelValue;
+        }
+
         e.valueChanges = this._valueChanges.pipe(
           map((value) => value?.[key as keyof UnwrapValue<T>] as any),
           distinctUntilChanged()
