@@ -21,8 +21,7 @@ export interface AbstractInputWithBound extends AbstractInput {
 }
 
 export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
-  implements AbstractControl<UnwrapValue<T>>
-{
+  implements AbstractControl<UnwrapValue<T>> {
   public validators: Map<string, ValidatorFn[]> = new Map();
   public valid = true;
   public invalid = false;
@@ -212,7 +211,24 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
       }
 
       if (this.type === 'number') {
-        value = Number(value);
+        let val = Number(value);
+        const maxAttr = this.getAttribute('max');
+        if (maxAttr) {
+          const max = Number(maxAttr);
+          if (!isNaN(max) && val > max) {
+            val = max;
+            this.value = String(val);
+          }
+        }
+        const minAttr = this.getAttribute('min');
+        if (minAttr) {
+          const min = Number(minAttr);
+          if (!isNaN(min) && val < min) {
+            val = min;
+            this.value = String(val);
+          }
+        }
+        value = val;
       }
 
       const inputsWithBindings = [
@@ -291,8 +307,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
     ) as HTMLFormElement;
     if (!form) {
       throw new Error(
-        `Form element with name "${this.options.name}" not present inside ${
-          this.getParentElement().outerHTML
+        `Form element with name "${this.options.name}" not present inside ${this.getParentElement().outerHTML
         } component`
       );
     }
