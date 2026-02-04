@@ -1,4 +1,4 @@
-## [0.7.230](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.230) (2026-02-04)
+## [0.7.231](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.231) (2026-02-04)
 
 
 ### Bug Fixes
@@ -125,6 +125,7 @@
 * **forms:** added better deep prop type ([95e358e](https://github.com/rxdi/mono/commit/95e358e38e9721d5fe239f358771eb9d314d65dd))
 * **forms:** added custom elements query selector ([5048eff](https://github.com/rxdi/mono/commit/5048eff7563726de746da668b0d3b6c46c4ec859))
 * **forms:** async validators experiment ([0667b03](https://github.com/rxdi/mono/commit/0667b03530d6e04137f2cb7aea6cf28076b2aa37))
+* **forms:** checkbox now has multiple attribute which makes them grouped ([bc1b8a4](https://github.com/rxdi/mono/commit/bc1b8a4672e9829a0439f860f34c1ee509ebdac6))
 * **forms:** fixed validity of forms and automatic change detection ([86cf192](https://github.com/rxdi/mono/commit/86cf192f48e20716f6ea147054d85a77e3fef393))
 * **forms:** removed rxjs and added form array element to manage more complex forms ([928c76b](https://github.com/rxdi/mono/commit/928c76bdc1b14e1073e97f69ffa95c633436ac08))
 * **forms:** type checking is now full ! ([cf4bc5d](https://github.com/rxdi/mono/commit/cf4bc5d0b04b8dd36c05a85d246d6ff8b036d5b4))
