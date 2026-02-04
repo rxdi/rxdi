@@ -16,8 +16,13 @@ import {
   ValidatorFn,
 } from './form.tokens';
 
+export interface AbstractInputWithBound extends AbstractInput {
+  _bound?: boolean;
+}
+
 export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
-  implements AbstractControl<UnwrapValue<T>> {
+  implements AbstractControl<UnwrapValue<T>>
+{
   public validators: Map<string, ValidatorFn[]> = new Map();
   public valid = true;
   public invalid = false;
@@ -286,7 +291,8 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
     ) as HTMLFormElement;
     if (!form) {
       throw new Error(
-        `Form element with name "${this.options.name}" not present inside ${this.getParentElement().outerHTML
+        `Form element with name "${this.options.name}" not present inside ${
+          this.getParentElement().outerHTML
         } component`
       );
     }
@@ -319,7 +325,7 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public mapEventToInputs(inputs: HTMLElement[] = []): AbstractInput[] {
-    return inputs.map((el: AbstractInput) => {
+    return inputs.map((el: AbstractInputWithBound) => {
       const strategy = `on${this.options.strategy}`;
       if (!el[strategy]) {
         el[strategy] = function () {
@@ -335,12 +341,15 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
         const attr = customAttributes.find((a) => a.name.startsWith('#'));
         this.parentElement[attr.name.replace('#', '')] = el;
       }
-      el.addEventListener('blur', async () => {
-        this.setElementDirty(el);
-        await this.parentElement.requestUpdate();
-        await this.setElementValidity(el);
-      });
-      el[strategy] = this.updateValueAndValidityOnEvent(el[strategy]);
+      if (!el._bound) {
+        el.addEventListener('blur', async () => {
+          this.setElementDirty(el);
+          await this.parentElement.requestUpdate();
+          await this.setElementValidity(el);
+        });
+        el[strategy] = this.updateValueAndValidityOnEvent(el[strategy]);
+        el._bound = true;
+      }
       return el;
     });
   }
@@ -391,8 +400,13 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
   public async validate(element: AbstractInput): Promise<ErrorObject> {
     let errors = [];
 
-    element.setCustomValidity('');
-    if (!element.checkValidity()) {
+    if (typeof element.setCustomValidity === 'function') {
+      element.setCustomValidity('');
+    }
+    if (
+      typeof element.checkValidity === 'function' &&
+      !element.checkValidity()
+    ) {
       return {
         errors: errors.concat(
           Object.keys(InputValidityState)

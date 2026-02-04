@@ -21,7 +21,10 @@ export function Form(
       if (!(this[name] instanceof FormGroup)) {
         throw new Error('Value provided is not an instance of FormGroup!');
       }
-      (this[name] as FormGroup).setParentElement(this).setOptions(options).prepareValues();
+      (this[name] as FormGroup)
+        .setParentElement(this)
+        .setOptions(options)
+        .prepareValues();
       if (options.model && this[options.model]) {
         this[name].patchValue(this[options.model]);
       }

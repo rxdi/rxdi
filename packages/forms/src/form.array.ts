@@ -24,7 +24,10 @@ export class FormArray<T = any> implements AbstractControl<T[]> {
 
   constructor(
     controls: AbstractControl<T>[] = [],
-    nameOrOptions: string | FormArrayOptions<T> | ((value: T) => AbstractControl) = ''
+    nameOrOptions:
+      | string
+      | FormArrayOptions<T>
+      | ((value: T) => AbstractControl) = ''
   ) {
     this.controls = controls;
     if (typeof nameOrOptions === 'string') {
