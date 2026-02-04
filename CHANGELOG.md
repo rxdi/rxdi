@@ -1,4 +1,4 @@
-## [0.7.231](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.231) (2026-02-04)
+## [0.7.232](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.232) (2026-02-04)
 
 
 ### Bug Fixes
@@ -22,6 +22,7 @@
 * **forms:** added query select by textarea ([0cccbd7](https://github.com/rxdi/mono/commit/0cccbd7c26d869b80ffcfc42f73080130cbd4c23))
 * **forms:** added set timeout to init form in order for the first render to pass and to apply form validation and find the correct inputs (this change is due to rx-graph component initial rendering which happens on the second render ([6d96e49](https://github.com/rxdi/mono/commit/6d96e496a0a9a58dfd76b44e831dd382ff95853a))
 * **forms:** added try catch on init and setTimeout if it fails ([05245f8](https://github.com/rxdi/mono/commit/05245f8e213cb17b581e58881148efdbca09bdb8))
+* **forms:** dynamic form validation and adding additional fields based on conditions was not reattaching the validators of the form input group ([bca2ee8](https://github.com/rxdi/mono/commit/bca2ee83adcc154802eb9bbaa28567161e8c1651))
 * **forms:** fixes for propagation of errors and form submision ([dd72ebd](https://github.com/rxdi/mono/commit/dd72ebd4eaf714e52cd397f1c98084b4d981f4ef))
 * **forms:** in nested forms we are missing in the first couple of miliseconds the parent element later on when form values are initialized we populate the fields and form is present into the stage ([3ab0ecc](https://github.com/rxdi/mono/commit/3ab0ecc84d26d05d52f4a5ab855e1e4ce6462965))
 * **forms:** inputs now defaults to value provided inside form group ([b0c99a0](https://github.com/rxdi/mono/commit/b0c99a01c322ae85cbe61a29ecf21ac5b0d87cd1))
