@@ -1,4 +1,4 @@
-## [0.7.229](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.229) (2026-02-01)
+## [0.7.230](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.230) (2026-02-04)
 
 
 ### Bug Fixes
@@ -25,6 +25,7 @@
 * **forms:** fixes for propagation of errors and form submision ([dd72ebd](https://github.com/rxdi/mono/commit/dd72ebd4eaf714e52cd397f1c98084b4d981f4ef))
 * **forms:** in nested forms we are missing in the first couple of miliseconds the parent element later on when form values are initialized we populate the fields and form is present into the stage ([3ab0ecc](https://github.com/rxdi/mono/commit/3ab0ecc84d26d05d52f4a5ab855e1e4ce6462965))
 * **forms:** inputs now defaults to value provided inside form group ([b0c99a0](https://github.com/rxdi/mono/commit/b0c99a01c322ae85cbe61a29ecf21ac5b0d87cd1))
+* **forms:** regression with radio and checkbox buttons introduced recently ([2cce80e](https://github.com/rxdi/mono/commit/2cce80eee5a3ae5323a4ea2abe5e180daea11111))
 * **forms:** removed unnecessery console log ([390c6dd](https://github.com/rxdi/mono/commit/390c6ddf3a3ab5eedacbe754c3d96bd53a86b4f7))
 * **forms:** reverted back focus ([f97f8b6](https://github.com/rxdi/mono/commit/f97f8b66d4392dd3ea5d720aa99f6ac64f827197))
 * **forms:** type checkbox was not parsed correctly as a boolean instead it was string ([f2395e0](https://github.com/rxdi/mono/commit/f2395e06f6edeb05be19c7f6a2c5786b45780e3e))

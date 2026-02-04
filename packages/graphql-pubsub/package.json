@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/graphql-pubsub",
-  "version": "0.7.229",
+  "version": "0.7.230",
   "repository": {
     "type": "git",
     "url": "https://github.com/rxdi/graphql-pubsub"
@@ -30,14 +30,14 @@
   },
   "homepage": "https://github.com/rxdi/graphql-pubsub#readme",
   "dependencies": {
-    "@rxdi/graphql-rabbitmq-subscriptions": "^0.7.229",
-    "@rxdi/rabbitmq-pubsub": "^0.7.229",
+    "@rxdi/graphql-rabbitmq-subscriptions": "^0.7.230",
+    "@rxdi/rabbitmq-pubsub": "^0.7.230",
     "subscriptions-transport-ws": "^0.9.19"
   },
   "devDependencies": {
-    "@rxdi/core": "^0.7.229",
-    "@rxdi/graphql": "^0.7.229",
-    "@rxdi/hapi": "^0.7.229",
+    "@rxdi/core": "^0.7.230",
+    "@rxdi/graphql": "^0.7.230",
+    "@rxdi/hapi": "^0.7.230",
     "@types/graphql": "^14.5.0",
     "@types/hapi": "^18.0.4",
     "@types/jest": "^24.0.22",
