@@ -622,6 +622,8 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
         if (e.type === 'checkbox' || e.type === 'radio') {
           if (Array.isArray(modelValue)) {
             e.checked = modelValue.includes(e.value);
+          } else if (typeof modelValue === 'boolean') {
+            e.checked = modelValue;
           } else {
             e.checked = modelValue === e.value;
           }
