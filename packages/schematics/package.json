@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/schematics",
-  "version": "0.7.234",
+  "version": "0.7.235",
   "description": "",
   "scripts": {
     "build": "rm -rf utils lib && tsc && cp -r ./src/* .",

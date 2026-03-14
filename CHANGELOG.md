@@ -1,4 +1,4 @@
-## [0.7.234](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.234) (2026-02-04)
+## [0.7.235](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.235) (2026-03-14)
 
 
 ### Bug Fixes
@@ -135,6 +135,7 @@
 * **forms:** type safety added to the forms and additional binding configuration if model present on the component to set values of the form dynamically without explicitly setting it inside hook OnUpdateFirst crucial readability feature! ([76135cd](https://github.com/rxdi/mono/commit/76135cd32edb5c5f498a2f70daf6a38f4ee75668))
 * **GarbageCollect:** added method to handle unsubscribe from observables ([9313eda](https://github.com/rxdi/mono/commit/9313eda88a7f6b4fce7873931b680218a10c8b7c))
 * **GlobalPrefetch:** added to pusbusb ([dfb9913](https://github.com/rxdi/mono/commit/dfb9913d82c604e95ca99ab6eb89b05203434eff))
+* **graphql-client:** added additional options to handle edge cases ([33a7ad5](https://github.com/rxdi/mono/commit/33a7ad540b86d2df6deeb8cdb6c180dd8bd22d0a))
 * **graphql-client:** added cancel request handler and options everyone to make his own options ([ea312b7](https://github.com/rxdi/mono/commit/ea312b74b0f0c9c7717c45a3a033ec76fb250aec))
 * **graphql-client:** added importQueryAsync method in order to load async documents when we use compression for example ([c44b651](https://github.com/rxdi/mono/commit/c44b651fe2f859c378e918d9c0286cfa3dcb4d6b))
 * **graphql-client:** deep copy method introduced ([4e88198](https://github.com/rxdi/mono/commit/4e881984308d3ad51b5cae434a8c0203ddd051ab))
