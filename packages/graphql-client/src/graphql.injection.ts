@@ -3,10 +3,12 @@ import {
   ApolloClient as AC,
   ApolloClientOptions,
   DocumentNode,
+  HttpOptions,
   RequestHandler,
   TypedDocumentNode,
 } from '@apollo/client/core';
 import { NormalizedCacheObject, InMemoryCache } from '@apollo/client/cache';
+import { ClientOptions } from 'subscriptions-transport-ws';
 
 export const ApolloClient = new InjectionToken<AC<NormalizedCacheObject>>('apollo-link');
 export interface ApolloClient extends AC<NormalizedCacheObject> { }
@@ -22,6 +24,8 @@ export interface GraphqlModuleConfig {
   cancelPendingRequests?: boolean;
   apolloClientOptions?: ApolloClientOptions<unknown>;
   refreshOnUnauthenticated?: boolean;
+  httpOptions?: HttpOptions;
+  pubsubOptions?: ClientOptions;
 }
 export const noopHeaders = () => new Headers();
 export const noop = () => null;

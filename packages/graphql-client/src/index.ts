@@ -33,6 +33,8 @@ export class GraphqlModule {
       apolloRequestHandler,
       cancelPendingRequests,
       apolloClientOptions,
+      httpOptions = {},
+      pubsubOptions = {}
     }: GraphqlModuleConfig = {} as GraphqlModuleConfig,
     documents = {},
   ): ModuleWithServices {
@@ -142,11 +144,12 @@ export class GraphqlModule {
                           }
                         },
                         reconnect: true,
+                        ...pubsubOptions
                       }),
                     );
                     return wsLink;
                   })(),
-                  createHttpLink({ uri }),
+                  createHttpLink({ uri, ...httpOptions }),
                 ),
               ),
               cache: cache || new InMemoryCache(),
