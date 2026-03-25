@@ -1,4 +1,4 @@
-## [0.7.235](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.235) (2026-03-14)
+## [0.7.236](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.236) (2026-03-25)
 
 
 ### Bug Fixes
@@ -142,6 +142,7 @@
 * **graphql-client:** little modification to remove extra dependency react not using barrel export from apollo ([f38f011](https://github.com/rxdi/mono/commit/f38f011f3393c0f4a8a0da345df5f84a9698c01b))
 * **graphql-pubsub:** added compatibility between graphql v15 and graphql v16 we want to use v16 but subscriptions are not stable enough ([795a36d](https://github.com/rxdi/mono/commit/795a36d0f3843e9e68fc4c42dad2852e2552ccfe))
 * **graphql-pubsub:** refactored subscription service a little bit ([6d5b427](https://github.com/rxdi/mono/commit/6d5b427f5b707519202341c26baf4f0c30c3a3b6))
+* **graphql:** added option to disable query suggestion on client facing errors so attacker cannot guess what the next queries might be ([4b313fc](https://github.com/rxdi/mono/commit/4b313fcd3fb0e0b023c9e11043a8fd7c741f565c))
 * **graphql:** removed the usage of apollo-server from the stack replaced with pure graphql ([fd174b9](https://github.com/rxdi/mono/commit/fd174b94769f59ee094a0746ee6867aeee97fb62))
 * **hapi, core:** added decorator Route to define post and get requests ([92caf6c](https://github.com/rxdi/mono/commit/92caf6c720d97752cc23286dc97dbb3d503f921f))
 * **lit-html:** added components property for initializing components needed for a specific component ([ebfc279](https://github.com/rxdi/mono/commit/ebfc279b10d4ebbe3e0399b1974008c87acaf586))
