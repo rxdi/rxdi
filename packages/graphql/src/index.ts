@@ -1,6 +1,6 @@
 import { Module, ModuleWithServices } from '@rxdi/core';
 import { HookService, EffectService} from './services';
-import { GraphqlService } from './services/apollo.service';
+import { GraphqlService } from './services/graphql.service';
 import { GRAPHQL_PLUGIN_CONFIG } from './config.tokens';
 import { BootstrapService } from './services/bootstrap.service';
 import { PluginInit } from './plugin-init';

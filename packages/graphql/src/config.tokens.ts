@@ -20,6 +20,7 @@ export interface GRAPHQL_PLUGIN_CONFIG {
     cors?: boolean;
   };
   graphqlOptions?: any;
+  hideSchemaDetailsFromClientErrors?: boolean;
 }
 export interface GRAPHQL_AUTHENTICATION_FAKE {
   validateToken(authorization: string): any;

@@ -8,7 +8,7 @@ import {
  CUSTOM_SCHEMA_DEFINITION,
  ON_REQUEST_HANDLER,
 } from '../config.tokens';
-import { BootstrapService } from '../services/bootstrap.service';
+import { BootstrapService } from './bootstrap.service';
 import { GraphQLSchema } from 'graphql';
 import { HookService } from './hooks.service';
 import { graphql } from 'graphql';
@@ -52,7 +52,7 @@ export class GraphqlService implements PluginInterface {
 
  async register() {
   if (!this.config || !this.config.graphqlOptions) {
-   throw new Error('Apollo Server requires options.');
+   throw new Error('Graphql Server requires options.');
   }
   this.config.graphqlOptions.schema = await this.config.graphqlOptions.schema;
   this.hookService.AttachHooks([
@@ -135,10 +135,17 @@ export class GraphqlService implements PluginInterface {
    contextValue: this.config.graphqlOptions.context,
   });
 
+  if (graphqlResponse?.errors?.length && this.config.hideSchemaDetailsFromClientErrors) {
+    graphqlResponse.errors = graphqlResponse.errors.map(err => {
+      err.message = err.message.replace(/ ?Did you mean(.+?)\?\$/, '');;
+      return err;
+    });
+  }
   const response = h.response(graphqlResponse);
   response.type('application/json');
   return response;
  }
+ 
  handler = async (request: Request, h: ResponseToolkit, err?: Error) => {
   try {
    return await this.defaultOrNew(request, h, err);
