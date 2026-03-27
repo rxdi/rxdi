@@ -13,6 +13,12 @@ export class HapiConfigModel {
       }
     }
   };
+  /** 
+   * This parameter let use choose between running a hapi server
+   * on a port aka stanadalone server or only bootstraping routes
+   * and running it as a lambda by using `server.inject({...requestParams})`
+   *  */
+  mode?: 'lambda' | 'server';
   hapi?: ServerOptions;
   plugins?: Array<PluginBase<any, any> & (PluginNameVersion | PluginPackage)>;
 
