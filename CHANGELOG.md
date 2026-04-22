@@ -1,4 +1,4 @@
-## [0.7.237](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.237) (2026-03-27)
+## [0.7.238](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.238) (2026-04-22)
 
 
 ### Bug Fixes
@@ -143,6 +143,7 @@
 * **graphql-pubsub:** added compatibility between graphql v15 and graphql v16 we want to use v16 but subscriptions are not stable enough ([795a36d](https://github.com/rxdi/mono/commit/795a36d0f3843e9e68fc4c42dad2852e2552ccfe))
 * **graphql-pubsub:** refactored subscription service a little bit ([6d5b427](https://github.com/rxdi/mono/commit/6d5b427f5b707519202341c26baf4f0c30c3a3b6))
 * **graphql:** added option to disable query suggestion on client facing errors so attacker cannot guess what the next queries might be ([4b313fc](https://github.com/rxdi/mono/commit/4b313fcd3fb0e0b023c9e11043a8fd7c741f565c))
+* **graphql:** dynamic schema reload introduced due to the lambda nature ([dba716e](https://github.com/rxdi/mono/commit/dba716e6eea25ee6834c8b5e8bad4ae4d4048a12))
 * **graphql:** removed the usage of apollo-server from the stack replaced with pure graphql ([fd174b9](https://github.com/rxdi/mono/commit/fd174b94769f59ee094a0746ee6867aeee97fb62))
 * **hapi, core:** added decorator Route to define post and get requests ([92caf6c](https://github.com/rxdi/mono/commit/92caf6c720d97752cc23286dc97dbb3d503f921f))
 * **hapi:** added server mode of type lambda or server giving us ability to have faster bootstrap and output when running in lambda environment ([3c13ac1](https://github.com/rxdi/mono/commit/3c13ac17a691f1465c9d479b4498e14da4452e71))
