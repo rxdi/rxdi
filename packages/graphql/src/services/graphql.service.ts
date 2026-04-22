@@ -136,16 +136,16 @@ export class GraphqlService implements PluginInterface {
   });
 
   if (graphqlResponse?.errors?.length && this.config.hideSchemaDetailsFromClientErrors) {
-    graphqlResponse.errors = graphqlResponse.errors.map(err => {
-      err.message = err.message.replace(/ ?Did you mean(.+?)\?\$/, '');;
-      return err;
-    });
+   graphqlResponse.errors = graphqlResponse.errors.map((err) => {
+    err.message = err.message.replace(/ ?Did you mean(.+?)\?\$/, '');
+    return err;
+   });
   }
   const response = h.response(graphqlResponse);
   response.type('application/json');
   return response;
  }
- 
+
  handler = async (request: Request, h: ResponseToolkit, err?: Error) => {
   try {
    return await this.defaultOrNew(request, h, err);
@@ -187,4 +187,13 @@ export class GraphqlService implements PluginInterface {
    throw err;
   }
  };
+
+ reloadSchema(newSchema: GraphQLSchema): void {
+  this.config.graphqlOptions.schema = newSchema;
+  this.hookService.AttachHooks([
+   newSchema.getQueryType(),
+   newSchema.getMutationType(),
+   newSchema.getSubscriptionType(),
+  ]);
+ }
 }

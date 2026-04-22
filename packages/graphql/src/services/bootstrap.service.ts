@@ -1,4 +1,4 @@
-import { ModuleService, Service, Inject, Container } from '@rxdi/core';
+import { ModuleService, Service, Inject, Container, ControllersService } from '@rxdi/core';
 import {
   GraphQLObjectType,
   GraphQLSchema,
@@ -15,6 +15,7 @@ import {
   applySchemaCustomDirectives,
   GraphQLCustomDirective
 } from '../helpers/directives/custom-directive';
+import { ServiceArgumentsInternal } from '@rxdi/core/src/decorators/module/module.interfaces';
 
 export class FieldsModule {
   query: {};
@@ -239,5 +240,105 @@ export class BootstrapService {
           .forEach(v => descriptors.push({ descriptor: v, self: map.value }))
       );
     return descriptors;
+  }
+
+  private createControllerMetadata(controller: Function): void {
+    const originalName = controller.name || controller.constructor?.name || 'Unknown';
+    const uniqueHashForClass = `${controller}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    Object.defineProperty(controller, 'originalName', {
+      value: originalName,
+      writable: true
+    });
+    Object.defineProperty(controller, 'name', {
+      value: uniqueHashForClass,
+      writable: true
+    });
+
+    controller['metadata'] = {
+      moduleName: originalName,
+      moduleHash: uniqueHashForClass,
+      options: null,
+      type: 'controller',
+      raw: `---- @Controller '${originalName}' metadata (dynamically registered)----`
+    };
+  }
+
+  registerControllerDynamic(controller: Function): GraphQLSchema {
+    this.createControllerMetadata(controller);
+    this.moduleService.watcherService.createConstructor(controller.name, { value: controller });
+    const controllersService = Container.get(ControllersService);
+    controllersService.register(controller);
+    return this.generateSchema();
+  }
+
+  registerControllersDynamic(controllers: Function[]): GraphQLSchema {
+    for (const controller of controllers) {
+      this.createControllerMetadata(controller);
+      this.moduleService.watcherService.createConstructor(controller.name, { value: controller });
+    }
+    const controllersService = Container.get(ControllersService);
+    for (const controller of controllers) {
+      controllersService.register(controller);
+    }
+    return this.generateSchema();
+  }
+
+  registerServiceDynamic(service: Function): void {
+    const originalName = service.name || service.constructor?.name || 'Unknown';
+    const uniqueHashForClass = `${service}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    Object.defineProperty(service, 'originalName', {
+      value: originalName,
+      writable: true
+    });
+    Object.defineProperty(service, 'name', {
+      value: uniqueHashForClass,
+      writable: true
+    });
+
+    service['metadata'] = {
+      moduleName: originalName,
+      moduleHash: uniqueHashForClass,
+      options: null,
+      type: 'service',
+      raw: `---- @Service '${originalName}' metadata (dynamically registered)----`
+    };
+
+    Container.set({ type: service });
+    this.moduleService.watcherService.createConstructor(service.name, { value: service });
+  }
+
+  registerServicesDynamic(services: Function[]): void {
+    for (const service of services) {
+      this.registerServiceDynamic(service);
+    }
+  }
+
+  registerModuleDynamic(moduleConfig: {
+    controllers?: Function[];
+    services?: Function[];
+    providers?: ServiceArgumentsInternal[];
+  }): GraphQLSchema {
+    if (moduleConfig.services) {
+      this.registerServicesDynamic(moduleConfig.services);
+    }
+    if (moduleConfig.providers) {
+      for (const provider of moduleConfig.providers) {
+        if (provider.useClass) {
+          this.registerServiceDynamic(provider.useClass);
+        }
+        if (provider.useFactory) {
+          const factoryService = provider.useFactory(...(provider.deps || []));
+          if (typeof factoryService === 'function') {
+            this.registerServiceDynamic(factoryService);
+          }
+        }
+      }
+    }
+    if (moduleConfig.controllers) {
+      this.registerControllersDynamic(moduleConfig.controllers);
+    }
+    return this.generateSchema();
   }
 }
