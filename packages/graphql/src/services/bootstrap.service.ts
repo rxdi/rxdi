@@ -2,10 +2,12 @@ import { ModuleService, Service, Inject, Container, ControllersService } from '@
 import {
   GraphQLObjectType,
   GraphQLSchema,
+  GraphQLList,
   printSchema,
   GraphQLFieldConfigMap,
   buildSchema,
   GraphQLString,
+  GraphQLScalarType,
   validateSchema
 } from 'graphql';
 import { GRAPHQL_PLUGIN_CONFIG } from '../config.tokens';
@@ -16,6 +18,25 @@ import {
   GraphQLCustomDirective
 } from '../helpers/directives/custom-directive';
 import { ServiceArgumentsInternal } from '@rxdi/core/src/decorators/module/module.interfaces';
+
+const scalarTypeCache = new Map<string, any>();
+
+function isScalarType(type: any): boolean {
+  return type?.constructor?.name === 'GraphQLScalarType';
+}
+
+function isListType(type: any): boolean {
+  return type?.constructor?.name === 'GraphQLList';
+}
+
+function getScalarType(type: any): any {
+  const name = type && type.name;
+  if (!name) return type;
+  if (!scalarTypeCache.has(name)) {
+    scalarTypeCache.set(name, type);
+  }
+  return scalarTypeCache.get(name);
+}
 
 export class FieldsModule {
   query: {};
@@ -66,10 +87,11 @@ export class BootstrapService {
   }
 
   applyInitStatus() {
+    const statusType = getScalarType(GraphQLString);
     return {
       type: new GraphQLObjectType({
         name: 'StatusQueryType',
-        fields: () => ({ status: { type: GraphQLString } })
+        fields: () => ({ status: { type: statusType } })
       }),
       method_name: 'status',
       public: true,
@@ -91,9 +113,11 @@ export class BootstrapService {
       const desc = descriptor();
       desc.target = self;
       this.validateResolver(desc, self);
+      if (desc.type && isScalarType(desc.type)) {
+        desc.type = getScalarType(desc.type);
+      }
       Fields[desc.method_type][desc.method_name] = desc;
     });
-
     this.Fields = Fields;
     return this.Fields;
   }
@@ -122,6 +146,7 @@ export class BootstrapService {
   }
 
   generateSchema(schemaOverride?: boolean): GraphQLSchema {
+    this.Fields = { query: {}, mutation: {}, subscription: {} };
     const Fields = this.collectAppSchema();
     if (this.isEmptySchemaFields(Fields) && schemaOverride) {
       return null;
@@ -173,7 +198,17 @@ export class BootstrapService {
     if (!Object.keys(fields).length) {
       return;
     }
-    return new GraphQLObjectType({ name, description, fields });
+    const normalizedFields = Object.entries(fields).reduce((acc, [fieldName, field]) => {
+      if (isScalarType(field.type)) {
+        field.type = getScalarType(field.type);
+      } else if (isListType(field.type)) {
+        if (isScalarType((field.type as any).ofType)) {
+          field.type = new GraphQLList(getScalarType((field.type as any).ofType));
+        }
+      }
+      return { ...acc, [fieldName]: field };
+    }, {});
+    return new GraphQLObjectType({ name, description, fields: normalizedFields });
   }
 
   private applyGlobalControllerOptions() {
@@ -243,25 +278,33 @@ export class BootstrapService {
   }
 
   private createControllerMetadata(controller: Function): void {
-    const originalName = controller.name || controller.constructor?.name || 'Unknown';
+    const existingOriginalName = (controller as any)['originalName'];
+    const originalName = existingOriginalName || controller.name || controller.constructor?.name || 'Unknown';
     const uniqueHashForClass = `${controller}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-    Object.defineProperty(controller, 'originalName', {
-      value: originalName,
-      writable: true
-    });
+    if (!existingOriginalName) {
+      Object.defineProperty(controller, 'originalName', {
+        value: originalName,
+        writable: true
+      });
+    }
     Object.defineProperty(controller, 'name', {
       value: uniqueHashForClass,
       writable: true
     });
 
-    controller['metadata'] = {
-      moduleName: originalName,
-      moduleHash: uniqueHashForClass,
-      options: null,
-      type: 'controller',
-      raw: `---- @Controller '${originalName}' metadata (dynamically registered)----`
-    };
+    if (!controller['metadata']) {
+      controller['metadata'] = {};
+    }
+    controller['metadata'].moduleName = originalName;
+    controller['metadata'].moduleHash = uniqueHashForClass;
+    controller['metadata'].options = controller['metadata'].options || null;
+    controller['metadata'].type = 'controller';
+    controller['metadata'].raw = `---- @Controller '${originalName}' metadata (dynamically registered)----`;
+
+    if (!controller['_descriptors']) {
+      controller['_descriptors'] = new Map();
+    }
   }
 
   registerControllerDynamic(controller: Function): GraphQLSchema {
@@ -275,13 +318,39 @@ export class BootstrapService {
   registerControllersDynamic(controllers: Function[]): GraphQLSchema {
     for (const controller of controllers) {
       this.createControllerMetadata(controller);
-      this.moduleService.watcherService.createConstructor(controller.name, { value: controller });
+      this.moduleService.watcherService.createConstructor(controller.name, {
+        type: controller,
+        value: controller
+      });
     }
     const controllersService = Container.get(ControllersService);
     for (const controller of controllers) {
       controllersService.register(controller);
     }
+    this.mergeControllerFields(controllers);
     return this.generateSchema();
+  }
+
+  mergeControllerFields(newControllers: Function[]): void {
+    for (const controller of newControllers) {
+      const constructorKey = controller.name;
+      const constructor = this.moduleService.watcherService.getConstructor(constructorKey);
+      if (!constructor) continue;
+      const map = constructor as any;
+      if (!map.type || !map.type._descriptors) continue;
+      Array.from(map.type._descriptors.keys())
+        .map(k => map.type._descriptors.get(k))
+        .map(d => d.value)
+        .forEach((descriptorGetter: () => GenericGapiResolversType) => {
+          const desc = descriptorGetter();
+          desc.target = () => { };
+          this.validateResolver(desc, controller);
+          if (desc.type && isScalarType(desc.type)) {
+            desc.type = getScalarType(desc.type);
+          }
+          this.Fields[desc.method_type][desc.method_name] = desc;
+        });
+    }
   }
 
   registerServiceDynamic(service: Function): void {
