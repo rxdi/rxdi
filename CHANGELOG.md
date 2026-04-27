@@ -1,4 +1,4 @@
-## [0.7.238](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.238) (2026-04-22)
+## [0.7.239](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.239) (2026-04-27)
 
 
 ### Bug Fixes
@@ -44,6 +44,7 @@
 * **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
 * **graphql:** added parsing for graphql query variables json when using GET ([8f27eaa](https://github.com/rxdi/mono/commit/8f27eaaa536d8cc63c9554b136f28061a2017c79))
 * **graphql:** Boom imported from the correct place ([0eff5ba](https://github.com/rxdi/mono/commit/0eff5ba1b85402936eb67236648b860cb69bf196))
+* **graphql:** bootstrap service fixes for dynamic graphql module loading ([79dd926](https://github.com/rxdi/mono/commit/79dd926d171de461c4875b008a1cc31849f40abc))
 * **graphql:** directive location changed ([d12af5d](https://github.com/rxdi/mono/commit/d12af5df5b96a2a7dac3c917c993725facbe38c6))
 * **graphql:** filtered unknown arguments ([6a0be24](https://github.com/rxdi/mono/commit/6a0be241a119d2a417994477354ff8450c977526))
 * **graphql:** parsing of undefined is not possible ([9bad1d2](https://github.com/rxdi/mono/commit/9bad1d2b0cd7e334c5b779385bc39ccf67f23745))
