@@ -1,5 +1,6 @@
 import { InjectionToken } from '@rxdi/core';
 import { NatsConnection } from 'nats';
+import { NatsLogger } from './nats-logger';
 
 export interface NatsModuleConfiguration {
   host?: string;
@@ -15,6 +16,9 @@ export interface NatsModuleConfiguration {
   timeout?: number;
   tls?: any;
   maxPayload?: number;
+  logging?: boolean;
+  logger?: NatsLogger;
+  serviceName?: string;
 }
 
 export interface ServiceDiscoveryOptions {
@@ -24,13 +28,14 @@ export interface ServiceDiscoveryOptions {
 
 export interface NatsPubSubOptions {
   triggerTransform?: (trigger: string) => string;
-  logger?: any;
+  logger?: NatsLogger;
 }
 
 export const NATS_MODULE_CONFIG = new InjectionToken<NatsModuleConfiguration>('nats-module-config-injection-token');
 export const NATS_CLIENT_SERVICE = new InjectionToken<NatsClientInterface>('nats-client-service-injection-token');
 export const NATS_PUBSUB_SERVICE = new InjectionToken<NatsPubSubInterface>('nats-pubsub-service-injection-token');
 export const GRAPHQL_NATS_PUBSUB = new InjectionToken<boolean>('graphql-nats-pubsub-injection-token');
+export const NATS_LOGGER = new InjectionToken<NatsLogger>('nats-logger-injection-token');
 
 export interface NatsClientInterface {
   connect(): Promise<void>;

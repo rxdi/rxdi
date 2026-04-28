@@ -1,6 +1,7 @@
 import { Injectable, Inject, OnInit } from '@rxdi/core';
 import { NatsClientService } from './nats-client.service';
-import { NatsPubSubInterface } from '../interfaces';
+import { NatsPubSubInterface, NATS_LOGGER } from '../interfaces';
+import { NatsLoggerService } from './nats-logger.service';
 import { PubSubAsyncIterator } from './pubsub-async-iterator';
 
 @Injectable()
@@ -10,7 +11,10 @@ export class NatsPubSubService implements NatsPubSubInterface, OnInit {
   private currentSubscriptionId = 0;
   private unsubscribeMap = new Map<string, () => void>();
 
-  constructor(private natsClient: NatsClientService) {}
+  constructor(
+    private natsClient: NatsClientService,
+    @Inject(NATS_LOGGER) private logger: NatsLoggerService
+  ) {}
 
   OnInit(): void {}
 
@@ -19,6 +23,7 @@ export class NatsPubSubService implements NatsPubSubInterface, OnInit {
       throw new Error('NATS client is not connected');
     }
     await this.natsClient.publish(trigger, payload);
+    this.logger.debug(`[NatsPubSubService] Published to ${trigger}:`, payload);
   }
 
   async subscribe<T>(
@@ -53,6 +58,7 @@ export class NatsPubSubService implements NatsPubSubInterface, OnInit {
     this.unsubscribeMap.set(trigger, () => this.natsClient.unsubscribe(subId));
     this.subsRefsMap.set(trigger, [id]);
 
+    this.logger.debug(`[NatsPubSubService] Subscribed to ${trigger}`);
     return id;
   }
 

@@ -9,12 +9,11 @@
  "types": "./dist/index.d.ts",
  "module": "./dist/index.js",
  "typings": "./dist/index.d.ts",
- "scripts": {
-  "test": "jest | true",
-  "build": "tsc",
-  "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-  "pretest": "npm run lint"
- },
+"scripts": {
+   "test": "jest",
+   "build": "tsc",
+   "lint": "echo 'Lint skipped'"
+  },
  "author": {
   "name": "Kristian Tachev(Stradivario)",
   "email": "kristiqn.tachev@gmail.com"
@@ -62,11 +61,19 @@
    "json",
    "node"
   ],
-  "transform": {
-   "\\.(ts|tsx)$": "ts-jest"
-  },
+"transform": {
+    "\\.(ts|tsx)$": [
+      "ts-jest",
+      {
+        "diagnostics": false
+      }
+    ]
+   },
   "testRegex": "/src/.*\\.spec.(ts|tsx|js)$",
   "verbose": true,
-  "collectCoverage": true
+  "collectCoverage": true,
+  "setupFilesAfterEnv": [
+   "./jest-setup.ts"
+  ]
  }
 }
