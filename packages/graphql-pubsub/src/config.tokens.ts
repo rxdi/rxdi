@@ -3,6 +3,13 @@ import { AmqpPubSub } from '@rxdi/graphql-rabbitmq-subscriptions';
 import { PubSub } from 'graphql-subscriptions';
 import { Server } from 'http';
 import { ServerOptions } from 'subscriptions-transport-ws';
+
+export enum PubSubProtocol {
+  DEFAULT = 'DEFAULT',
+  NATS = 'NATS',
+  RABBITMQ = 'RABBITMQ',
+}
+
 export interface GRAPHQL_PUBSUB_SERVER_OPTIONS {
   server?: Server;
   path?: string; // '/subscriptions'
@@ -32,9 +39,9 @@ export class GRAPHQL_PUB_SUB_DI_CONFIG {
   authentication?: string;
   log?: boolean;
   activateRabbitMQ?: boolean;
+  protocol?: PubSubProtocol;
   logger?: any;
   subscriptionServerOptions?: GRAPHQL_PUBSUB_SERVER_OPTIONS;
-
 }
 
 export interface PubSubOptions extends ServerOptions {

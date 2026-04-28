@@ -1,0 +1,7 @@
+{
+  "extends": "../../tslint.json",
+  "rules": {
+    "quotemark": [true, "single"],
+    "no-unused-expression": true
+  }
+}
