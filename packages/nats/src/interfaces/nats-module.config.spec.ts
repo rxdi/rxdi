@@ -1,8 +1,5 @@
 import {
   NatsModuleConfiguration,
-  NatsCallOptions,
-  NatsListenerOptions,
-  NatsEmitOptions,
   NATS_MODULE_CONFIG,
   NATS_CLIENT_SERVICE,
   NATS_PUBSUB_SERVICE,
@@ -10,6 +7,9 @@ import {
   NatsLogger,
   NatsLogLevel,
 } from '../interfaces';
+import { NatsCallOptions } from '../decorators/nats-call.decorator';
+import { NatsListenerOptions } from '../decorators/nats-listener.decorator';
+import { NatsEmitOptions } from '../decorators/nats-emit.decorator';
 
 describe('NatsModuleConfiguration Interface', () => {
   it('should accept full configuration', () => {
