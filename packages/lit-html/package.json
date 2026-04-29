@@ -1,6 +1,6 @@
 {
   "name": "@rxdi/lit-html",
-  "version": "0.7.239",
+  "version": "0.7.240",
   "main": "./dist/index.js",
   "author": "Kristiyan Tachev",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "npx tsc",
-    "test":"echo test"
+    "test": "echo test"
   },
   "dependencies": {
     "@lit/reactive-element": "1.5.0",

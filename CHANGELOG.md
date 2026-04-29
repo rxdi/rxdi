@@ -1,4 +1,4 @@
-## [0.7.239](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.239) (2026-04-27)
+## [0.7.240](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.240) (2026-04-29)
 
 
 ### Bug Fixes
@@ -60,6 +60,7 @@
 * **Hotkeys:** reverted back logic for binding ([5d83018](https://github.com/rxdi/mono/commit/5d830181d6a5ed611e5ff06f861a9501cb45e6bf))
 * **Hotkeys:** unbinding leads to not subscribing again to observable. we will leave it like so ([4720e9f](https://github.com/rxdi/mono/commit/4720e9f608f15fbb63404c162017607b6020d715))
 * **http:** added export and documentation ([58f7ebb](https://github.com/rxdi/mono/commit/58f7ebbfcbb43939d9eeb6c48e6ac037a5d7b547))
+* **jest:** changes needed for jest to run ([b6f4aa4](https://github.com/rxdi/mono/commit/b6f4aa480b643b78ca8076f367c5aec47c298d48))
 * **lit-html:** added correct dependencies ([c3b5d9f](https://github.com/rxdi/mono/commit/c3b5d9f001eca7a06e3af7714cee1b271fbb5e2e))
 * **lit-html:** added correct re-exports ([9722efd](https://github.com/rxdi/mono/commit/9722efd025721e1b14fdd94d16b29f22537dcacb))
 * **lit-html:** added type never to not interfeer with return type of decorator ([5f3f96d](https://github.com/rxdi/mono/commit/5f3f96d365547634b916ca267d743bb2bd7c63d9))
@@ -148,6 +149,7 @@
 * **graphql:** removed the usage of apollo-server from the stack replaced with pure graphql ([fd174b9](https://github.com/rxdi/mono/commit/fd174b94769f59ee094a0746ee6867aeee97fb62))
 * **hapi, core:** added decorator Route to define post and get requests ([92caf6c](https://github.com/rxdi/mono/commit/92caf6c720d97752cc23286dc97dbb3d503f921f))
 * **hapi:** added server mode of type lambda or server giving us ability to have faster bootstrap and output when running in lambda environment ([3c13ac1](https://github.com/rxdi/mono/commit/3c13ac17a691f1465c9d479b4498e14da4452e71))
+* **jest:** migrated to latest 29 ([10709ae](https://github.com/rxdi/mono/commit/10709ae6631fc818e370c9d04b93c52080b1d3a0))
 * **lit-html:** added components property for initializing components needed for a specific component ([ebfc279](https://github.com/rxdi/mono/commit/ebfc279b10d4ebbe3e0399b1974008c87acaf586))
 * **lit-html:** added decorators to be part of the bundle since Deno is complaining about decorators.js from cdn ([f0214aa](https://github.com/rxdi/mono/commit/f0214aa2860b2e1b7bb2227ca8992cba4eca2948))
 * **lit-html:** added dependencies instead of just lit ([bed8bc8](https://github.com/rxdi/mono/commit/bed8bc8abdf2d8a090e676e2464566bbbbbd67ee))
@@ -158,6 +160,8 @@
 * **lit-html:** bumped to 2.0.0 refactored code to fit new exports ([bf1a100](https://github.com/rxdi/mono/commit/bf1a100cd1c95dfa115278546b19147b9eab2110))
 * **lit-html:** modifiers logic added ([5808050](https://github.com/rxdi/mono/commit/5808050c71f778a379e6d88986deb980383302ec))
 * **lit-html:** removed dependencies added monorepo packages to be on one place due to DENO build fails ([af937e7](https://github.com/rxdi/mono/commit/af937e7379b3e11b621becae3efbb16aa84b4f28))
+* **nats:** added multiple tests ([eb019a2](https://github.com/rxdi/mono/commit/eb019a2c1f85a55c8f14dc1695be33cb922ac37a))
+* **nats:** added nats module and graphql-nats so now we can have scalable services ([7ffada2](https://github.com/rxdi/mono/commit/7ffada23ab734d2b03047aabc4ebd34f87feb0fc))
 * **neo4j:** bumped version of neo4j driver and neo4j graphql js ([f669981](https://github.com/rxdi/mono/commit/f6699814dee357065c719fa48763e6a0f91e7ea2))
 * **neo4j:** orm for neo4j added to the stack ([feeda88](https://github.com/rxdi/mono/commit/feeda88ef9c7ee23f7ccf502a212e1b996ce4878))
 * **neo4j:** removed unused logic added more clear transition to augmented schema from new neo4j graphql package ([58089ff](https://github.com/rxdi/mono/commit/58089ff971674ea12f58ee515df2e5a8a89005ec))
