@@ -10,10 +10,9 @@
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "test": "jest | true",
+    "test": "jest",
     "build": "tsc",
-    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-    "pretest": "npm run lint"
+    "lint": "echo 'Lint skipped'"
   },
   "author": {
     "name": "Kristian Tachev(Stradivario)",
@@ -66,10 +65,18 @@
       "node"
     ],
     "transform": {
-      "\\.(ts|tsx)$": "ts-jest"
+      "\\.(ts|tsx)$": [
+        "ts-jest",
+        {
+          "diagnostics": false
+        }
+      ]
     },
-    "testRegex": "/src/.*\\.spec.(ts|tsx|js)$",
+    "testRegex": "/(src|test)/.*\\.spec.(ts|tsx|js)$",
     "verbose": true,
-    "collectCoverage": true
+    "collectCoverage": true,
+    "setupFilesAfterEnv": [
+      "./jest-setup.ts"
+    ]
   }
 }

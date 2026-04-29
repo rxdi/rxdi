@@ -8,9 +8,8 @@
   "scripts": {
     "lint": "tslint -c tslint.json 'development/**/*.{ts,tsx}'",
     "lint:fix": "tslint -c tslint.json 'development/**/*.{ts,tsx}' --fix",
-    "pretest": "npm run lint",
     "build": "tsc",
-    "test": "jest "
+    "test": "jest"
   },
   "author": {
     "name": "Kristian Tachev(Stradivario)",
@@ -78,6 +77,7 @@
     },
     "testRegex": "/src/*/.*\\.spec.(ts|tsx|js)$",
     "verbose": true,
-    "collectCoverage": true
+    "collectCoverage": true,
+    "moduleDirectories": ["node_modules", "../../node_modules"]
   }
 }

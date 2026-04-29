@@ -11,7 +11,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'"
+    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
+    "test": "echo tests"
   },
   "repository": {
     "type": "git",

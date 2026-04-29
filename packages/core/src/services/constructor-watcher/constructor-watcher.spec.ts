@@ -42,7 +42,7 @@ describe('Service: ConstructorWatcher', () => {
 
   it('Should trigger OnInit on current test Class ', done => {
     const testConstructor = Container.get(TestConstructor);
-    const testSpy = spyOn(testConstructor, 'OnInit');
+    const testSpy = jest.spyOn(testConstructor, 'OnInit');
     Container.get(TestService);
     constructorWatcherService.triggerOnInit(TestConstructor);
     expect(testSpy).toHaveBeenCalled();

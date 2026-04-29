@@ -88,32 +88,29 @@ describe('Custom Graphql Directives aka Schema Decorators', () => {
 
   afterAll(async () => await server.stop());
 
-  it('Should decorete name return property to become UPPERCASE', async done => {
+  it('Should decorete name return property to become UPPERCASE', async () => {
     const res = await sendRequest<{ findUser: { name: number } }>({
       query: `query findUser($name: String!) { findUser(name: $name) { name @toUpperCase } }`,
       variables: { name: 'imetomi' }
     });
     expect(res.data.findUser.name).toBe('IMETOMI');
-    done();
   });
 
-  it('Should decorete name return property to have text outside', async done => {
+  it('Should decorete name return property to have text outside', async () => {
     const res = await sendRequest<{ findUser: { name: number } }>({
       query: `query findUser($name: String!) { findUser(name: $name) { name @addText(inside: "", outside: "test") } }`,
       variables: { name: 'imetomi' }
     });
     console.log(res.data.findUser.name);
     expect(res.data.findUser.name).toBe('IMETOMItest');
-    done();
   });
 
-  it('Should decorete name return property to have text inside', async done => {
+  it('Should decorete name return property to have text inside', async () => {
     const res = await sendRequest<{ findUser: { name: number } }>({
       query: `query findUser($name: String!) { findUser(name: $name) { name @addText(inside: "test", outside: "") } }`,
       variables: { name: 'imetomi' }
     });
     expect(res.data.findUser.name).toBe('testIMETOMI');
-    done();
   });
 
   afterAll(async () => await server.stop());

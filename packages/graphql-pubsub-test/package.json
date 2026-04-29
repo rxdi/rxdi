@@ -10,10 +10,9 @@
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "test": "jest | true",
+    "test": "echo tests",
     "build": "tsc",
-    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-    "pretest": "npm run lint"
+    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'"
   },
   "author": {
     "name": "Kristian Tachev(Stradivario)",

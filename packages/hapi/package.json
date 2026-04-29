@@ -6,7 +6,8 @@
     "url": "https://github.com/rxdi/hapi"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "echo tests"
   },
   "author": {
     "name": "Kristian Tachev(Stradivario)",

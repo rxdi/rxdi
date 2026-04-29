@@ -9,7 +9,7 @@
   },
   "scripts": {
     "postinstall": "rm -rf ./node_modules/@rxdi/core/node_modules/rxjs",
-    "test": "echo 'npx bolt ws exec -- npm test'",
+    "test": "npx bolt ws exec -- npm test",
     "ws-exec": "npx bolt ws exec --",
     "ws-run": "npx bolt ws run",
     "patch": "npx bolt ws exec -- npm version patch",
