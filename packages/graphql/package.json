@@ -8,9 +8,8 @@
   "scripts": {
     "lint": "tslint -c tslint.json 'development/**/*.{ts,tsx}'",
     "lint:fix": "tslint -c tslint.json 'development/**/*.{ts,tsx}' --fix",
-    "pretest": "npm run lint",
     "build": "tsc",
-    "test": "jest "
+    "test": "jest"
   },
   "author": {
     "name": "Kristian Tachev(Stradivario)",
@@ -31,7 +30,8 @@
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "dependencies": {
-    "@hapi/boom": "^10.0.1"
+    "@hapi/boom": "^10.0.1",
+    "@hapi/hoek": "^11.0.2"
   },
   "devDependencies": {
     "@rxdi/core": "^0.7.239",

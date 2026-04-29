@@ -19,13 +19,13 @@
       "esnext.asynciterable"
     ],
     "skipLibCheck": true,
-    "types": []
+    "types": ["jest"]
   },
   "files": [
-    "./src/index.ts",
-
+    "./src/index.ts"
   ],
-  "exclude": [
-    "**/*.spec.ts"
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.spec.ts"
   ]
 }

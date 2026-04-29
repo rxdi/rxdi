@@ -1,32 +1,7 @@
-import { Module, ModuleWithServices } from '@rxdi/core';
-import { HookService, EffectService} from './services';
-import { GraphqlService } from './services/graphql.service';
-import { GRAPHQL_PLUGIN_CONFIG } from './config.tokens';
-import { BootstrapService } from './services/bootstrap.service';
-import { PluginInit } from './plugin-init';
-
-@Module()
-export class GraphQLModule {
-  public static forRoot(config: GRAPHQL_PLUGIN_CONFIG): ModuleWithServices {
-    return {
-      module: GraphQLModule,
-      providers: [
-        EffectService,
-        {
-          provide: GRAPHQL_PLUGIN_CONFIG,
-          useValue: config
-        },
-        HookService,
-        BootstrapService,
-        GraphqlService,
-      ],
-      plugins: [ PluginInit]
-    };
-  }
-}
 
 export * from './decorators';
 export * from './services';
 export * from './config.tokens';
 export * from './helpers/index';
 export * from './test/index';
+export * from './core.module';

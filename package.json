@@ -9,7 +9,7 @@
   },
   "scripts": {
     "postinstall": "rm -rf ./node_modules/@rxdi/core/node_modules/rxjs",
-    "test": "echo 'npx bolt ws exec -- npm test'",
+    "test": "npx bolt ws exec -- npm test",
     "ws-exec": "npx bolt ws exec --",
     "ws-run": "npx bolt ws run",
     "patch": "npx bolt ws exec -- npm version patch",
@@ -47,6 +47,7 @@
     "@hapi/boom": "^10.0.1",
     "@hapi/hapi": "^21.4.3",
     "@hapi/inert": "^7.1.0",
+    "@hapi/hoek":"^11.0.2",
     "@lit/reactive-element": "1.5.0",
     "@neo4j/graphql": "3.9.0",
     "@neo4j/graphql-ogm": "3.9.0",

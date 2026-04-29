@@ -1,6 +1,6 @@
 import { GRAPHQL_PLUGIN_CONFIG } from '../../config.tokens';
 import { HapiConfigModel, HapiModule, HAPI_SERVER } from '@rxdi/hapi';
-import { GraphQLModule } from '../..';
+import { GraphQLModule } from '../../core.module';
 import {
   ConfigModel,
   Container,

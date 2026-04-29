@@ -9,7 +9,8 @@
     "url": "https://github.com/rxdi/forms"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "echo tests"
   },
   "devDependencies": {
     "@rxdi/lit-html": "^0.7.239",

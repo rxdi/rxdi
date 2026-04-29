@@ -13,9 +13,8 @@
     "start": "gapi start --local --path=./src/testing-app/main.ts",
     "build": "tsc",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-    "pretest": "npm run lint",
     "test-browser": "gapi testing browser",
-    "test": "gapi testing node"
+    "test": "jest --env node --testPathPattern='/src/.*\\.spec.(ts|tsx|js)$'"
   },
   "repository": {
     "type": "git",
