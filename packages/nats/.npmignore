@@ -1,1 +1,6 @@
-dist
+src
+node_modules
+typings
+tsconfig.json
+typings.json
+tslint.json
