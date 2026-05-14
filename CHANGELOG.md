@@ -1,4 +1,4 @@
-## [0.7.242](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.242) (2026-05-14)
+## [0.7.243](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.243) (2026-05-14)
 
 
 ### Bug Fixes
@@ -52,6 +52,7 @@
 * **graphql:** removed custom directive from export ([800eded](https://github.com/rxdi/mono/commit/800eded6dbec7493a24845f3ed93f6b4d4a18594))
 * **graphql:** removed docs folder since it is unused [ci-skip] ([2f3537d](https://github.com/rxdi/mono/commit/2f3537d5198b042e6b57594ab43f016fca5e01f0))
 * **graphql:** status is not number it is a string ([d7a39e1](https://github.com/rxdi/mono/commit/d7a39e1239494fad6e4748aa35cd29dc94d86926))
+* **graphql:** type decorator now accepts also union type ([09a5031](https://github.com/rxdi/mono/commit/09a5031dcd26956063a9ca4eb9653b9955e9ac8e))
 * **hapi:** reverted back hapi and subscription logic ([1005a53](https://github.com/rxdi/mono/commit/1005a539da1fe53dcd3507270ff51aa127722190))
 * **hapi:** typings for hapi removed from core dependency ([7aebe9c](https://github.com/rxdi/mono/commit/7aebe9c68b559fb2bd4b1f8b6407eb251adc08f9))
 * **Hotkeys:** added complete method to when binding ([6130ebe](https://github.com/rxdi/mono/commit/6130ebe68919a91eadc0acacc1c0306abf2ce781))
