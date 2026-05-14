@@ -1,5 +1,5 @@
 import { Container } from '@rxdi/core';
-import { GraphQLObjectType, GraphQLList, GraphQLScalarType, GraphQLString, GraphQLInt, GraphQLFloat, GraphQLBoolean } from 'graphql';
+import { GraphQLObjectType, GraphQLList, GraphQLScalarType, GraphQLString, GraphQLInt, GraphQLFloat, GraphQLBoolean, GraphQLUnionType } from 'graphql';
 
 const SCALAR_TYPES = [String, Number, Boolean, Date];
 
@@ -14,7 +14,8 @@ export function Type<T>(type): Function {
         type = { type: GraphQLBoolean };
     } else if (type && (type.constructor === GraphQLObjectType ||
         type.constructor === GraphQLList ||
-        type.constructor === GraphQLScalarType)) {
+        type.constructor === GraphQLScalarType ||
+        type.constructor === GraphQLUnionType)) {
         type = { type };
     } else if (SCALAR_TYPES.includes(type)) {
         type = { type: type };
