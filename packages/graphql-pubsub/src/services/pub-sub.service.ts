@@ -39,9 +39,7 @@ export class PubSubService {
     try {
       const { NatsClientService, NatsPubSub } = require('@rxdi/nats');
       const natsClient: any = Container.get(NatsClientService);
-      if (natsClient?.isReady?.()) {
-        return new NatsPubSub(natsClient);
-      }
+      return new NatsPubSub(natsClient);
     } catch (e) {
       console.warn('NATS PubSub not available, falling back to default PubSub');
     }
