@@ -1,4 +1,4 @@
-## [0.7.241](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.241) (2026-05-05)
+## [0.7.242](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.242) (2026-05-14)
 
 
 ### Bug Fixes
@@ -40,6 +40,7 @@
 * **graphql-client:** unauthenticated property can be added which will reload the page if websocket tries to connect with expired token or wrong one ([38ec592](https://github.com/rxdi/mono/commit/38ec592fb15f52c916506ccfad99b64cfa0fa585))
 * **graphql-pubsub:** added connection with credentials for amqp protocol ([3c8b320](https://github.com/rxdi/mono/commit/3c8b320f199503fed3e9e4cfd28660c5a3ad2de1))
 * **graphql-pubsub:** barell export moved to client core ([0e0099c](https://github.com/rxdi/mono/commit/0e0099caf6653e61693c519eae2c22de35fcd14e))
+* **graphql-pubsub:** fixed nats to lazy evaluate the service instead of checking if it is ready ([1d3b313](https://github.com/rxdi/mono/commit/1d3b31348f11323d39ca9936921f13b5b38068e9))
 * **graphql:** added check for when payload is missing ([96b4355](https://github.com/rxdi/mono/commit/96b4355e4ea2d2e4f825f8dbbaf319397ce3208a))
 * **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
 * **graphql:** added parsing for graphql query variables json when using GET ([8f27eaa](https://github.com/rxdi/mono/commit/8f27eaaa536d8cc63c9554b136f28061a2017c79))
