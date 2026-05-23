@@ -1,4 +1,4 @@
-## [0.7.244](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.244) (2026-05-23)
+## [0.7.245](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.245) (2026-05-23)
 
 
 ### Bug Fixes
@@ -153,6 +153,7 @@
 * **hapi, core:** added decorator Route to define post and get requests ([92caf6c](https://github.com/rxdi/mono/commit/92caf6c720d97752cc23286dc97dbb3d503f921f))
 * **hapi:** added server mode of type lambda or server giving us ability to have faster bootstrap and output when running in lambda environment ([3c13ac1](https://github.com/rxdi/mono/commit/3c13ac17a691f1465c9d479b4498e14da4452e71))
 * **jest:** migrated to latest 29 ([10709ae](https://github.com/rxdi/mono/commit/10709ae6631fc818e370c9d04b93c52080b1d3a0))
+* **lambda:** dynamic loading of lambda modules ([f21cff6](https://github.com/rxdi/mono/commit/f21cff66f5560848c26ff55f34b40ccaefec1de5))
 * **lit-html:** added components property for initializing components needed for a specific component ([ebfc279](https://github.com/rxdi/mono/commit/ebfc279b10d4ebbe3e0399b1974008c87acaf586))
 * **lit-html:** added decorators to be part of the bundle since Deno is complaining about decorators.js from cdn ([f0214aa](https://github.com/rxdi/mono/commit/f0214aa2860b2e1b7bb2227ca8992cba4eca2948))
 * **lit-html:** added dependencies instead of just lit ([bed8bc8](https://github.com/rxdi/mono/commit/bed8bc8abdf2d8a090e676e2464566bbbbbd67ee))
