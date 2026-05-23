@@ -74,7 +74,7 @@
     "mkdirp": "^0.5.1",
     "mousetrap": "^1.6.5",
     "msgpack5": "^5.3.1",
-    "nats": "^2.29.3",
+    "@nats-io/transport-node": "^3.4.0",
     "neo4j-driver": "5.10.0",
     "node-emoji": "^1.10.0",
     "node-fetch": "^2.1.2",

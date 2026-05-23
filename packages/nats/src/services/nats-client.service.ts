@@ -1,5 +1,8 @@
 import { Injectable, Inject, OnInit } from '@rxdi/core';
-import { connect, NatsConnection, ConnectionOptions, Subscription } from 'nats';
+import { connect, NodeConnectionOptions } from '@nats-io/transport-node';
+import { NatsConnection, Subscription } from '@nats-io/nats-core';
+
+
 import { NatsModuleConfiguration, NATS_MODULE_CONFIG, NATS_LOGGER } from '../interfaces';
 import { NatsLoggerService } from './nats-logger.service';
 
@@ -40,7 +43,7 @@ export class NatsClientService implements OnInit {
     }
 
     try {
-      const options: ConnectionOptions = {
+      const options: NodeConnectionOptions = {
         name: this.config?.name || 'rxdi-nats-client',
         maxReconnectAttempts: this.config?.maxReconnectAttempts ?? -1,
         reconnect: true,

@@ -1,6 +1,8 @@
 import { InjectionToken } from '@rxdi/core';
-import { NatsConnection } from 'nats';
+
+import { NatsConnection } from '@nats-io/nats-core';
 import { NatsLogger } from './nats-logger';
+
 
 export interface NatsModuleConfiguration {
   host?: string;

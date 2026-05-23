@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/rxdi/nats#readme",
   "dependencies": {
-    "nats": "^2.29.3"
+    "@nats-io/transport-node": "^3.4.0"
   },
   "devDependencies": {
     "@rxdi/core": "^0.7.243",
