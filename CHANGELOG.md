@@ -1,4 +1,4 @@
-## [0.7.243](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.243) (2026-05-14)
+## [0.7.244](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.244) (2026-05-23)
 
 
 ### Bug Fixes
@@ -165,6 +165,7 @@
 * **lit-html:** removed dependencies added monorepo packages to be on one place due to DENO build fails ([af937e7](https://github.com/rxdi/mono/commit/af937e7379b3e11b621becae3efbb16aa84b4f28))
 * **nats:** added multiple tests ([eb019a2](https://github.com/rxdi/mono/commit/eb019a2c1f85a55c8f14dc1695be33cb922ac37a))
 * **nats:** added nats module and graphql-nats so now we can have scalable services ([7ffada2](https://github.com/rxdi/mono/commit/7ffada23ab734d2b03047aabc4ebd34f87feb0fc))
+* **nats:** updated nats version to latest transport-node ([8c2e7fa](https://github.com/rxdi/mono/commit/8c2e7faf798ea4bbd092747a2cb28c2bc50bcd1b))
 * **neo4j:** bumped version of neo4j driver and neo4j graphql js ([f669981](https://github.com/rxdi/mono/commit/f6699814dee357065c719fa48763e6a0f91e7ea2))
 * **neo4j:** orm for neo4j added to the stack ([feeda88](https://github.com/rxdi/mono/commit/feeda88ef9c7ee23f7ccf502a212e1b996ce4878))
 * **neo4j:** removed unused logic added more clear transition to augmented schema from new neo4j graphql package ([58089ff](https://github.com/rxdi/mono/commit/58089ff971674ea12f58ee515df2e5a8a89005ec))
