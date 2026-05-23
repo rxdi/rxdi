@@ -246,4 +246,86 @@ export class BootstrapService {
     );
     return true;
   }
+
+  /**
+   * Wires a module into an already-bootstrapped container. Used by dynamic
+   * runtimes (e.g. Lambforge specialize) where the AppModule is not known at
+   * container start time.
+   *
+   * Walks `imports` recursively via the existing GenericConstruct path,
+   * then runs the same lifecycle order as `start()` but ONLY against newly
+   * registered entries — existing services keep their identity, OnInit and
+   * plugin `register()` are not invoked twice for things already live.
+   *
+   * Provider conflicts: last-write-wins. A user-module provider whose token
+   * already has a value in the container will silently replace it. Idempotent
+   * `forRoot` calls (PR3) detect well-known framework tokens and refuse to
+   * override them; arbitrary user tokens are the user's responsibility.
+   */
+  async applyModule(moduleClass: Function): Promise<void> {
+    const before = this.snapshotRegistries();
+    Container.get(moduleClass);
+    const after = this.snapshotRegistries();
+
+    const newBeforePlugins = this.diff(before.beforePlugins, after.beforePlugins);
+    const newPlugins = this.diff(before.plugins, after.plugins);
+    const newAfterPlugins = this.diff(before.afterPlugins, after.afterPlugins);
+    const newControllers = this.diff(before.controllers, after.controllers);
+    const newServices = this.diff(before.services, after.services);
+    const newEffects = this.diff(before.effects, after.effects);
+    const newComponents = this.diff(before.components, after.components);
+    const newBootstraps = this.diff(before.bootstraps, after.bootstraps);
+
+    // Controllers come first in start() — keep the same ordering here so
+    // any plugin that depends on controllers being resolved sees them.
+    await Promise.all(newControllers.map(c => Container.get(c)));
+
+    for (const p of newBeforePlugins) {
+      await this.registerNewPlugin(p);
+    }
+    for (const p of newPlugins) {
+      await this.registerNewPlugin(p);
+    }
+    for (const p of newAfterPlugins) {
+      await this.registerNewPlugin(p);
+    }
+
+    await Promise.all(newServices.map(s => Container.get(s)));
+    await Promise.all(newEffects.map(e => Container.get(e)));
+    await Promise.all(newComponents.map(c => Container.get(c)));
+    await Promise.all(newBootstraps.map(b => Container.get(b)));
+  }
+
+  private snapshotRegistries() {
+    return {
+      controllers: new Set(this.controllersService.getControllers()),
+      services: new Set(this.servicesService.getServices()),
+      effects: new Set(this.effectsService.getEffects()),
+      components: new Set(this.componentsService.getComponents()),
+      bootstraps: new Set(this.bootstrapsService.getBootstraps()),
+      plugins: new Set(this.pluginService.getPlugins()),
+      beforePlugins: new Set(this.pluginService.getBeforePlugins()),
+      afterPlugins: new Set(this.pluginService.getAfterPlugins())
+    };
+  }
+
+  private diff(
+    before: Set<ServiceArgumentsInternal>,
+    after: Set<ServiceArgumentsInternal>
+  ): ServiceArgumentsInternal[] {
+    const result: ServiceArgumentsInternal[] = [];
+    after.forEach(item => {
+      if (!before.has(item)) {
+        result.push(item);
+      }
+    });
+    return result;
+  }
+
+  private async registerNewPlugin(pluggable: ServiceArgumentsInternal): Promise<void> {
+    const plugin = Container.get<PluginInterface>(pluggable);
+    if (typeof plugin?.register === 'function') {
+      await plugin.register();
+    }
+  }
 }

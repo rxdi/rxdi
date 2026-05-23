@@ -16,12 +16,24 @@ import { graphql } from 'graphql';
 @Service()
 export class GraphqlService implements PluginInterface {
  isInitQuery: boolean;
+ private schemaReloadHooks: Array<(schema: GraphQLSchema) => void | Promise<void>> = [];
+
  constructor(
   @Inject(HAPI_SERVER) private server: Server,
   @Inject(GRAPHQL_PLUGIN_CONFIG) private config: GRAPHQL_PLUGIN_CONFIG,
   private bootstrapService: BootstrapService,
   private hookService: HookService,
  ) {}
+
+ /**
+  * Register a callback invoked after `reloadSchema` swaps the live schema.
+  * Used by @rxdi/graphql-pubsub to rebind its WS SubscriptionServer so new
+  * subscribers validate against the freshly loaded schema. Forward-only
+  * coupling: graphql doesn't know its consumers, but exposes a hook for them.
+  */
+ addSchemaReloadHook(hook: (schema: GraphQLSchema) => void | Promise<void>): void {
+  this.schemaReloadHooks.push(hook);
+ }
 
  OnInit() {
   this.init();
@@ -195,5 +207,17 @@ export class GraphqlService implements PluginInterface {
    newSchema.getMutationType(),
    newSchema.getSubscriptionType(),
   ]);
+  for (const hook of this.schemaReloadHooks) {
+   try {
+    const result = hook(newSchema);
+    if (result instanceof Promise) {
+     result.catch((err) =>
+      console.error('[GraphqlService] schemaReloadHook rejected:', err),
+     );
+    }
+   } catch (err) {
+    console.error('[GraphqlService] schemaReloadHook threw:', err);
+   }
+  }
  }
 }

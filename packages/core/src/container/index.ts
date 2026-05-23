@@ -7,4 +7,5 @@ export { ServiceIdentifier } from './types/ServiceIdentifier';
 export { ServiceMetadata } from './types/ServiceMetadata';
 export { ObjectType } from './types/ObjectType';
 export { Token as InjectionToken } from './Token';
+export { ObservableContainer } from './observable-interface';
 export * from './types/hooks/index';

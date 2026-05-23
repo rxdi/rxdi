@@ -15,3 +15,4 @@ export * from './bootstraps/index';
 export * from './services/index';
 export * from './plugin-manager/plugin-manager';
 export * from './after-starter/after-starter.service';
+export { BootstrapService as CoreBootstrapService } from './bootstrap/bootstrap.service';

@@ -17,7 +17,7 @@ import {
   applySchemaCustomDirectives,
   GraphQLCustomDirective
 } from '../helpers/directives/custom-directive';
-import { ServiceArgumentsInternal } from '@rxdi/core/src/decorators/module/module.interfaces';
+import { ServiceArgumentsInternal } from '@rxdi/core';
 
 const scalarTypeCache = new Map<string, any>();
 

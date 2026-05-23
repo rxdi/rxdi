@@ -1,4 +1,4 @@
-import { Module, ModuleWithServices } from '@rxdi/core';
+import { Module, ModuleWithServices, Container } from '@rxdi/core';
 import {
   GRAPHQL_PUB_SUB_CONFIG,
   GRAPHQL_PUB_SUB_DI_CONFIG
@@ -12,6 +12,15 @@ export class GraphQLPubSubModule {
   public static forRoot(
     config?: GRAPHQL_PUB_SUB_DI_CONFIG
   ): ModuleWithServices {
+    // Idempotent path: if GRAPHQL_PUB_SUB_CONFIG is already in the container,
+    // merge into the live config. SubscriptionService reads this on its next
+    // register() — which the GraphqlService schema-reload hook triggers
+    // automatically once the user module finishes wiring controllers.
+    if (Container.has(GRAPHQL_PUB_SUB_CONFIG)) {
+      const live = Container.get<GRAPHQL_PUB_SUB_DI_CONFIG>(GRAPHQL_PUB_SUB_CONFIG);
+      Object.assign(live, config || new GRAPHQL_PUB_SUB_DI_CONFIG());
+      return { module: GraphQLPubSubModule, providers: [] };
+    }
     return {
       module: GraphQLPubSubModule,
       providers: [
