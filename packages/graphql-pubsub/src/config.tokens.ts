@@ -40,6 +40,7 @@ export class GRAPHQL_PUB_SUB_DI_CONFIG {
   log?: boolean;
   activateRabbitMQ?: boolean;
   protocol?: PubSubProtocol;
+  path?: string;
   logger?: any;
   subscriptionServerOptions?: GRAPHQL_PUBSUB_SERVER_OPTIONS;
 }

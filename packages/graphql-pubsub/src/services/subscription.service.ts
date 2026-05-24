@@ -40,46 +40,54 @@ export class SubscriptionService implements PluginInterface {
   * (e.g. Lambforge specialize) actually take effect for WS subscribers.
   */
  async register(schema?: GraphQLSchema) {
-  if (schema) {
-   this.config.graphqlOptions.schema = schema;
+   if (schema) {
+    this.config.graphqlOptions.schema = schema;
+   }
+   // During lambda specialize the user module is loaded with
+   // LAMBFORGE_RUNTIME=1. If a schema-reload hook fires during
+   // that transient phase, update the config reference but leave
+   // the existing server intact — it is recreated in step 2 of
+   // specialize (applyAppModule → reloadSchema) when the flag
+   // is no longer set.
+   if (process.env.LAMBFORGE_RUNTIME) {
+    return;
+   }
+   if (this.subscriptionServer) {
+    this.subscriptionServer.close();
+    this.subscriptionServer = null;
+   }
+   const config: ServerOptions = {
+    execute: this.execute.bind(this),
+    subscribe: this.subscribe.bind(this),
+    schema: this.config.graphqlOptions.schema,
+    onConnect(connectionParams) {
+     return connectionParams;
+    },
+    onOperation: (connectionParams, params, webSocket) => {
+     return { ...params, schema: this.config.graphqlOptions.schema };
+    },
+   };
+   if (this.pubConfig.authentication) {
+    const auth: PubSubOptions = Container.get(this.pubConfig.authentication);
+    Object.assign(config, auth);
+    if (auth.onSubConnection) {
+     config.onConnect = auth.onSubConnection.bind(auth);
+    }
+    if (auth.onSubOperation) {
+     config.onOperation = auth.onSubOperation.bind(auth);
+    }
+    if (auth.onSubOperationComplete) {
+     config.onOperationComplete = auth.onSubOperationComplete.bind(auth);
+    }
+    if (auth.onSubDisconnect) {
+     config.onDisconnect = auth.onSubDisconnect.bind(auth);
+    }
+   }
+   this.subscriptionServer = new SubscriptionServer(config, {
+    server: this.server.listener,
+    ...this.pubConfig.subscriptionServerOptions,
+   });
   }
-  if (this.subscriptionServer) {
-   this.subscriptionServer.close();
-   this.subscriptionServer = null;
-  }
-  const config: ServerOptions = {
-   execute: this.execute.bind(this),
-   subscribe: this.subscribe.bind(this),
-   schema: this.config.graphqlOptions.schema,
-   onConnect(connectionParams) {
-    return connectionParams;
-   },
-   onOperation: (connectionParams, params, webSocket) => {
-    return params;
-   },
-  };
-  if (this.pubConfig.authentication) {
-   const auth: PubSubOptions = Container.get(this.pubConfig.authentication);
-   Object.assign(config, auth);
-   if (auth.onSubConnection) {
-    config.onConnect = auth.onSubConnection.bind(auth);
-   }
-   if (auth.onSubOperation) {
-    config.onOperation = auth.onSubOperation.bind(auth);
-   }
-   if (auth.onSubOperationComplete) {
-    config.onOperationComplete = auth.onSubOperationComplete.bind(auth);
-   }
-   if (auth.onSubDisconnect) {
-    config.onDisconnect = auth.onSubDisconnect.bind(auth);
-   }
-  }
-  this.subscriptionServer = new SubscriptionServer(config, {
-   server: this.server.listener,
-   path: '/subscriptions',
-   ...this.pubConfig.subscriptionServerOptions,
-  });
- }
 
  /**
   * Cross compatability graphql v15 and v16 for subscriptions.
