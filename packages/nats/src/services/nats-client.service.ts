@@ -8,6 +8,39 @@ import { NatsLoggerService } from './nats-logger.service';
 
 export type RequestHandler = (data: any) => Promise<any>;
 
+/**
+ * Thrown by `NatsClientService.request()` when the remote handler threw and
+ * the listener replied with an error envelope ({ error: string }). Lets
+ * callers handle remote handler failures like normal exceptions instead of
+ * receiving a silent garbage payload masquerading as data.
+ */
+export class NatsHandlerError extends Error {
+  readonly channel: string;
+  readonly remoteError: string;
+  constructor(channel: string, remoteError: string) {
+    super(`[NATS handler error on ${channel}] ${remoteError}`);
+    this.name = 'NatsHandlerError';
+    this.channel = channel;
+    this.remoteError = remoteError;
+  }
+}
+
+/**
+ * Shape of the error envelope produced by `subscribeRequestHandler` and the
+ * `@NatsCall` decorator wrapper. We mark it with `__natsError: true` so
+ * the caller can distinguish it from a legitimate response that happens to
+ * carry an `error` field of its own.
+ */
+const NATS_ERROR_TAG = '__natsError';
+function isErrorEnvelope(v: unknown): v is { error: string } {
+  return (
+    !!v &&
+    typeof v === 'object' &&
+    (v as Record<string, unknown>)[NATS_ERROR_TAG] === true &&
+    typeof (v as Record<string, unknown>).error === 'string'
+  );
+}
+
 @Injectable()
 export class NatsClientService implements OnInit {
   private client: NatsConnection | null = null;
@@ -104,7 +137,10 @@ export class NatsClientService implements OnInit {
           } catch (e) {
             this.logger.error(`[NatsClientService] Request handler error on ${channel}:`, e);
             if (msg.reply) {
-              this.client?.publish(msg.reply, JSON.stringify({ error: String(e) }));
+              this.client?.publish(
+                msg.reply,
+                JSON.stringify({ [NATS_ERROR_TAG]: true, error: String(e) }),
+              );
             }
           }
         }
@@ -161,13 +197,19 @@ export class NatsClientService implements OnInit {
     const message = typeof data === 'string' ? data : JSON.stringify(data);
     const response = await this.client.request(channel, message, { timeout });
     if (response.data) {
+      let result: unknown;
       try {
-        const result = JSON.parse(response.data.toString());
-        this.logger.debug(`[NatsClientService] Request response from ${channel}:`, result);
-        return result;
+        result = JSON.parse(response.data.toString());
       } catch {
         return response.data.toString();
       }
+      // Remote handler threw — surface as a real exception instead of
+      // letting a garbage payload silently flow back to the caller.
+      if (isErrorEnvelope(result)) {
+        throw new NatsHandlerError(channel, result.error);
+      }
+      this.logger.debug(`[NatsClientService] Request response from ${channel}:`, result);
+      return result;
     }
     return null;
   }

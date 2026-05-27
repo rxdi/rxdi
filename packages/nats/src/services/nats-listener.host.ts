@@ -102,7 +102,11 @@ export class NatsListenerHost implements OnInit {
             return result;
           } catch (e) {
             this.logger.error(`[@NatsCall] Error in handler ${entry.methodName}:`, e);
-            return { error: (e as Error).message };
+            // Tag the envelope so NatsClientService.request() can recognise
+            // it and throw NatsHandlerError on the caller side. Without the
+            // tag, the caller can't distinguish a real handler failure from
+            // a legitimate response that happens to carry an `error` field.
+            return { __natsError: true, error: (e as Error).message };
           }
         }, entry.queueGroup);
       } catch (e) {
