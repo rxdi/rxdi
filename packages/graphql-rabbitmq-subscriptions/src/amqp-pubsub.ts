@@ -63,7 +63,7 @@ export class AmqpPubSub {
     config?: IQueueNameConfig,
   ): Promise<void> {
     this.logger.trace("publishing for queue '%s' (%j)", trigger, payload);
-    this.producer.publish(trigger, payload, config);
+    await this.producer.publish(trigger, payload, config);
   }
 
   public async subscribe<T>(

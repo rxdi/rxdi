@@ -63,6 +63,38 @@ export class RabbitMqSingletonConnectionFactory implements IRabbitMqConnectionFa
    return this.promise;
   }
   this.logger.debug('creating connection to %s', this.connection);
-  return (this.promise = Promise.resolve(connect(this.connection)));
+  // Enable heartbeats so a half-open (silently dead) TCP connection is
+  // detected instead of hanging every publish/subscribe forever.
+  const url =
+   this.connection.indexOf('heartbeat=') === -1
+    ? this.connection +
+      (this.connection.indexOf('?') === -1 ? '?' : '&') +
+      'heartbeat=30'
+    : this.connection;
+  return (this.promise = Promise.resolve(connect(url))
+   .then((conn) => {
+    // If the connection dies, drop the cached promise so the NEXT
+    // create() re-establishes it instead of reusing a dead connection.
+    const reset = (err?: Error) => {
+     if (this.promise) {
+      this.logger.error(
+       err,
+       "connection to '%s' lost, will reconnect on next use",
+       this.connection,
+      );
+      this.promise = undefined;
+     }
+    };
+    conn.on('error', reset);
+    conn.on('close', () => reset());
+    return conn;
+   })
+   .catch((err) => {
+    // Never cache a rejected connection — clear it so we retry next time
+    // (e.g. when the broker finishes starting up).
+    this.promise = undefined;
+    this.logger.error("failed to create connection '%s'", this.connection);
+    return Promise.reject(err);
+   }));
  }
 }
