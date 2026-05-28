@@ -1,4 +1,4 @@
-## [0.7.247](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.247) (2026-05-27)
+## [0.7.248](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.248) (2026-05-28)
 
 
 ### Bug Fixes
@@ -105,6 +105,7 @@
 * **rabbitmq-pubsub:** added correct dependency ([5ea4b7a](https://github.com/rxdi/mono/commit/5ea4b7af70fc7ed754195b508e48352f60f7310c))
 * **rabbitmq-pubsub:** fixed bug with prefetch of undefined ([e2ddd57](https://github.com/rxdi/mono/commit/e2ddd5702d2dad24ce2bc576e7bdcea2aaa3c3a6))
 * **rabbitmq-pubsub:** version fix ([576665d](https://github.com/rxdi/mono/commit/576665dc9a04cabe13690072d2683cb272b918dd))
+* **rabbitmq:** added await on publish and reconnect logic ([bb07f1f](https://github.com/rxdi/mono/commit/bb07f1ff7e915bc1303139d68b56a403ad1391f2))
 * removed many many unused things ([7d24954](https://github.com/rxdi/mono/commit/7d249549e9cbd3924d0f8866edfe94715f55c283))
 * **Router:** added allowJS ([b15d51f](https://github.com/rxdi/mono/commit/b15d51faf1f7d0bc1709411e44a6e3cdc346d411))
 * **router:** removed log when lazy module is loaded ([31acf76](https://github.com/rxdi/mono/commit/31acf761c90eb0482b4711c426aea9ec13f296f9))
