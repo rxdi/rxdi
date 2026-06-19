@@ -63,23 +63,27 @@ export class GraphqlService implements PluginInterface {
  }
 
  async register() {
-  if (!this.config || !this.config.graphqlOptions) {
-   throw new Error('Graphql Server requires options.');
+   if (!this.config || !this.config.graphqlOptions) {
+    throw new Error('Graphql Server requires options.');
+   }
+   this.config.graphqlOptions.schema = await this.config.graphqlOptions.schema;
+   this.hookService.AttachHooks([
+    this.config.graphqlOptions.schema.getQueryType(),
+    this.config.graphqlOptions.schema.getMutationType(),
+    this.config.graphqlOptions.schema.getSubscriptionType(),
+   ]);
+   if (this.config.skipRouteRegistration) {
+    this.config.initQuery = false;
+    return;
+   }
+   this.server.route(<any>{
+    method: ['GET', 'POST'],
+    path: this.config.path || '/graphql',
+    vhost: this.config.vhost,
+    config: this.config.route || {},
+    handler: this.handler,
+   });
   }
-  this.config.graphqlOptions.schema = await this.config.graphqlOptions.schema;
-  this.hookService.AttachHooks([
-   this.config.graphqlOptions.schema.getQueryType(),
-   this.config.graphqlOptions.schema.getMutationType(),
-   this.config.graphqlOptions.schema.getSubscriptionType(),
-  ]);
-  this.server.route(<any>{
-   method: ['GET', 'POST'],
-   path: this.config.path || '/graphql',
-   vhost: this.config.vhost,
-   config: this.config.route || {},
-   handler: this.handler,
-  });
- }
 
  defaultOrNew = async (request: Request, response: ResponseToolkit, error: Error) => {
   let onRequest: (

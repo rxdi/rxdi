@@ -21,6 +21,7 @@ export interface GRAPHQL_PLUGIN_CONFIG {
   };
   graphqlOptions?: any;
   hideSchemaDetailsFromClientErrors?: boolean;
+  skipRouteRegistration?: boolean;
 }
 export interface GRAPHQL_AUTHENTICATION_FAKE {
   validateToken(authorization: string): any;

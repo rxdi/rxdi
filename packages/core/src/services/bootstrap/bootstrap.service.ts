@@ -267,6 +267,21 @@ export class BootstrapService {
     Container.get(moduleClass);
     const after = this.snapshotRegistries();
 
+    // Resolve lazy factories before instantiating controllers/services,
+    // mirroring what start() does via prepareAsyncChainables +
+    // attachLazyLoadedChainables. Without this, providers registered
+    // with `lazy: true` are never Container.set()'d, causing
+    // ServiceNotFoundError when a service tries to @Inject them.
+    const lazyKeys = Array.from(
+      this.lazyFactoriesService.lazyFactories.keys()
+    );
+    const resolved = await Promise.all(
+      lazyKeys.map(k =>
+        Promise.resolve(this.lazyFactoriesService.getLazyFactory(k))
+      )
+    );
+    lazyKeys.forEach((k, i) => Container.set(k, resolved[i]));
+
     const newBeforePlugins = this.diff(before.beforePlugins, after.beforePlugins);
     const newPlugins = this.diff(before.plugins, after.plugins);
     const newAfterPlugins = this.diff(before.afterPlugins, after.afterPlugins);
