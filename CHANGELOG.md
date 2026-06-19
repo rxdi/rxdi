@@ -1,4 +1,4 @@
-## [0.7.248](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.248) (2026-05-28)
+## [0.7.249](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.249) (2026-06-19)
 
 
 ### Bug Fixes
@@ -43,6 +43,7 @@
 * **graphql-pubsub:** fixed nats to lazy evaluate the service instead of checking if it is ready ([1d3b313](https://github.com/rxdi/mono/commit/1d3b31348f11323d39ca9936921f13b5b38068e9))
 * **graphql:** added check for when payload is missing ([96b4355](https://github.com/rxdi/mono/commit/96b4355e4ea2d2e4f825f8dbbaf319397ce3208a))
 * **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
+* **graphql:** added lazyFactories fix and added flag to disable graphql on demand and to leave only subscriptions server ([63b057d](https://github.com/rxdi/mono/commit/63b057d2ca4e057b983ec81f69d3ee6a7a04a0a1))
 * **graphql:** added parsing for graphql query variables json when using GET ([8f27eaa](https://github.com/rxdi/mono/commit/8f27eaaa536d8cc63c9554b136f28061a2017c79))
 * **graphql:** Boom imported from the correct place ([0eff5ba](https://github.com/rxdi/mono/commit/0eff5ba1b85402936eb67236648b860cb69bf196))
 * **graphql:** bootstrap service fixes for dynamic graphql module loading ([79dd926](https://github.com/rxdi/mono/commit/79dd926d171de461c4875b008a1cc31849f40abc))
