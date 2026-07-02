@@ -32,6 +32,25 @@ export class NatsHandlerError extends Error {
  * carry an `error` field of its own.
  */
 const NATS_ERROR_TAG = '__natsError';
+
+/**
+ * Decode a NATS message payload to a UTF-8 string.
+ *
+ * `@nats-io/nats-core` delivers `msg.data` as a `Uint8Array`. Depending on how
+ * the core reassembles the frame off the socket, that value is sometimes a Node
+ * `Buffer` (single read) and sometimes a plain `Uint8Array` (payload spanning
+ * multiple reads — common for larger messages). `Buffer.prototype.toString()`
+ * decodes UTF-8, but `Uint8Array.prototype.toString()` returns comma-separated
+ * byte values (e.g. "123,34,..."), so calling `.toString()` on the raw payload
+ * silently corrupts every large message ~a third of the time, making
+ * `JSON.parse` throw non-deterministically. `TextDecoder` decodes both
+ * correctly, so always route payloads through it.
+ */
+const textDecoder = new TextDecoder();
+function decodePayload(data: Uint8Array | null | undefined): string {
+  return data?.length ? textDecoder.decode(data) : '';
+}
+
 function isErrorEnvelope(v: unknown): v is { error: string } {
   return (
     !!v &&
@@ -127,7 +146,8 @@ export class NatsClientService implements OnInit {
       try {
         for await (const msg of sub) {
           try {
-            const data = msg.data ? JSON.parse(msg.data.toString()) : null;
+            const text = decodePayload(msg.data);
+            const data = text ? JSON.parse(text) : null;
 
             const result = await handler(data);
 
@@ -165,11 +185,11 @@ export class NatsClientService implements OnInit {
     (async () => {
       try {
         for await (const msg of sub) {
+          const text = decodePayload(msg.data);
           try {
-            const data = msg.data ? JSON.parse(msg.data.toString()) : null;
-            callback(data);
+            callback(text ? JSON.parse(text) : null);
           } catch {
-            callback(msg.data.toString());
+            callback(text);
           }
         }
       } catch {
@@ -196,12 +216,13 @@ export class NatsClientService implements OnInit {
     this.logger.debug(`[NatsClientService] Sending request to ${channel}:`, data);
     const message = typeof data === 'string' ? data : JSON.stringify(data);
     const response = await this.client.request(channel, message, { timeout });
-    if (response.data) {
+    const text = decodePayload(response.data);
+    if (text) {
       let result: unknown;
       try {
-        result = JSON.parse(response.data.toString());
+        result = JSON.parse(text);
       } catch {
-        return response.data.toString();
+        return text;
       }
       // Remote handler threw — surface as a real exception instead of
       // letting a garbage payload silently flow back to the caller.
