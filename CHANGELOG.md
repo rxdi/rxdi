@@ -1,4 +1,4 @@
-## [0.7.249](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.249) (2026-06-19)
+## [0.7.250](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.250) (2026-07-02)
 
 
 ### Bug Fixes
@@ -94,6 +94,7 @@
 * missing scripts in package.json ([5e20b17](https://github.com/rxdi/mono/commit/5e20b17a0113f41821967efbfa697cbc38435f77))
 * **nats:** added better error handling and rethrow ([c9bc5fd](https://github.com/rxdi/mono/commit/c9bc5fdf834d5a7ef1c646b9bc68f6aca73c95e3))
 * **nats:** removed dist from npm ignore since it is causing problems ([d70b4e6](https://github.com/rxdi/mono/commit/d70b4e6aa5e6bf8e7f207ddf579c2d8805842583))
+* **nats:** used text encoder instead of regular to string ([87165fd](https://github.com/rxdi/mono/commit/87165fd0dc9e74d09651e73b42dd7eb1f35ec29e))
 * **neo4j:** added fixed dependencies for @neo4j/graphql ([e6a20d3](https://github.com/rxdi/mono/commit/e6a20d3c112e82eff4d62212be11cc4c4ba5feaa))
 * **neo4j:** added typed schema as an option ([218ef55](https://github.com/rxdi/mono/commit/218ef552f8bea655b9c59f60a6d7c6b5ecee1fc9))
 * **neo4j:** module fixed ([d4842e8](https://github.com/rxdi/mono/commit/d4842e8e86b851a69c46d18ccca6f31fd11f76e8))
