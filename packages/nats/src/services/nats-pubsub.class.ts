@@ -1,4 +1,5 @@
 import { NatsClientInterface, NatsPubSubInterface } from '../interfaces';
+import { PubSubAsyncIterator } from './pubsub-async-iterator';
 
 export class NatsPubSub implements NatsPubSubInterface {
   private subscriptionMap = new Map<number, [string, (m: any) => Promise<void>]>();
@@ -87,65 +88,12 @@ export class NatsPubSub implements NatsPubSubInterface {
   }
 }
 
-export class NatsPubSubAsyncIterator<T> implements AsyncIterator<T> {
-  private subscriptionId: number | null = null;
-  private listeners: Array<(value: T) => void> = [];
-  private resolveReturn!: (value: { value: T; done: boolean }) => void;
-  private rejectPromise!: (reason: any) => void;
-  private returnPromise: Promise<{ value: T; done: boolean }>;
-
-  constructor(
-    private pubsub: NatsPubSubInterface,
-    private triggers: string | string[]
-  ) {
-    this.returnPromise = new Promise<{ value: T; done: boolean }>((resolve, reject) => {
-      this.resolveReturn = resolve;
-      this.rejectPromise = reject;
-    });
-  }
-
-  async next(): Promise<{ value: T; done: boolean }> {
-    if (!this.subscriptionId) {
-      const trigger = Array.isArray(this.triggers) ? this.triggers[0] : this.triggers;
-      this.subscriptionId = await this.pubsub.subscribe(
-        trigger,
-        async (message: T) => {
-          for (const listener of this.listeners) {
-            listener(message);
-          }
-        }
-      ) as any;
-    }
-
-    return new Promise<{ value: T; done: boolean }>((resolve) => {
-      const listener = (value: T) => {
-        this.listeners = this.listeners.filter((l) => l !== listener);
-        resolve({ value, done: false });
-      };
-      this.listeners.push(listener);
-    });
-  }
-
-  async return(): Promise<{ value: T; done: boolean }> {
-    if (this.subscriptionId) {
-      await this.pubsub.unsubscribe(this.subscriptionId);
-      this.subscriptionId = null;
-    }
-    return { value: undefined as any, done: true };
-  }
-
-  async throw?(error?: any): Promise<never> {
-    if (this.subscriptionId) {
-      await this.pubsub.unsubscribe(this.subscriptionId);
-      this.subscriptionId = null;
-    }
-    return Promise.reject(error);
-  }
-
-  [Symbol.asyncIterator](): AsyncIterator<T> {
-    return this;
-  }
-}
+/**
+ * Kept as a distinct exported name for backwards compatibility; the buffered,
+ * loss-free implementation lives in PubSubAsyncIterator (see its doc comment
+ * for the same-tick message-drop bug this fixes).
+ */
+export class NatsPubSubAsyncIterator<T> extends PubSubAsyncIterator<T> {}
 
 export function createNatsPubSub(natsClient: NatsClientInterface): NatsPubSub {
   return new NatsPubSub(natsClient);
