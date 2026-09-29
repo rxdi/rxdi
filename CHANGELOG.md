@@ -1,4 +1,4 @@
-## [0.7.251](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.251) (2026-08-19)
+## [0.7.252](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.252) (2026-09-29)
 
 
 ### Bug Fixes
@@ -35,6 +35,7 @@
 * **forms:** type error in readme.md [ci-skip] ([daa6601](https://github.com/rxdi/mono/commit/daa6601fd849a59ac3d7389c90c6917714ab1c6f))
 * **forms:** typings fixes ([f6857dc](https://github.com/rxdi/mono/commit/f6857dc95eec49c324add1800613ce7112ef94d0))
 * **graphql-client:** added one time parsing of Graphql Documents and after that we just use the string ([d191406](https://github.com/rxdi/mono/commit/d19140604491fb9b582e5bbeaffa054a8566c1d9))
+* **graphql-client:** exposed subscriptions injection key to manage ws graphql connection correctly and on expire token to be able to reauthenticate again ([9bd464e](https://github.com/rxdi/mono/commit/9bd464e4cc6ec618caab3c1d6d33094c2b91613e))
 * **graphql-client:** fixed missing export of GraphQLRequest from apollo-link ([ed35dbf](https://github.com/rxdi/mono/commit/ed35dbf99869ef25634f1307b6e819d742bd140c))
 * **graphql-client:** subscription websocket link now takes authorization token lazily ([c0b525c](https://github.com/rxdi/mono/commit/c0b525c9ce86b7f56ccbaee804dd1d14103ee69e))
 * **graphql-client:** unauthenticated property can be added which will reload the page if websocket tries to connect with expired token or wrong one ([38ec592](https://github.com/rxdi/mono/commit/38ec592fb15f52c916506ccfad99b64cfa0fa585))
