@@ -184,6 +184,80 @@ export class DetailsComponent extends BaseComponent {
 ```
 
 
+# Subscription connection errors and the subscription client
+
+The WebSocket link is a lazy `subscriptions-transport-ws` `SubscriptionClient`
+with `reconnect: true`. Two things follow from that, and both are the
+consumer's to handle:
+
+- **A rejected handshake errors every pending subscription.** The server's
+  `onConnect` rejection reaches each operation's observable as a bare
+  `{ message }` (no `graphQLErrors`). That is the deterministic signal that
+  the connection is dead.
+- **The library never stops the reconnect loop by itself.** After the server
+  closes the socket the client re-handshakes with backoff (capped at 10 s)
+  forever, re-sending the same `connectionParams`. For a dead session that
+  is a request to your auth backend every few seconds per open tab.
+
+So the module exposes the client and a hook:
+
+```typescript
+import {
+  GraphqlModule,
+  GraphqlSubscriptionClient,
+  isAuthorizationConnectionError,
+} from '@rxdi/graphql-client';
+
+GraphqlModule.forRoot({
+  uri, pubsub,
+  pubsubOptions: { connectionParams: () => ({ 'x-session-id': session.id }) },
+  // Handshake rejections only (never success). Fires BEFORE the operation
+  // errors, so do not close the client from here — log or flag state.
+  onSubscriptionConnectionError: (error) => console.warn('ws rejected', error),
+});
+
+// Where you handle the operation error (an effect, a service, ...):
+@Injectable()
+class SessionService {
+  @Inject(GraphqlSubscriptionClient) private ws: GraphqlSubscriptionClient;
+
+  onSubscriptionError(error: unknown) {
+    if (isAuthorizationConnectionError(error)) {
+      // Session is dead: stop re-sending it. Works in every client state
+      // (a plain close(true, true) is a no-op between reconnect attempts)
+      // and errors any other still-pending subscription with the reason.
+      this.ws.terminate(error instanceof Error ? error : undefined);
+      // ...show your "session expired" UI. Once credentials are renewed,
+      // simply subscribe again: the lazy link reconnects and re-evaluates
+      // connectionParams.
+    }
+  }
+}
+```
+
+Why not terminate inside `onSubscriptionConnectionError`: the connection-level
+error arrives before the per-operation errors. Stopping the client there
+settles the operations before the real rejection reaches them, so the app
+never learns the session died; a non-forced close (`close(false, false)`)
+schedules a reconnect. The decision belongs where the operation error is
+observed.
+
+`GraphqlSubscriptionClient` resolves to a `ManagedSubscriptionClient`: the
+stock client plus `terminate(reason?)`. Prefer it over `close(true, true)`,
+which does nothing between two reconnect attempts (no socket object exists
+then) and leaves the reconnect timer armed.
+
+`refreshOnUnauthenticated: true` keeps its exact old meaning —
+`location.reload()` when the rejection message is the literal `Unauthorized`,
+and nothing else. It is deliberately NOT widened: a consumer whose server says
+`You are not authorized` never reloaded before, and silently turning that into
+a reload could loop a page whose credentials are launch-bound (an operator's
+session id). Use `isAuthorizationConnectionError` in your own hook when you
+want the wider match.
+
+The contract above is pinned by `src/index.spec.ts` against a real
+subscriptions-transport-ws server (`npm test`).
+
 # Advanced features
 
 

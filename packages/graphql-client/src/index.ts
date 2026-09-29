@@ -4,6 +4,7 @@ import {
   ApolloClient,
   GraphqlDocuments,
   GraphqlModuleConfig,
+  GraphqlSubscriptionClient,
   noopHeaders,
   Definintion,
 } from './graphql.injection';
@@ -17,7 +18,7 @@ import {
   from,
 } from '@apollo/client/core';
 import { WebSocketLink } from '@apollo/client/link/ws';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { ManagedSubscriptionClient } from './subscription-client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
 
@@ -34,16 +35,56 @@ export class GraphqlModule {
       cancelPendingRequests,
       apolloClientOptions,
       httpOptions = {},
-      pubsubOptions = {}
+      pubsubOptions = {},
+      onSubscriptionConnectionError,
     }: GraphqlModuleConfig = {} as GraphqlModuleConfig,
     documents = {},
   ): ModuleWithServices {
     const headers = {};
     const connections: { [key: string]: AbortController } = {};
 
+    // One client for the WebSocket link AND the GraphqlSubscriptionClient
+    // token, so what a consumer closes is what the link uses. `lazy: true`:
+    // nothing connects until the first subscription, and a client the
+    // consumer force-closed reconnects on the next one — with freshly
+    // evaluated connectionParams.
+    const subscriptionClient = new ManagedSubscriptionClient(pubsub, {
+      lazy: true,
+      connectionParams: () => ({
+        get authorization() {
+          return headers['authorization'];
+        },
+      }),
+      connectionCallback: (error) => {
+        // Also fires on every successful ack, with no error.
+        if (!error) {
+          return;
+        }
+        console.error('[Subscription]: ', error);
+        // Legacy reload: the literal 'Unauthorized' only, exactly as before
+        // (see GraphqlModuleConfig.refreshOnUnauthenticated).
+        if (refreshOnUnauthenticated && error?.['message'] === 'Unauthorized') {
+          location.reload();
+          return;
+        }
+        // Deliberately NO close()/terminate() here: this fires before the
+        // pending operations receive their errors, so stopping the client
+        // now settles them with nothing (forced close) or reconnects
+        // (non-forced). Stopping the reconnect loop is the consumer's call,
+        // from the operation error it does see — see GraphqlSubscriptionClient.
+        onSubscriptionConnectionError?.(error, subscriptionClient);
+      },
+      reconnect: true,
+      ...pubsubOptions,
+    });
+
     return {
       module: GraphqlModule,
       providers: [
+        {
+          provide: GraphqlSubscriptionClient,
+          useValue: subscriptionClient,
+        },
         {
           provide: GraphqlDocuments,
           useValue: Object.keys(documents).reduce((prev, doc) => ({
@@ -125,30 +166,7 @@ export class GraphqlModule {
                     const { kind, operation }: Definintion = getMainDefinition(query);
                     return kind === 'OperationDefinition' && operation === 'subscription';
                   },
-                  (() => {
-                    const wsLink = new WebSocketLink(
-                      new SubscriptionClient(pubsub, {
-                        lazy: true,
-                        connectionParams: () => ({
-                          get authorization() {
-                            return headers['authorization'];
-                          },
-                        }),
-                        connectionCallback: (error) => {
-                          console.error('[Subscription]: ', error);
-                          if (error?.['message'] === 'Unauthorized') {
-                            if (refreshOnUnauthenticated) {
-                              location.reload();
-                            }
-                            wsLink['subscriptionClient'].close(false, false);
-                          }
-                        },
-                        reconnect: true,
-                        ...pubsubOptions
-                      }),
-                    );
-                    return wsLink;
-                  })(),
+                  new WebSocketLink(subscriptionClient),
                   createHttpLink({ uri, ...httpOptions }),
                 ),
               ),
@@ -162,6 +180,7 @@ export class GraphqlModule {
 }
 
 export * from './graphql.injection';
+export * from './subscription-client';
 export * from './graphq.helpers';
 export {
   GraphQLRequest,
