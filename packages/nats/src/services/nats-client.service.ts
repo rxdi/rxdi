@@ -60,14 +60,29 @@ function isErrorEnvelope(v: unknown): v is { error: string } {
   );
 }
 
+interface SubscriptionEntry {
+  channel: string;
+  queueGroup?: string;
+  kind: 'request' | 'plain';
+  handler: RequestHandler;
+  sub: Subscription;
+}
+
 @Injectable()
 export class NatsClientService implements OnInit {
   private client: NatsConnection | null = null;
-  private subscriptions: Map<number, { sub: Subscription; handler: RequestHandler }> = new Map();
+  private subscriptions: Map<number, SubscriptionEntry> = new Map();
   private subscriptionId = 0;
   private isConnected = false;
   private connectionPromise: Promise<void>;
   private resolveConnection!: () => void;
+  // Set only by an explicit close() call, so the closed()-watcher below can
+  // tell an intentional shutdown apart from a connection that died on its
+  // own (fatal server error, auth failure, exhausted reconnects, ...).
+  private closing = false;
+  // Guards against overlapping reconnect loops if closed() somehow fires
+  // more than once for the connection we're currently replacing.
+  private reconnecting = false;
 
   constructor(
     @Inject(NATS_MODULE_CONFIG) private config: NatsModuleConfiguration,
@@ -93,6 +108,9 @@ export class NatsClientService implements OnInit {
     if (this.isConnected) {
       return;
     }
+    // Any explicit connect() call (initial boot or manual retry) re-arms
+    // auto-reconnect, in case a prior close() had disarmed it.
+    this.closing = false;
 
     try {
       const options: NodeConnectionOptions = {
@@ -100,6 +118,10 @@ export class NatsClientService implements OnInit {
         maxReconnectAttempts: this.config?.maxReconnectAttempts ?? -1,
         reconnect: true,
       };
+
+      if (this.config?.reconnectTimeWait !== undefined) {
+        options.reconnectTimeWait = this.config.reconnectTimeWait;
+      }
 
       if (this.config?.user && this.config?.pass) {
         options.user = this.config.user;
@@ -112,13 +134,96 @@ export class NatsClientService implements OnInit {
       }
 
       options.servers = servers;
-      this.client = await connect(options);
+      const client = await connect(options);
+      this.client = client;
       this.isConnected = true;
       this.resolveConnection();
       this.logger.info(`[NatsClientService] Connected to NATS!`);
+      this.watchConnection(client);
+      await this.resubscribeAll();
     } catch (error: unknown) {
       const err = error as Error;
       this.logger.error(`[NatsClientService] Connection failed: ${err.message}`);
+    }
+  }
+
+  /**
+   * `nats.js` only auto-reconnects transient network blips on the *same*
+   * connection object (and transparently re-sends SUB commands for us when
+   * it does). When the connection dies for good — exhausted reconnect
+   * attempts, a fatal auth error, the server evicting the client, etc. —
+   * `client.closed()` resolves and nats.js gives up permanently; it will
+   * never reconnect on its own. Without this watcher, `this.client` stays
+   * pointed at a dead connection forever and every request/publish call
+   * fails until the process is restarted, which is the bug this fixes.
+   */
+  private watchConnection(client: NatsConnection): void {
+    client.closed().then((err) => {
+      if (this.closing) {
+        return;
+      }
+      if (this.client !== client) {
+        // Already superseded by a newer connection; nothing to do.
+        return;
+      }
+      this.isConnected = false;
+      this.client = null;
+      this.logger.error(
+        `[NatsClientService] Connection closed unexpectedly${err ? `: ${(err as Error).message}` : ''}. Reconnecting...`,
+      );
+      // Re-arm waitForConnection() so future callers block until the
+      // reconnect below actually succeeds, instead of resolving instantly
+      // against a connection that no longer exists.
+      this.connectionPromise = new Promise((resolve) => {
+        this.resolveConnection = resolve;
+      });
+      void this.reconnectWithBackoff();
+    });
+  }
+
+  private async reconnectWithBackoff(): Promise<void> {
+    if (this.reconnecting) {
+      return;
+    }
+    this.reconnecting = true;
+    const delay = this.config?.reconnectTimeWait ?? 2000;
+    try {
+      while (!this.closing && !this.isConnected) {
+        await this.connect();
+        if (this.isConnected) {
+          break;
+        }
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+    } finally {
+      this.reconnecting = false;
+    }
+  }
+
+  /**
+   * Re-establish every previously-registered subscription/request handler
+   * against the freshly reconnected client. This is a no-op on the very
+   * first connect (nothing has been registered yet). It's required on
+   * reconnect because the old subscriptions' `for await` loops end silently
+   * once the dead connection closes — they don't come back on their own.
+   */
+  private async resubscribeAll(): Promise<void> {
+    if (!this.client || this.subscriptions.size === 0) {
+      return;
+    }
+    this.logger.info(`[NatsClientService] Restoring ${this.subscriptions.size} subscription(s) after reconnect...`);
+    for (const entry of this.subscriptions.values()) {
+      try {
+        const sub = this.client.subscribe(entry.channel, { queue: entry.queueGroup });
+        entry.sub = sub;
+        if (entry.kind === 'request') {
+          this.consumeRequestHandler(entry.channel, sub, entry.handler);
+        } else {
+          this.consumePlain(entry.channel, sub, entry.handler);
+        }
+      } catch (e) {
+        this.logger.error(`[NatsClientService] Failed to resubscribe ${entry.channel}:`, e);
+      }
     }
   }
 
@@ -140,8 +245,14 @@ export class NatsClientService implements OnInit {
 
     const sub = this.client.subscribe(channel, { queue: queueGroup });
     const id = ++this.subscriptionId;
-    this.subscriptions.set(id, { sub, handler });
+    this.subscriptions.set(id, { channel, queueGroup, kind: 'request', handler, sub });
+    this.consumeRequestHandler(channel, sub, handler);
 
+    this.logger.debug(`[NatsClientService] Subscribed request handler: ${channel}${queueGroup ? ` (queue: ${queueGroup})` : ''}`);
+    return id;
+  }
+
+  private consumeRequestHandler(channel: string, sub: Subscription, handler: RequestHandler): void {
     (async () => {
       try {
         for await (const msg of sub) {
@@ -168,9 +279,6 @@ export class NatsClientService implements OnInit {
         // Subscription closed
       }
     })();
-
-    this.logger.debug(`[NatsClientService] Subscribed request handler: ${channel}${queueGroup ? ` (queue: ${queueGroup})` : ''}`);
-    return id;
   }
 
   async subscribe(channel: string, callback: (msg: any) => void, queueGroup?: string): Promise<number> {
@@ -180,25 +288,41 @@ export class NatsClientService implements OnInit {
     }
     const sub = this.client.subscribe(channel, { queue: queueGroup });
     const id = ++this.subscriptionId;
-    this.subscriptions.set(id, { sub, handler: async (data) => { callback(data); } });
+    const handler: RequestHandler = async (data) => { callback(data); };
+    this.subscriptions.set(id, { channel, queueGroup, kind: 'plain', handler, sub });
+    this.consumePlain(channel, sub, handler);
 
+    this.logger.debug(`[NatsClientService] Subscribed: ${channel}${queueGroup ? ` (queue: ${queueGroup})` : ''}`);
+    return id;
+  }
+
+  private consumePlain(channel: string, sub: Subscription, handler: RequestHandler): void {
     (async () => {
       try {
         for await (const msg of sub) {
           const text = decodePayload(msg.data);
+          // Parse FIRST, then call the handler exactly once. The old shape
+          // (`try { handler(JSON.parse(text)) } catch { handler(text) }`)
+          // re-invoked the handler with the raw text whenever the handler
+          // itself threw on the parsed payload — a double delivery that an
+          // async handler's rejection also triggered once we started
+          // awaiting it.
+          let payload: unknown;
           try {
-            callback(text ? JSON.parse(text) : null);
+            payload = text ? JSON.parse(text) : null;
           } catch {
-            callback(text);
+            payload = text;
+          }
+          try {
+            await handler(payload);
+          } catch (e) {
+            this.logger.error(`[NatsClientService] Subscription handler error on ${channel}:`, e);
           }
         }
       } catch {
         // Subscription closed
       }
     })();
-
-    this.logger.debug(`[NatsClientService] Subscribed: ${channel}${queueGroup ? ` (queue: ${queueGroup})` : ''}`);
-    return id;
   }
 
   unsubscribe(subId: number): void {
@@ -236,6 +360,7 @@ export class NatsClientService implements OnInit {
   }
 
   async close(): Promise<void> {
+    this.closing = true;
     if (this.client) {
       await this.client.close();
       this.isConnected = false;

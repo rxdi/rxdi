@@ -1,6 +1,34 @@
 import { NatsClientInterface, NatsPubSubInterface } from '../interfaces';
 import { PubSubAsyncIterator } from './pubsub-async-iterator';
 
+
+/**
+ * Dispatch one message to every listener at once and wait for all of them,
+ * never letting one rejection hide the others. `resolve` looks a subscriber
+ * id up at dispatch time, so a listener unsubscribed mid-flight is skipped.
+ */
+export async function fanOut<T>(
+  subscriberIds: readonly number[],
+  resolve: (id: number) => ((m: T) => Promise<void>) | undefined,
+  message: T,
+  onError: (id: number, error: unknown) => void
+): Promise<void> {
+  const pending: Promise<void>[] = [];
+  for (const sId of subscriberIds) {
+    const listener = resolve(sId);
+    if (!listener) continue;
+    let p: Promise<void>;
+    try {
+      p = Promise.resolve(listener(message));
+    } catch (e) {
+      onError(sId, e);
+      continue;
+    }
+    pending.push(p.catch((e) => onError(sId, e)));
+  }
+  if (pending.length) await Promise.all(pending);
+}
+
 export class NatsPubSub implements NatsPubSubInterface {
   private subscriptionMap = new Map<number, [string, (m: any) => Promise<void>]>();
   private subsRefsMap = new Map<string, number[]>();
@@ -15,6 +43,10 @@ export class NatsPubSub implements NatsPubSubInterface {
 
   async publish(trigger: string, payload: any): Promise<void> {
     await this.natsClient.publish(trigger, payload);
+  }
+
+  protected onListenerError(trigger: string, subscriberId: number, error: unknown): void {
+    console.error(`[NatsPubSub] listener ${subscriberId} on ${trigger} failed:`, error);
   }
 
   async subscribe<T>(
@@ -36,12 +68,16 @@ export class NatsPubSub implements NatsPubSubInterface {
       const subscribers = this.subsRefsMap.get(trigger);
       if (!subscribers?.length) return;
 
-      for (const sId of subscribers) {
-        const entry = this.subscriptionMap.get(sId);
-        if (!entry) continue;
-        const [, listener] = entry;
-        await listener(msg);
-      }
+      // Fan out to every subscriber CONCURRENTLY and isolate failures. The
+      // previous `for … await listener(msg)` chained all N listeners behind
+      // each other (the last subscriber waited for N-1 others on every
+      // message, so delivery skew grew linearly with N), and one rejecting
+      // listener aborted the loop so every subscriber after it silently
+      // missed the message. A listener is a buffered iterator push in the
+      // GraphQL case, so this is also what keeps a 200 ms tick feed from
+      // queueing behind hundreds of sequential awaits.
+      await fanOut(subscribers, (sId) => this.subscriptionMap.get(sId)?.[1], msg, (sId, err) =>
+        this.onListenerError(trigger, sId, err));
     });
 
     this.subscriptionIds.set(trigger, subId);

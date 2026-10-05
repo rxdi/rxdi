@@ -3,6 +3,7 @@ import { NatsClientService } from './nats-client.service';
 import { NatsPubSubInterface, NATS_LOGGER } from '../interfaces';
 import { NatsLoggerService } from './nats-logger.service';
 import { PubSubAsyncIterator } from './pubsub-async-iterator';
+import { fanOut } from './nats-pubsub.class';
 
 @Injectable()
 export class NatsPubSubService implements NatsPubSubInterface, OnInit {
@@ -17,6 +18,10 @@ export class NatsPubSubService implements NatsPubSubInterface, OnInit {
   ) {}
 
   OnInit(): void {}
+
+  private onListenerError(trigger: string, subscriberId: number, error: unknown): void {
+    this.logger.error(`[NatsPubSubService] listener ${subscriberId} on ${trigger} failed:`, error);
+  }
 
   async publish(trigger: string, payload: any): Promise<void> {
     if (!this.natsClient.isReady()) {
@@ -47,12 +52,16 @@ export class NatsPubSubService implements NatsPubSubInterface, OnInit {
       const subscribers = this.subsRefsMap.get(trigger);
       if (!subscribers?.length) return;
 
-      for (const sId of subscribers) {
-        const entry = this.subscriptionMap.get(sId);
-        if (!entry) continue;
-        const [, listener] = entry;
-        await listener(msg);
-      }
+      // Fan out to every subscriber CONCURRENTLY and isolate failures. The
+      // previous `for … await listener(msg)` chained all N listeners behind
+      // each other (the last subscriber waited for N-1 others on every
+      // message, so delivery skew grew linearly with N), and one rejecting
+      // listener aborted the loop so every subscriber after it silently
+      // missed the message. A listener is a buffered iterator push in the
+      // GraphQL case, so this is also what keeps a 200 ms tick feed from
+      // queueing behind hundreds of sequential awaits.
+      await fanOut(subscribers, (sId) => this.subscriptionMap.get(sId)?.[1], msg, (sId, err) =>
+        this.onListenerError(trigger, sId, err));
     });
 
     this.unsubscribeMap.set(trigger, () => this.natsClient.unsubscribe(subId));
