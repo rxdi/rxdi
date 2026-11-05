@@ -1,4 +1,4 @@
-## [0.7.253](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.253) (2026-10-05)
+## [0.7.254](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.254) (2026-11-05)
 
 
 ### Bug Fixes
@@ -95,6 +95,7 @@
 * missing scripts in package.json ([5e20b17](https://github.com/rxdi/mono/commit/5e20b17a0113f41821967efbfa697cbc38435f77))
 * **nats:** added better error handling and rethrow ([c9bc5fd](https://github.com/rxdi/mono/commit/c9bc5fdf834d5a7ef1c646b9bc68f6aca73c95e3))
 * **nats:** concurrent error-isolated pubsub fan-out, auto-reconnect on closed(), single delivery for plain subscriptions ([98433f8](https://github.com/rxdi/mono/commit/98433f8c6774f9457e29e69b09fda036899b2bf5))
+* **nats:** improve connection handling and retry logic for NATS client and listener ([d8343e7](https://github.com/rxdi/mono/commit/d8343e7a6cf99089155c9a91cc066ccd7d53bd60))
 * **nats:** pubsub async iterator decoupled and added tests ([d7094f4](https://github.com/rxdi/mono/commit/d7094f4912dbceacffeb4bed372fcb73571ce337))
 * **nats:** removed dist from npm ignore since it is causing problems ([d70b4e6](https://github.com/rxdi/mono/commit/d70b4e6aa5e6bf8e7f207ddf579c2d8805842583))
 * **nats:** used text encoder instead of regular to string ([87165fd](https://github.com/rxdi/mono/commit/87165fd0dc9e74d09651e73b42dd7eb1f35ec29e))
