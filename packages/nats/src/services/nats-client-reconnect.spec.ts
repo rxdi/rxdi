@@ -179,6 +179,30 @@ describe('NatsClientService reconnect behaviour', () => {
     expect(received[0]).toEqual({ hello: 'world' });
   }, 10000);
 
+  it('keeps retrying the FIRST connect until the server is reachable (boot before NATS)', async () => {
+    const { connect } = require('@nats-io/transport-node');
+    let attempts = 0;
+    (connect as jest.Mock).mockImplementation(async () => {
+      attempts++;
+      if (attempts <= 3) {
+        throw new Error('connect ECONNREFUSED 10.101.131.69:4222');
+      }
+      const conn = new FakeConnection();
+      connections.push(conn);
+      return conn;
+    });
+
+    const service = makeService();
+    let resolved = false;
+    void service.waitForConnection().then(() => (resolved = true));
+    service.OnInit();
+
+    await waitFor(() => service.isReady(), 5000);
+    await waitFor(() => resolved, 1000);
+    expect(attempts).toBe(4);
+    expect(connections).toHaveLength(1);
+  }, 10000);
+
   it('does not attempt to reconnect after an explicit close()', async () => {
     const service = makeService();
     await service.connect();

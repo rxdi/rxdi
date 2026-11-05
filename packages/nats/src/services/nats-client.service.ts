@@ -98,10 +98,14 @@ export class NatsClientService implements OnInit {
   }
 
   OnInit(): void {
-    this.connect().catch((error: unknown) => {
-      const err = error as Error;
-      this.logger.error(`[NatsClientService] Initial connection failed: ${err.message}`);
-    });
+    // The first connect must retry too, not only reconnects after a drop.
+    // nats.js rejects connect() at once when the server is unreachable
+    // (ECONNREFUSED / no Service endpoints yet), so a process that boots a
+    // few seconds before its NATS server - a fresh namespace, a node move,
+    // a NATS pod restart - would never connect, waitForConnection() would
+    // never resolve, and no handler would ever subscribe ("no responders")
+    // while the pod still looked healthy.
+    void this.reconnectWithBackoff();
   }
 
   async connect(): Promise<void> {
@@ -193,7 +197,8 @@ export class NatsClientService implements OnInit {
         if (this.isConnected) {
           break;
         }
-        await new Promise((resolve) => setTimeout(resolve, delay));
+        // unref: a pending retry alone must not keep the process alive.
+        await new Promise((resolve) => setTimeout(resolve, delay).unref?.());
       }
     } finally {
       this.reconnecting = false;

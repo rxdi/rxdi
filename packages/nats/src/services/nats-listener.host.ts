@@ -40,7 +40,33 @@ export class NatsListenerHost implements OnInit {
 
   OnInit(): void {
     this.logger.debug('[NatsListenerHost] Initializing...');
-    this.setupWithRetry();
+    this.setupWhenConnected();
+  }
+
+  /**
+   * Subscribe every @NatsCall / @NatsListener handler once the client is
+   * connected - however long that takes. The old fixed 30 x 100 ms poll gave
+   * up for good when NATS was not reachable within 3 s of boot, leaving the
+   * process running with no handlers at all.
+   */
+  private setupWhenConnected(): void {
+    let natsClient: NatsClientService;
+    try {
+      natsClient = Container.get(NatsClientService);
+    } catch (e) {
+      // Client not registered yet in the container: fall back to the poll.
+      this.setupWithRetry();
+      return;
+    }
+    natsClient
+      .waitForConnection()
+      .then(() => {
+        if (!NatsListenerHost.connectionReady) {
+          NatsListenerHost.connectionReady = true;
+          this.setupAll(natsClient);
+        }
+      })
+      .catch((e) => this.logger.error('[NatsListenerHost] Error:', e));
   }
 
   private setupWithRetry(maxRetries = 30, retryDelayMs = 100): void {

@@ -328,10 +328,12 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public querySelectorAllInputs(): AbstractInput[] {
-    const customElements = this.options.customElements.map((v) =>
+    // customElements is optional in FormOptions: default BEFORE mapping (a
+    // form declared without it used to crash with "reading 'map'").
+    const customElements = (this.options.customElements ?? []).map((v) =>
       typeof v === 'string' ? v : typeof v === 'function' ? v.is() : v
     );
-    return [...(customElements ?? []), 'input', 'select', 'textarea']
+    return [...customElements, 'input', 'select', 'textarea']
       .map((item) => this.querySelectAll(item))
       .flat()
       .filter((el) => this.isInputPresentOnStage(el))

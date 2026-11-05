@@ -17,8 +17,23 @@ import { ConsoleNatsLogger, NatsLogger } from './interfaces/nats-logger';
 @Injectable()
 export class ConfiguredNatsLogger extends NatsLoggerService {
   constructor(config: NatsModuleConfiguration) {
-    const logger = new ConsoleNatsLogger(config?.logging ?? false);
+    // The inner console logger is always on; the `logging` flag gates
+    // debug/info/warn in NatsLoggerService. Errors are printed regardless
+    // (see error() below).
+    const logger = new ConsoleNatsLogger(true);
     super(config?.logging ?? false, logger);
+    this.alwaysOn = logger;
+  }
+
+  private alwaysOn: NatsLogger;
+
+  /**
+   * Errors always print, even with `logging: false`: a failed connection or
+   * a crashing handler must show up in the service log, otherwise a process
+   * that cannot reach NATS looks perfectly healthy.
+   */
+  error(message: string, ...args: any[]): void {
+    this.alwaysOn.error(message, ...args);
   }
 }
 
