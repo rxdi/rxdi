@@ -1,4 +1,4 @@
-## [0.7.254](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.254) (2026-11-05)
+## [0.7.255](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.255) (2026-11-07)
 
 
 ### Bug Fixes
@@ -49,7 +49,9 @@
 * **graphql:** Boom imported from the correct place ([0eff5ba](https://github.com/rxdi/mono/commit/0eff5ba1b85402936eb67236648b860cb69bf196))
 * **graphql:** bootstrap service fixes for dynamic graphql module loading ([79dd926](https://github.com/rxdi/mono/commit/79dd926d171de461c4875b008a1cc31849f40abc))
 * **graphql:** directive location changed ([d12af5d](https://github.com/rxdi/mono/commit/d12af5df5b96a2a7dac3c917c993725facbe38c6))
+* **graphql:** exclude spec files from the package build ([c3b05b3](https://github.com/rxdi/mono/commit/c3b05b30b5ed91d7e9906375ef78446101c3f23f))
 * **graphql:** filtered unknown arguments ([6a0be24](https://github.com/rxdi/mono/commit/6a0be241a119d2a417994477354ff8450c977526))
+* **graphql:** init self-check queries its own server and never crashes the process ([ea71c28](https://github.com/rxdi/mono/commit/ea71c2807925f8f319dcc2546569cdce6430158a))
 * **graphql:** parsing of undefined is not possible ([9bad1d2](https://github.com/rxdi/mono/commit/9bad1d2b0cd7e334c5b779385bc39ccf67f23745))
 * **graphql:** removed custom directive from export ([800eded](https://github.com/rxdi/mono/commit/800eded6dbec7493a24845f3ed93f6b4d4a18594))
 * **graphql:** removed docs folder since it is unused [ci-skip] ([2f3537d](https://github.com/rxdi/mono/commit/2f3537d5198b042e6b57594ab43f016fca5e01f0))
