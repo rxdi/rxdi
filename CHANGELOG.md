@@ -1,4 +1,4 @@
-## [0.7.255](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.255) (2026-11-07)
+## [0.7.256](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.256) (2026-11-09)
 
 
 ### Bug Fixes
@@ -42,6 +42,7 @@
 * **graphql-pubsub:** added connection with credentials for amqp protocol ([3c8b320](https://github.com/rxdi/mono/commit/3c8b320f199503fed3e9e4cfd28660c5a3ad2de1))
 * **graphql-pubsub:** barell export moved to client core ([0e0099c](https://github.com/rxdi/mono/commit/0e0099caf6653e61693c519eae2c22de35fcd14e))
 * **graphql-pubsub:** fixed nats to lazy evaluate the service instead of checking if it is ready ([1d3b313](https://github.com/rxdi/mono/commit/1d3b31348f11323d39ca9936921f13b5b38068e9))
+* **graphql:** @Type accepts NonNull / List / Enum / Interface root types ([b5c1e47](https://github.com/rxdi/mono/commit/b5c1e47a92dcb809c880ed6092c12f38984bca53))
 * **graphql:** added check for when payload is missing ([96b4355](https://github.com/rxdi/mono/commit/96b4355e4ea2d2e4f825f8dbbaf319397ce3208a))
 * **Graphql:** added graphql scalar type to be handled inside type decorator ([3be6bd8](https://github.com/rxdi/mono/commit/3be6bd839d6bafb949f6af0f299020f86c70a4ca))
 * **graphql:** added lazyFactories fix and added flag to disable graphql on demand and to leave only subscriptions server ([63b057d](https://github.com/rxdi/mono/commit/63b057d2ca4e057b983ec81f69d3ee6a7a04a0a1))
@@ -124,6 +125,9 @@
 * **Subscriptions:** removed logic from external dependencies refactored many parts of the pubsub protocol using regular Promise and not bluebird promise ([e3a70df](https://github.com/rxdi/mono/commit/e3a70dfd68885fc5f9742a289be5af3f748f2d99))
 
 
+* refactor(nats)!: remove NatsModule.forRootAsync ([db447d6](https://github.com/rxdi/mono/commit/db447d6043dff14a9246fd6f32d089557f6d2732))
+
+
 ### Features
 
 * **ai:** long time no change in core graphql package added description field inside meta fields in order to define what this graph node is doing and expose it to the schema introspection ([c42a702](https://github.com/rxdi/mono/commit/c42a70233a3a17728d2f5c88538b3d6ef47e273a))
@@ -176,6 +180,7 @@
 * **lit-html:** removed dependencies added monorepo packages to be on one place due to DENO build fails ([af937e7](https://github.com/rxdi/mono/commit/af937e7379b3e11b621becae3efbb16aa84b4f28))
 * **nats:** added multiple tests ([eb019a2](https://github.com/rxdi/mono/commit/eb019a2c1f85a55c8f14dc1695be33cb922ac37a))
 * **nats:** added nats module and graphql-nats so now we can have scalable services ([7ffada2](https://github.com/rxdi/mono/commit/7ffada23ab734d2b03047aabc4ebd34f87feb0fc))
+* **nats:** startupTimeout - fail the bootstrap when NATS is unreachable ([e8545a1](https://github.com/rxdi/mono/commit/e8545a15cc8c9810b8f18549953b0e4f23e45fa3))
 * **nats:** updated nats version to latest transport-node ([8c2e7fa](https://github.com/rxdi/mono/commit/8c2e7faf798ea4bbd092747a2cb28c2bc50bcd1b))
 * **neo4j:** bumped version of neo4j driver and neo4j graphql js ([f669981](https://github.com/rxdi/mono/commit/f6699814dee357065c719fa48763e6a0f91e7ea2))
 * **neo4j:** orm for neo4j added to the stack ([feeda88](https://github.com/rxdi/mono/commit/feeda88ef9c7ee23f7ccf502a212e1b996ce4878))
@@ -195,6 +200,12 @@
 * **subscription:** enhance subscription server configuration and handle lambda runtime ([b1c7d6c](https://github.com/rxdi/mono/commit/b1c7d6c159941abc22ec00d3f01a19a8f52297ed))
 * **webcomponents:** direct insertion to the customElements via LitElement and @rxdi/lit-html components ([ef6daa9](https://github.com/rxdi/mono/commit/ef6daa9a005a6e655c2d8d248bc952ff6fd1a981))
 * **Websocket:** added perMessageDeflate gzip on subscriptions options ([157f29b](https://github.com/rxdi/mono/commit/157f29bddf0e5aeb997d6bed642206076e679439))
+
+
+### BREAKING CHANGES
+
+* NatsModule.forRootAsync is removed; call
+NatsModule.forRoot(config) instead.
 
 
 
