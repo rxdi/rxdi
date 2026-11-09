@@ -5,6 +5,7 @@ import {
   NATS_PUBSUB_SERVICE,
   NATS_CLIENT_SERVICE,
   NATS_LOGGER,
+  NATS_CONNECTION,
   ServiceDiscoveryOptions,
 } from './interfaces';
 import { NatsClientService } from './services/nats-client.service';
@@ -37,6 +38,23 @@ export class ConfiguredNatsLogger extends NatsLoggerService {
   }
 }
 
+/**
+ * `NATS_CONNECTION`: a lazy async factory, so `Bootstrap()` awaits it before
+ * controllers and services start. With `startupTimeout` it waits for the
+ * first connection and rejects on timeout (the app does not start); without
+ * it it resolves at once with the current client (possibly null) and the
+ * client keeps connecting in the background.
+ */
+const connectionProvider = {
+  provide: NATS_CONNECTION,
+  lazy: true,
+  deps: [NATS_MODULE_CONFIG, NatsClientService],
+  useFactory: (config: NatsModuleConfiguration, client: NatsClientService) =>
+    config?.startupTimeout
+      ? client.waitForStartup(config.startupTimeout)
+      : Promise.resolve(client.getClient()),
+};
+
 @Module()
 export class NatsModule {
   static forRoot(
@@ -59,6 +77,7 @@ export class NatsModule {
           provide: NATS_CLIENT_SERVICE,
           useClass: NatsClientService,
         },
+        connectionProvider,
         NatsListenerHost,
         {
           provide: NATS_PUBSUB_SERVICE,
@@ -90,6 +109,7 @@ export class NatsModule {
           provide: NATS_CLIENT_SERVICE,
           useClass: NatsClientService,
         },
+        connectionProvider,
         NatsListenerHost,
         {
           provide: NATS_PUBSUB_SERVICE,

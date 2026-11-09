@@ -208,6 +208,25 @@ When running multiple instances of your service, use queue groups to distribute 
 async onGameCrash(data) { }
 ```
 
+## Fail startup without NATS (`startupTimeout`)
+
+By default the client connects in the background and retries forever, so the
+app starts even when NATS is unreachable. Set `startupTimeout` (ms) to make
+the bootstrap wait for the first connection and fail when it does not come
+up in time - the process exits and Kubernetes sees a failing pod instead of
+one that is "Ready" with no handlers subscribed:
+
+```typescript
+NatsModule.forRoot({
+  servers: ['nats://nats:4222'],
+  startupTimeout: 30000,
+})
+```
+
+The connected client is also available as `NATS_CONNECTION`
+(`@Inject(NATS_CONNECTION) nats: NatsConnection`). Reconnects after a later
+drop still retry forever.
+
 ## Logging
 
 Logging is disabled by default. Enable it in module config:

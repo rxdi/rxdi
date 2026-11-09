@@ -97,6 +97,39 @@ export class NatsClientService implements OnInit {
     return this.connectionPromise;
   }
 
+  /**
+   * Wait for the first connection, at most `timeoutMs`. On timeout the
+   * client is closed (no background retry keeps the process alive) and the
+   * promise rejects - used by the module's `NATS_CONNECTION` factory to fail
+   * the bootstrap when NATS is unreachable (`startupTimeout`).
+   */
+  async waitForStartup(timeoutMs: number): Promise<NatsConnection> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_, reject) => {
+      timer = setTimeout(
+        () =>
+          reject(
+            new Error(
+              `[NatsClientService] No NATS connection within ${timeoutMs}ms (${(
+                this.config?.servers ?? []
+              ).join(', ')}) - refusing to start`
+            )
+          ),
+        timeoutMs
+      );
+    });
+    try {
+      await Promise.race([this.waitForConnection(), timeout]);
+      return this.client as NatsConnection;
+    } catch (error) {
+      this.logger.error((error as Error).message);
+      await this.close();
+      throw error;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   OnInit(): void {
     // The first connect must retry too, not only reconnects after a drop.
     // nats.js rejects connect() at once when the server is unreachable

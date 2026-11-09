@@ -21,6 +21,17 @@ export interface NatsModuleConfiguration {
   logging?: boolean;
   logger?: NatsLogger;
   serviceName?: string;
+  /**
+   * Fail the application bootstrap when the first NATS connection is not
+   * established within this many milliseconds. The module then provides
+   * `NATS_CONNECTION` through an async factory that `Bootstrap()` awaits:
+   * on timeout it closes the client and rejects, so the process exits and
+   * an orchestrator (Kubernetes) sees a failing pod instead of one that is
+   * "Ready" with no handlers subscribed. Unset (default): bootstrap does not
+   * wait and the client keeps retrying in the background (old behaviour).
+   * Reconnects after a later drop always retry forever either way.
+   */
+  startupTimeout?: number;
 }
 
 export interface ServiceDiscoveryOptions {
@@ -37,6 +48,8 @@ export const NATS_MODULE_CONFIG = new InjectionToken<NatsModuleConfiguration>('n
 export const NATS_CLIENT_SERVICE = new InjectionToken<NatsClientInterface>('nats-client-service-injection-token');
 export const NATS_PUBSUB_SERVICE = new InjectionToken<NatsPubSubInterface>('nats-pubsub-service-injection-token');
 export const GRAPHQL_NATS_PUBSUB = new InjectionToken<boolean>('graphql-nats-pubsub-injection-token');
+/** Resolves to the connected client once the first connection is up (see `startupTimeout`). */
+export const NATS_CONNECTION = new InjectionToken<NatsConnection | null>('nats-connection-injection-token');
 export const NATS_LOGGER = new InjectionToken<NatsLogger>('nats-logger-injection-token');
 
 export interface NatsClientInterface {
