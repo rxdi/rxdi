@@ -1,7 +1,27 @@
 import { Container } from '@rxdi/core';
-import { GraphQLObjectType, GraphQLList, GraphQLScalarType, GraphQLString, GraphQLInt, GraphQLFloat, GraphQLBoolean, GraphQLUnionType } from 'graphql';
+import { GraphQLString, GraphQLFloat, GraphQLBoolean } from 'graphql';
 
 const SCALAR_TYPES = [String, Number, Boolean, Date];
+
+/**
+ * Any graphql-js type instance, wrapping ones included: `@Type(X)`,
+ * `@Type(new GraphQLNonNull(X))`, `@Type(new GraphQLList(new GraphQLNonNull(X)))`.
+ * Checked by constructor name so a second copy of graphql-js still matches.
+ */
+const GRAPHQL_TYPE_CONSTRUCTORS = [
+    'GraphQLObjectType',
+    'GraphQLList',
+    'GraphQLNonNull',
+    'GraphQLScalarType',
+    'GraphQLUnionType',
+    'GraphQLEnumType',
+    'GraphQLInterfaceType',
+];
+
+function isGraphQLType(type: any): boolean {
+    return !!type && typeof type === 'object' &&
+        GRAPHQL_TYPE_CONSTRUCTORS.includes(type.constructor?.name);
+}
 
 export function Type<T>(type): Function {
     let currentType;
@@ -12,10 +32,7 @@ export function Type<T>(type): Function {
         type = { type: GraphQLFloat };
     } else if (type === Boolean) {
         type = { type: GraphQLBoolean };
-    } else if (type && (type.constructor === GraphQLObjectType ||
-        type.constructor === GraphQLList ||
-        type.constructor === GraphQLScalarType ||
-        type.constructor === GraphQLUnionType)) {
+    } else if (isGraphQLType(type)) {
         type = { type };
     } else if (SCALAR_TYPES.includes(type)) {
         type = { type: type };

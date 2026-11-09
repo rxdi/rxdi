@@ -92,11 +92,19 @@ export type EffectTypes = keyof typeof EffectTypes;
     resolver: GraphQLField<T, K>,
     rxdiResolver: GraphQLFieldConfig<T, K>
   ) {
-    if (rxdiResolver['type']['getFields']) {
-      const typeFields = rxdiResolver['type']['getFields']();
-      const typeRes = resolver['type']['getFields']();
+    // Unwrap List / NonNull: `@Type(new GraphQLNonNull(X))` must keep X's
+    // field resolvers like a plain `@Type(X)`.
+    const named = (t: any) => {
+      while (t && t.ofType) t = t.ofType;
+      return t;
+    };
+    const rxdiType = named(rxdiResolver['type']);
+    const schemaType = named(resolver['type']);
+    if (rxdiType?.['getFields'] && schemaType?.['getFields']) {
+      const typeFields = rxdiType['getFields']();
+      const typeRes = schemaType['getFields']();
       Object.keys(typeFields).forEach(f => {
-        if (typeFields[f].resolve) {
+        if (typeFields[f].resolve && typeRes[f]) {
           typeRes[f].resolve = typeFields[f].resolve;
         }
       });

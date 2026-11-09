@@ -2,7 +2,10 @@ import {
   GraphQLInt,
   GraphQLScalarType,
   GraphQLNonNull,
-  GraphQLObjectType
+  GraphQLObjectType,
+  GraphQLList,
+  GraphQLString,
+  GraphQLEnumType
 } from 'graphql';
 import {
   Container,
@@ -25,6 +28,22 @@ class UserType {
   readonly id: number | GraphQLScalarType = GraphQLInt;
   name: string;
 }
+
+const StrictUserType = new GraphQLObjectType({
+  name: 'StrictUser',
+  fields: {
+    id: { type: new GraphQLNonNull(GraphQLInt) },
+    label: {
+      type: new GraphQLNonNull(GraphQLString),
+      resolve: (u: { id: number }) => `user-${u.id}`
+    }
+  }
+});
+
+const StrictColor = new GraphQLEnumType({
+  name: 'StrictColor',
+  values: { RED: { value: 'RED' } }
+});
 
 @Service()
 class TestInjectable {
@@ -53,6 +72,30 @@ class ClassTestProvider {
   })
   testInjection() {
     return of(this.injecatble.pesho);
+  }
+  @Scope('ADMIN')
+  @Type(new GraphQLNonNull(StrictUserType))
+  @Query()
+  strictUser() {
+    return { id: 7 };
+  }
+  @Scope('ADMIN')
+  @Type(new GraphQLList(new GraphQLNonNull(StrictUserType)))
+  @Query()
+  strictUsers() {
+    return [{ id: 1 }];
+  }
+  @Scope('ADMIN')
+  @Type(new GraphQLNonNull(GraphQLInt))
+  @Query()
+  strictCount() {
+    return 3;
+  }
+  @Scope('ADMIN')
+  @Type(new GraphQLNonNull(StrictColor))
+  @Query()
+  strictColor() {
+    return 'RED';
   }
 }
 
@@ -127,5 +170,23 @@ describe('Decorators: @Query', () => {
       .getFields();
     expect(queryFields.testInjection['method_name']).toBe('testInjection');
     expect(queryFields.testInjection['target']).toBeDefined();
+  });
+  it('Should keep a NonNull / List root type passed to @Type', () => {
+    const fields = Container.get(GRAPHQL_PLUGIN_CONFIG)
+      .graphqlOptions.schema.getQueryType()
+      .getFields();
+    expect(String(fields.strictUser.type)).toBe('StrictUser!');
+    expect(String(fields.strictUsers.type)).toBe('[StrictUser!]');
+    expect(String(fields.strictCount.type)).toBe('Int!');
+    expect(String(fields.strictColor.type)).toBe('StrictColor!');
+    expect(fields.strictUser['method_name']).toBe('strictUser');
+  });
+  it('Should keep field resolvers of a NonNull-wrapped type', () => {
+    const fields = Container.get(GRAPHQL_PLUGIN_CONFIG)
+      .graphqlOptions.schema.getQueryType()
+      .getFields();
+    const named = (fields.strictUser.type as any).ofType as GraphQLObjectType;
+    const label = named.getFields().label;
+    expect(label.resolve({ id: 7 }, {}, null, null)).toBe('user-7');
   });
 });

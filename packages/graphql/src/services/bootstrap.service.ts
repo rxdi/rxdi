@@ -3,6 +3,7 @@ import {
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLList,
+  GraphQLNonNull,
   printSchema,
   GraphQLFieldConfigMap,
   buildSchema,
@@ -27,6 +28,25 @@ function isScalarType(type: any): boolean {
 
 function isListType(type: any): boolean {
   return type?.constructor?.name === 'GraphQLList';
+}
+
+function isNonNullType(type: any): boolean {
+  return type?.constructor?.name === 'GraphQLNonNull';
+}
+
+/**
+ * The type with every scalar (also inside List / NonNull wrappers) replaced
+ * by its cached instance. Wrappers are rebuilt only when something inside
+ * changed, so `@Type(new GraphQLNonNull(X))` keeps its NonNull.
+ */
+function canonicalType(type: any): any {
+  if (isScalarType(type)) return getScalarType(type);
+  if (isListType(type) || isNonNullType(type)) {
+    const inner = canonicalType(type.ofType);
+    if (inner === type.ofType) return type;
+    return isListType(type) ? new GraphQLList(inner) : new GraphQLNonNull(inner);
+  }
+  return type;
 }
 
 function getScalarType(type: any): any {
@@ -113,8 +133,8 @@ export class BootstrapService {
       const desc = descriptor();
       desc.target = self;
       this.validateResolver(desc, self);
-      if (desc.type && isScalarType(desc.type)) {
-        desc.type = getScalarType(desc.type);
+      if (desc.type) {
+        desc.type = canonicalType(desc.type);
       }
       Fields[desc.method_type][desc.method_name] = desc;
     });
@@ -199,13 +219,7 @@ export class BootstrapService {
       return;
     }
     const normalizedFields = Object.entries(fields).reduce((acc, [fieldName, field]) => {
-      if (isScalarType(field.type)) {
-        field.type = getScalarType(field.type);
-      } else if (isListType(field.type)) {
-        if (isScalarType((field.type as any).ofType)) {
-          field.type = new GraphQLList(getScalarType((field.type as any).ofType));
-        }
-      }
+      field.type = canonicalType(field.type);
       return { ...acc, [fieldName]: field };
     }, {});
     return new GraphQLObjectType({ name, description, fields: normalizedFields });
@@ -345,8 +359,8 @@ export class BootstrapService {
           const desc = descriptorGetter();
           desc.target = () => { };
           this.validateResolver(desc, controller);
-          if (desc.type && isScalarType(desc.type)) {
-            desc.type = getScalarType(desc.type);
+          if (desc.type) {
+            desc.type = canonicalType(desc.type);
           }
           this.Fields[desc.method_type][desc.method_name] = desc;
         });
