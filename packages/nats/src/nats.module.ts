@@ -38,23 +38,6 @@ export class ConfiguredNatsLogger extends NatsLoggerService {
   }
 }
 
-/**
- * `NATS_CONNECTION`: a lazy async factory, so `Bootstrap()` awaits it before
- * controllers and services start. With `startupTimeout` it waits for the
- * first connection and rejects on timeout (the app does not start); without
- * it it resolves at once with the current client (possibly null) and the
- * client keeps connecting in the background.
- */
-const connectionProvider = {
-  provide: NATS_CONNECTION,
-  lazy: true,
-  deps: [NATS_MODULE_CONFIG, NatsClientService],
-  useFactory: (config: NatsModuleConfiguration, client: NatsClientService) =>
-    config?.startupTimeout
-      ? client.waitForStartup(config.startupTimeout)
-      : Promise.resolve(client.getClient()),
-};
-
 @Module()
 export class NatsModule {
   static forRoot(
@@ -77,7 +60,24 @@ export class NatsModule {
           provide: NATS_CLIENT_SERVICE,
           useClass: NatsClientService,
         },
-        connectionProvider,
+        {
+          // NATS_CONNECTION: a lazy async factory, so Bootstrap() awaits it
+          // before controllers and services start. With `startupTimeout` it
+          // waits for the first connection and rejects on timeout (the app
+          // does not start); without it it resolves at once with the current
+          // client (possibly null). Built here, per forRoot call: the core
+          // rewrites `deps` / `useFactory` on the object it registers.
+          provide: NATS_CONNECTION,
+          lazy: true,
+          deps: [NATS_MODULE_CONFIG, NatsClientService],
+          useFactory: (
+            moduleConfig: NatsModuleConfiguration,
+            client: NatsClientService
+          ) =>
+            moduleConfig?.startupTimeout
+              ? client.waitForStartup(moduleConfig.startupTimeout)
+              : Promise.resolve(client.getClient()),
+        },
         NatsListenerHost,
         {
           provide: NATS_PUBSUB_SERVICE,
@@ -109,7 +109,24 @@ export class NatsModule {
           provide: NATS_CLIENT_SERVICE,
           useClass: NatsClientService,
         },
-        connectionProvider,
+        {
+          // NATS_CONNECTION: a lazy async factory, so Bootstrap() awaits it
+          // before controllers and services start. With `startupTimeout` it
+          // waits for the first connection and rejects on timeout (the app
+          // does not start); without it it resolves at once with the current
+          // client (possibly null). Built here, per forRoot call: the core
+          // rewrites `deps` / `useFactory` on the object it registers.
+          provide: NATS_CONNECTION,
+          lazy: true,
+          deps: [NATS_MODULE_CONFIG, NatsClientService],
+          useFactory: (
+            moduleConfig: NatsModuleConfiguration,
+            client: NatsClientService
+          ) =>
+            moduleConfig?.startupTimeout
+              ? client.waitForStartup(moduleConfig.startupTimeout)
+              : Promise.resolve(client.getClient()),
+        },
         NatsListenerHost,
         {
           provide: NATS_PUBSUB_SERVICE,
