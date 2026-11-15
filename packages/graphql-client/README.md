@@ -55,6 +55,21 @@ gapi schema introspect --collect-documents --collect-types
 
 More information can be found [HERE](https://github.com/Stradivario/gapi-cli/wiki/schema)
 
+### Documents as text (smaller bundles)
+
+`DOCUMENTS` may hold each document's **text** instead of a pre-parsed
+syntax tree. Generate it with `--documents-as-text` (`@gapi/cli` 1.8.263+):
+
+```bash
+gapi schema collect --collect-types --documents-as-text
+```
+
+`importQuery` parses a text document the first time it is asked for
+(without source locations) and keeps the parsed node, so every later call
+returns the same object. Pre-parsed trees carry a `loc` on every node and
+are typically ~10x larger: in one app 389 documents were 2.27 MB as trees
+and 0.22 MB as text.
+
 # ApolloClientOptions interface
 
 ```ts

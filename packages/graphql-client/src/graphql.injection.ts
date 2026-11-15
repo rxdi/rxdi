@@ -40,7 +40,11 @@ export interface ApolloClient extends AC<NormalizedCacheObject> { }
 export const GraphqlSubscriptionClient = new InjectionToken<ManagedSubscriptionClient>('graphql-subscription-client');
 export interface GraphqlSubscriptionClient extends ManagedSubscriptionClient { }
 
-export const GraphqlDocuments = new InjectionToken<Record<string, DocumentNode | TypedDocumentNode>>('graphql-documents');
+/** Documents by file name: parsed, or their text (parsed on first use by
+    importQuery). */
+export const GraphqlDocuments = new InjectionToken<
+  Record<string, DocumentNode | TypedDocumentNode | string>
+>('graphql-documents');
 
 export interface GraphqlModuleConfig {
   uri: string;

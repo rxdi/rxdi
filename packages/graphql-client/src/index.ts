@@ -1,5 +1,6 @@
 import { Module, ModuleWithServices } from '@rxdi/core';
 import { InMemoryCache } from '@apollo/client/cache';
+import type { DocumentNode } from '@apollo/client/core';
 import {
   ApolloClient,
   GraphqlDocuments,
@@ -38,7 +39,7 @@ export class GraphqlModule {
       pubsubOptions = {},
       onSubscriptionConnectionError,
     }: GraphqlModuleConfig = {} as GraphqlModuleConfig,
-    documents = {},
+    documents: Record<string, DocumentNode | string> = {},
   ): ModuleWithServices {
     const headers = {};
     const connections: { [key: string]: AbortController } = {};
