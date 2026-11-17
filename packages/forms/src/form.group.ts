@@ -20,6 +20,14 @@ export interface AbstractInputWithBound extends AbstractInput {
   _bound?: boolean;
 }
 
+/** A number input holding text that is not a number yet ("-", "1e"): the
+ *  browser reports its value as "" and `validity.badInput`. Writing any
+ *  value into it erases what the user typed. */
+function isNumberMidEntry(input: AbstractInput | undefined | null) {
+  const el = input as unknown as HTMLInputElement;
+  return !!el && el.type === 'number' && !!el.validity?.badInput;
+}
+
 export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
   implements AbstractControl<UnwrapValue<T>> {
   public validators: Map<string, ValidatorFn[]> = new Map();
@@ -210,7 +218,17 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
         }
       }
 
-      if (this.type === 'number') {
+      if (isNumberMidEntry(this)) {
+        // "-", "1e", "1." ...: not a number yet. The browser reports the
+        // value as "" - converting that to 0 and writing it back erased
+        // what was typed, so "-1" could never be entered. Leave the input
+        // and the model alone until it is a number (or really empty).
+        return;
+      }
+
+      if (this.type === 'number' && value === '') {
+        // an emptied number field stays empty: it is not 0
+      } else if (this.type === 'number') {
         let val = Number(value);
         const maxAttr = this.getAttribute('max');
         if (maxAttr) {
@@ -596,7 +614,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
       input.type !== 'checkbox' &&
       input.type !== 'radio'
     ) {
-      input.value = value as string;
+      if (!isNumberMidEntry(input)) {
+        input.value = value as string;
+      }
     }
     const values = this.value;
     values[name as keyof UnwrapValue<T>] = value as never;
@@ -630,7 +650,9 @@ export class FormGroup<T = FormInputOptions, E = { [key: string]: never }>
             e.checked = modelValue === e.value;
           }
         } else {
-          e.value = modelValue;
+          if (!isNumberMidEntry(e)) {
+            e.value = modelValue;
+          }
         }
 
         e.valueChanges = this._valueChanges.pipe(
