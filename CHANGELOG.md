@@ -1,4 +1,4 @@
-## [0.7.257](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.257) (2026-11-15)
+## [0.7.258](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.258) (2026-11-17)
 
 
 ### Bug Fixes
@@ -17,6 +17,7 @@
 * **core:** removed bin from package.json ([2fb387a](https://github.com/rxdi/mono/commit/2fb387a752daa7e109f842fc0049b3e2abb6d37e))
 * **core:** unsubscribe directly error message is obsolete and should be removed ([fc70634](https://github.com/rxdi/mono/commit/fc706344c4dea016fd63dda20edd40f9bf85d7df))
 * **credit-card-form:** added correct dependencies ([a3cdac8](https://github.com/rxdi/mono/commit/a3cdac815b01abcbfddd3157868cf1eadce743bc))
+* **forms:** a half-typed number is left alone, an emptied number field stays empty ([5009f40](https://github.com/rxdi/mono/commit/5009f40d1cb14b54cca3d5fea8b3ceeba7ac0a6f))
 * **forms:** added better way of defining the form array without specifically add name of the object since now it relies on the parent form to get the key ([168028c](https://github.com/rxdi/mono/commit/168028c30d83e1367805e7b64d7afc247b2cf5c0))
 * **forms:** added check for min max to now be able the user to write more than a specific delimiter ([3782e4e](https://github.com/rxdi/mono/commit/3782e4ed9f8cdbf9de4fbce65598428960d5f87f))
 * **forms:** added element focus on validate ([0e0bef7](https://github.com/rxdi/mono/commit/0e0bef78a8e4248622288e7fd629d4bc1b36901d))
