@@ -1,4 +1,4 @@
-## [0.7.258](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.258) (2026-11-17)
+## [0.7.259](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.259) (2026-11-17)
 
 
 ### Bug Fixes
@@ -112,6 +112,7 @@
 * **pubsub:** added optional types server and path ([9f1e18f](https://github.com/rxdi/mono/commit/9f1e18f3eab8e5172ea7a7e3e2a97a1914d95c09))
 * **pubsub:** added que strict name to subscriber in order to have the same queue shared between multiple workers ([cb2de4b](https://github.com/rxdi/mono/commit/cb2de4b96f27ca8f95fae2d02f359e4fd349365a))
 * **pubsub:** fixed non existent function ([d5f9e60](https://github.com/rxdi/mono/commit/d5f9e602607c2da8e7c2e50effdc6a4e60acd8bf))
+* **rabbitmq-pubsub:** a subscription is kept - subscribe again after a lost connection, channel or consumer ([17c8084](https://github.com/rxdi/mono/commit/17c808440358968cd209bbeab3bab15bb419ba51))
 * **rabbitmq-pubsub:** added correct dependency ([5ea4b7a](https://github.com/rxdi/mono/commit/5ea4b7af70fc7ed754195b508e48352f60f7310c))
 * **rabbitmq-pubsub:** fixed bug with prefetch of undefined ([e2ddd57](https://github.com/rxdi/mono/commit/e2ddd5702d2dad24ce2bc576e7bdcea2aaa3c3a6))
 * **rabbitmq-pubsub:** version fix ([576665d](https://github.com/rxdi/mono/commit/576665dc9a04cabe13690072d2683cb272b918dd))
