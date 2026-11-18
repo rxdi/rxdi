@@ -1,4 +1,4 @@
-## [0.7.259](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.259) (2026-11-17)
+## [0.7.261](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.261) (2026-11-18)
 
 
 ### Bug Fixes
@@ -162,6 +162,7 @@
 * **graphql-client:** deep copy method introduced ([4e88198](https://github.com/rxdi/mono/commit/4e881984308d3ad51b5cae434a8c0203ddd051ab))
 * **graphql-client:** documents may be registered as text, parsed on first use ([2405b58](https://github.com/rxdi/mono/commit/2405b58796bb699a2aaf1242875119b081473bc0))
 * **graphql-client:** little modification to remove extra dependency react not using barrel export from apollo ([f38f011](https://github.com/rxdi/mono/commit/f38f011f3393c0f4a8a0da345df5f84a9698c01b))
+* **graphql-client:** OVER_WEBSOCKET - any operation can opt into the open WebSocket (subscriptions unchanged, default HTTP unchanged) ([c9c1b89](https://github.com/rxdi/mono/commit/c9c1b8968a0566efec966cc7c969f3a704c55dc1))
 * **graphql-pubsub:** added compatibility between graphql v15 and graphql v16 we want to use v16 but subscriptions are not stable enough ([795a36d](https://github.com/rxdi/mono/commit/795a36d0f3843e9e68fc4c42dad2852e2552ccfe))
 * **graphql-pubsub:** refactored subscription service a little bit ([6d5b427](https://github.com/rxdi/mono/commit/6d5b427f5b707519202341c26baf4f0c30c3a3b6))
 * **graphql:** added option to disable query suggestion on client facing errors so attacker cannot guess what the next queries might be ([4b313fc](https://github.com/rxdi/mono/commit/4b313fcd3fb0e0b023c9e11043a8fd7c741f565c))
