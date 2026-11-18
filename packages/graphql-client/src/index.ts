@@ -23,6 +23,33 @@ import { ManagedSubscriptionClient } from './subscription-client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
 
+/**
+ * Ask for one operation to go over the WebSocket instead of HTTP:
+ * `client.mutate({ ..., context: OVER_WEBSOCKET })`. For chatty operations
+ * that must not pay a request each (a terminal's keystrokes): the socket is
+ * already open, with no HTTP / TLS / gateway per message. The server must
+ * execute that operation over its subscriptions socket.
+ */
+export const OVER_WEBSOCKET = { transport: 'websocket' } as const;
+
+/** The link split: subscriptions always over the WebSocket (as before),
+    any other operation only when its context asks (OVER_WEBSOCKET). */
+export function overWebSocket(operation: {
+  query: DocumentNode;
+  getContext?: () => Record<string, unknown>;
+}): boolean {
+  const { kind, operation: type }: Definintion = getMainDefinition(
+    operation.query,
+  );
+  if (kind !== 'OperationDefinition') {
+    return false;
+  }
+  return (
+    type === 'subscription' ||
+    operation.getContext?.()?.transport === OVER_WEBSOCKET.transport
+  );
+}
+
 @Module({})
 export class GraphqlModule {
   public static forRoot(
@@ -163,10 +190,7 @@ export class GraphqlModule {
                   ),
                 ]),
                 split(
-                  ({ query }) => {
-                    const { kind, operation }: Definintion = getMainDefinition(query);
-                    return kind === 'OperationDefinition' && operation === 'subscription';
-                  },
+                  overWebSocket,
                   new WebSocketLink(subscriptionClient),
                   createHttpLink({ uri, ...httpOptions }),
                 ),

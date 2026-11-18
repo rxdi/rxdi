@@ -28,7 +28,7 @@ if (typeof (globalThis as { WebSocket?: unknown }).WebSocket === 'undefined') {
   (globalThis as { WebSocket?: unknown }).WebSocket = require('ws');
 }
 
-import { GraphqlModule } from './index';
+import { GraphqlModule, OVER_WEBSOCKET, overWebSocket } from './index';
 import {
   ApolloClient,
   GraphqlModuleConfig,
@@ -50,6 +50,11 @@ const TICK = gql`
     tick
   }
 `;
+const ECHO = gql`
+  mutation echo($text: String) {
+    echo(text: $text)
+  }
+`;
 const FOREVER = gql`
   subscription {
     forever
@@ -63,6 +68,16 @@ const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: { ping: { type: GraphQLString, resolve: () => 'pong' } },
+  }),
+  mutation: new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+      echo: {
+        type: GraphQLString,
+        args: { text: { type: GraphQLString } },
+        resolve: (_root, { text }: { text: string }) => `ws:${text}`,
+      },
+    },
   }),
   subscription: new GraphQLObjectType({
     name: 'Subscription',
@@ -398,6 +413,26 @@ describe('GraphqlModule WebSocket link', () => {
 
     expect(handshakes).toHaveLength(1);
   });
+  it('a mutation with OVER_WEBSOCKET runs over the open socket (HTTP is unreachable here)', async () => {
+    clientToken = 'good';
+    const { apollo } = boot();
+    const result = await apollo.mutate({
+      mutation: ECHO,
+      variables: { text: 'ls' },
+      context: OVER_WEBSOCKET,
+    });
+    expect(result.data).toEqual({ echo: 'ws:ls' });
+  });
+
+  it('without it a mutation still goes over HTTP (unchanged default)', async () => {
+    clientToken = 'good';
+    const { apollo } = boot();
+    await expect(
+      apollo.mutate({ mutation: ECHO, variables: { text: 'ls' } }),
+    ).rejects.toBeTruthy();
+    // the socket was never needed for it
+    expect(handshakes).toEqual([]);
+  });
 });
 
 describe('isAuthorizationConnectionError', () => {
@@ -415,5 +450,21 @@ describe('isAuthorizationConnectionError', () => {
     [undefined, false],
   ])('%p → %s', (error, expected) => {
     expect(isAuthorizationConnectionError(error)).toBe(expected);
+  });
+
+});
+
+describe('overWebSocket (the link split)', () => {
+  const op = (query: ReturnType<typeof gql>, context?: Record<string, unknown>) => ({
+    query,
+    getContext: () => context ?? {},
+  });
+
+  it('subscriptions always; queries / mutations only when asked', () => {
+    expect(overWebSocket(op(TICK))).toBe(true);
+    expect(overWebSocket(op(ECHO))).toBe(false);
+    expect(overWebSocket(op(ECHO, OVER_WEBSOCKET))).toBe(true);
+    expect(overWebSocket(op(ECHO, { transport: 'http' }))).toBe(false);
+    expect(overWebSocket({ query: ECHO })).toBe(false);
   });
 });
