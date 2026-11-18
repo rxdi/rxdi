@@ -104,3 +104,12 @@ export interface Definintion {
   kind: string;
   operation?: string;
 }
+
+/**
+ * Ask for one operation to go over the WebSocket instead of HTTP:
+ * `client.mutate({ ..., context: OVER_WEBSOCKET })`. For chatty operations
+ * that must not pay a request each (a terminal's keystrokes): the socket is
+ * already open, with no HTTP / TLS / gateway per message. The server must
+ * execute that operation over its subscriptions socket.
+ */
+export const OVER_WEBSOCKET = { transport: 'websocket' } as const;
