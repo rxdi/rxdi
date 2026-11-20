@@ -207,11 +207,14 @@ export type EffectTypes = keyof typeof EffectTypes;
         }
       } catch (error) {
         result = error;
+        // Never log the resolver args: args[2] is the request context (the
+        // user's auth token, headers) and args[1] the GraphQL arguments
+        // (passwords, secret values in mutations). Only their names.
         console.error({
           method_type: resolver.method_type,
           method_name: resolver.method_name,
           hasInterceptor: !!resolver.interceptor,
-          args,
+          argumentNames: Object.keys((args && args[1]) || {}),
           error
         });
       }
