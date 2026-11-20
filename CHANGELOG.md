@@ -1,4 +1,4 @@
-## [0.7.261](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.261) (2026-11-18)
+## [0.7.262](https://github.com/rxdi/mono/compare/3be6bd839d6bafb949f6af0f299020f86c70a4ca...v0.7.262) (2026-11-20)
 
 
 ### Bug Fixes
@@ -57,6 +57,7 @@
 * **graphql:** parsing of undefined is not possible ([9bad1d2](https://github.com/rxdi/mono/commit/9bad1d2b0cd7e334c5b779385bc39ccf67f23745))
 * **graphql:** removed custom directive from export ([800eded](https://github.com/rxdi/mono/commit/800eded6dbec7493a24845f3ed93f6b4d4a18594))
 * **graphql:** removed docs folder since it is unused [ci-skip] ([2f3537d](https://github.com/rxdi/mono/commit/2f3537d5198b042e6b57594ab43f016fca5e01f0))
+* **graphql:** resolver errors no longer log the request context (auth token) or argument values ([5331a8e](https://github.com/rxdi/mono/commit/5331a8e9243d8891ce5ba4c44770735c283b0f07))
 * **graphql:** status is not number it is a string ([d7a39e1](https://github.com/rxdi/mono/commit/d7a39e1239494fad6e4748aa35cd29dc94d86926))
 * **graphql:** type decorator now accepts also union type ([09a5031](https://github.com/rxdi/mono/commit/09a5031dcd26956063a9ca4eb9653b9955e9ac8e))
 * **hapi:** reverted back hapi and subscription logic ([1005a53](https://github.com/rxdi/mono/commit/1005a539da1fe53dcd3507270ff51aa127722190))
